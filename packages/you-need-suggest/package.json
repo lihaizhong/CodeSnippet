@@ -1,0 +1,35 @@
+{
+  "name": "@lihzsky/you-need-suggest",
+  "version": "0.0.2",
+  "keywords": [
+    "suggest",
+    "levenshtein"
+  ],
+  "author": "lihz",
+  "license": "ISC",
+  "description": "本地动态筛选功能",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "types": "es/index.d.ts",
+  "files": [
+    "lib",
+    "es"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lihaizhong/bitkit.git"
+  },
+  "scripts": {
+    "build": "rm -rf ./lib ./es && tsc --build tsconfig.es.json && tsc --build tsconfig.lib.json"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/lihaizhong/bitkit/issues"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

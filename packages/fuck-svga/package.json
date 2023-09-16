@@ -1,0 +1,30 @@
+{
+  "name": "fuck-svga",
+  "version": "0.1.1",
+  "description": "高性能SVGA播放器",
+  "type": "module",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf -rf dist && rollup -c"
+  },
+  "author": "lihzsky",
+  "license": "ISC",
+  "miniprogram": "dist",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.2",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "@types/wechat-miniprogram": "^3.4.8",
+    "fflate": "^0.8.2",
+    "rimraf": "^6.0.1",
+    "rollup": "^4.30.1",
+    "tslib": "^2.8.1",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "fuck-protobuf": "workspace:^"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/svga/index",
+    "pages/svga-analyze/index",
+    "pages/form/index"
+  ],
+  "window": {
+    "defaultTitle": "My App"
+  },
+  "behavior": {
+    "requestReferrerStrategy": "page",
+    "requestReferrerStyle": "full",
+    "requestDefaultEnableCookie": true,
+    "connectSocketDefaultMultiple": true
+  }
+}

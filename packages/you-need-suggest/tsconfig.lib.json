@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "UMD",
+    "moduleResolution": "node",
+    "lib": ["ES2016"],
+    "outDir": "./lib"
+  }
+}

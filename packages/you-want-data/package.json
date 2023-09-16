@@ -1,0 +1,23 @@
+{
+  "name": "you-want-data",
+  "version": "1.0.0",
+  "description": "基于JSON-SCHEMA的数据校验与格式化工具",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "build": "",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "format",
+    "validator"
+  ],
+  "author": "lihzsky",
+  "license": "ISC",
+  "dependencies": {
+    "dayjs": "^1.11.13"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

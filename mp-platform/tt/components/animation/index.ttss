@@ -1,0 +1,21 @@
+.svga-palette {
+  width: 80vw;
+  height: 80vh;
+}
+
+.svga-secondary {
+  position: fixed;
+  left: -200vw;
+  top: -200vh;
+}
+
+.svga-error-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  padding: 15px;
+  background: #fff;
+  border-radius: 3px;
+}

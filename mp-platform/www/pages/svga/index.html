@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SVGA Player</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background: #111;
+    }
+
+    .animation {
+      margin: 0 auto;
+    }
+
+    .footer {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 3;
+      display: flex;
+      padding: 0 20px;
+      padding-bottom: calc(15px + constant(safe-area-inset-bottom));
+      /* 兼容 iOS < 11.2 */
+      padding-bottom: calc(15px + env(safe-area-inset-bottom));
+      /* 兼容 iOS >= 11.2 */
+      text-align: center;
+    }
+
+    .foot-btn {
+      flex: 1 auto;
+      font-size: 18px;
+      height: 48px;
+    }
+
+    .foot-btn+.foot-btn {
+      margin-left: 20px;
+    }
+
+    .svga-palette {
+      width: 80vw;
+      height: 80vh;
+    }
+
+    .svga-secondary {
+      position: fixed;
+      left: -200vw;
+      top: -200vh;
+    }
+
+    .svga-error-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 20;
+      padding: 15px;
+      background: #fff;
+      border-radius: 3px;
+    }
+  </style>
+  <script type="module">
+    import Page from "../../utils/Page"
+    import { Parser, Player } from "../../utils/fuck-svga";
+    import { svgaSources, getOneAtRandom } from "../../utils/constants";
+
+    let parser, player
+
+    Page({
+      data: {
+        url: "",
+        current: 0,
+      },
+
+      bindEvents: {
+        "#prevbtn:click": "handleSwitchPrev",
+        "#nextbtn:click": "handleSwitchNext",
+        "#randbtn:click": "handleSwitchAtRandom"
+      },
+
+      observers: {
+        url() {
+          this.initialize()
+        }
+      },
+
+      handleSwitchAtRandom() {
+        const { ranIndex, url } = getOneAtRandom();
+
+        this.setData({
+          url,
+          current: ranIndex,
+        })
+      },
+
+      handleSwitchPrev() {
+        const { current } = this.data;
+        let prev = current - 1;
+
+        if (prev < 0) {
+          prev = svgaSources.length - 1;
+        }
+
+        this.setData({
+          url: svgaSources[prev],
+          current: prev,
+        });
+      },
+
+      handleSwitchNext() {
+        const { current } = this.data;
+        let next = current + 1;
+
+        if (next > svgaSources.length - 1) {
+          next = 0;
+        }
+
+        this.setData({
+          url: svgaSources[next],
+          current: next,
+        });
+      },
+
+      async initialize() {
+        try {
+          showPopup("准备下载资源")
+          const videoItem = await parser.load(this.data.url);
+          showPopup("下载资源成功")
+          await player.mount(videoItem);
+          showPopup("资源装载成功")
+          showPopup("准备开始播放");
+          player.start();
+          showPopup("");
+        } catch (ex) {
+          console.error("svga初始化失败！", ex);
+          showPopup(ex.message + "\n" + ex.stack);
+        }
+      },
+
+      async onLoad() {
+        parser = new Parser();
+        player = new Player();
+        await player.setConfig(
+          {
+            container: "#palette",
+            // secondary: "#secondary",
+          },
+          this
+        );
+        this.handleSwitchAtRandom();
+        // this.setData({
+        //   current: 40,
+        //   url: svgaSources[40]
+        // })
+      },
+    })
+
+    function showPopup(message) {
+      const $popup = document.querySelector('#popup');
+
+      if (message) {
+        $popup.innerText = message;
+        $popup.style.display = "block";
+      } else {
+        $popup.innerText = "";
+        $popup.style.display = "none";
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <div class="animation">
+    <canvas type="2d" id="palette" class="svga-palette"></canvas>
+    <canvas type="2d" id="secondary" class="svga-palette svga-secondary"></canvas>
+    <div id="popup" class="svga-error-popup">{{ message }}</div>
+  </div>
+
+  <div class="footer">
+    <button id="prevbtn" class="foot-btn">上一张</button>
+    <button id="randbtn" class="foot-btn">试一试</button>
+    <button id="nextbtn" class="foot-btn">下一张</button>
+  </div>
+</body>
+
+</html>

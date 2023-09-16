@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "rootDir": ".",
+    "baseUrl": ".",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "lib": ["ESNext"]
+  }
+}

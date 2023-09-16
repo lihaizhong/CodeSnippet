@@ -1,0 +1,3 @@
+<view class="page-container">
+  <button a:for="{{ btnList }}" a:key="path" class="btn" type="primary" data-url="{{ item.path }}" onTap="handleNavigateTo">{{ item.text }}</button>
+</view>

@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "declarationDir": "./es",
+    "rootDir": "./src",
+    "outDir": "./es",
+    "baseUrl": "."
+  },
+  "exclude": ["__tests__/*", "jest.config.ts", "es/*", "lib/*"]
+}

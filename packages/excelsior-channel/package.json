@@ -1,0 +1,31 @@
+{
+  "name": "@lihzsky/excelsior-channel",
+  "version": "0.1.9",
+  "keywords": [
+    "iframe",
+    "channel"
+  ],
+  "author": "sky",
+  "license": "ISC",
+  "description": "基于JSON-RPC 2.0协议的通信工具。用于浏览器主进程与iframe进程之间的通信。",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "types": "es/index.d.ts",
+  "files": [
+    "lib",
+    "es"
+  ],
+  "scripts": {
+    "build": "rm -rf ./lib ./types ./es && tsc --build tsconfig.es.json && tsc --build tsconfig.lib.json"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/lihaizhong/bitkit/issues"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

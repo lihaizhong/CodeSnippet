@@ -1,7 +1,0 @@
-<navigation-bar title="首页" back="{{false}}" color="black" background="#FFF"></navigation-bar>
-<scroll-view class="scroll-area" type="list" scroll-y>
-  <svga-player url="{{ url }}"></svga-player>
-  <view class="footer">
-    <button type="primary" bindtap="handleSwitch">切换</button>
-  </view>
-</scroll-view>

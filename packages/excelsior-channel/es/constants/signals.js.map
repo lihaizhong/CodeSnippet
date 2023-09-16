@@ -1,0 +1,1 @@
+{"version":3,"file":"signals.js","sourceRoot":"","sources":["../../src/constants/signals.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,IAAM,gBAAgB,GAAG,cAAc,CAAC;AAE/C,MAAM,CAAC,IAAM,aAAa,GAAG;IAC5B,OAAO,EAAE,UAAU;IACnB,EAAE,EAAE,UAAU;IACd,UAAU,EAAE,UAAU;CACtB,CAAC"}

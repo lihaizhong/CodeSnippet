@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["ES2016"],
+    "rootDir": "./src",
+    "outDir": "./lib"
+  },
+  "exclude": ["__tests__/*", "jest.config.ts", "es/*", "lib/*"]
+}

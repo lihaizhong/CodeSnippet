@@ -1,0 +1,17 @@
+{
+  "format": 2,
+  "miniprogramRoot": "./mp-platform/alipay/",
+  "compileOptions": {
+    "component2": true,
+    "transpile": {
+      "script": {
+        "ignore": [
+          "node_modules/**"
+        ]
+      }
+    }
+  },
+  "developOptions": {
+    "skipTranspile": true
+  }
+}

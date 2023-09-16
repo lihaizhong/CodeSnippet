@@ -1,0 +1,6 @@
+<fuck-animation url="{{ url }}" class="animation"></fuck-animation>
+<view class="footer">
+  <button class="foot-btn" type="primary" onTap="handleSwitchPrev">上一张</button>
+  <button class="foot-btn" type="primary" onTap="handleSwitchAtRandom">试一试</button>
+  <button class="foot-btn" type="primary" onTap="handleSwitchNext">下一张</button>
+</view>

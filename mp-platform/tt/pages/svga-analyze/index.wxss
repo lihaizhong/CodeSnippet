@@ -1,0 +1,14 @@
+.page-container {
+  background: #979797;
+}
+
+.swiper-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.swiper-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

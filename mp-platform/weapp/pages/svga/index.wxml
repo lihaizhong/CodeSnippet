@@ -1,0 +1,6 @@
+<fuck-animation url="{{ url }}" class="animation"></fuck-animation>
+<cover-view class="footer">
+  <button class="foot-btn" type="primary" bindtap="handleSwitchPrev">上一张</button>
+  <button class="foot-btn" type="primary" bindtap="handleSwitchAtRandom">试一试</button>
+  <button class="foot-btn" type="primary" bindtap="handleSwitchNext">下一张</button>
+</cover-view>

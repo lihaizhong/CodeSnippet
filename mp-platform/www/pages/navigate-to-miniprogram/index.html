@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>wx.miniProgram.navigateTo()</title>
+  <script src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
+  <style>
+    .btn {
+      display: block;
+      width: 80%;
+      height: 40px;
+      margin: 0 auto;
+    }
+
+    .btn + .btn {
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <button id="navigate-to-miniprogram-btn" class="btn">跳转小程序</button>
+  <button id="navigate-to-miniprogram-of-error-path-btn" class="btn">跳转小程序（不完整地址）</button>
+
+  <script type="text/javascript">
+    const $btn1 = document.getElementById('navigate-to-miniprogram-btn')
+    const $btn2 = document.getElementById('navigate-to-miniprogram-of-error-path-btn')
+
+    $btn1.addEventListener('click', () => {
+      wx.miniProgram.navigateTo({
+        url: '/pages/index/index'
+      })
+    })
+
+    $btn2.addEventListener('click', () => {
+      wx.miniProgram.navigateTo({
+        url: '/pages/index'
+      })
+    })
+  </script>
+</body>
+</html>

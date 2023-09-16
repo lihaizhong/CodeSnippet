@@ -1,0 +1,31 @@
+page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #111;
+}
+
+.animation {
+  margin: 0 auto;
+}
+
+.footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  display: flex;
+  padding: 0 20rpx;
+  padding-bottom: calc(15px + constant(safe-area-inset-bottom)); /* 兼容 iOS < 11.2 */
+ 	padding-bottom: calc(15px + env(safe-area-inset-bottom)); /* 兼容 iOS >= 11.2 */
+  text-align: center;
+}
+
+.foot-btn {
+  flex: 1 auto;
+}
+
+.foot-btn + .foot-btn {
+  margin-left: 20rpx;
+}

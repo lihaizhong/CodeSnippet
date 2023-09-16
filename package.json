@@ -1,0 +1,36 @@
+{
+  "name": "code-snippets",
+  "version": "1.0.0",
+  "description": "代码片段整理",
+  "private": true,
+  "packageManager": "pnpm@9.8.0",
+  "scripts": {
+    "preinstall": "npx -y only-allow pnpm",
+    "dev": "parcel serve",
+    "build": "parcel build",
+    "preview": "serve -p 3001 ./dist/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "targets": {
+    "frontend": {
+      "source": [
+        "./mp-platform/www/pages/index.html",
+        "./mp-platform/www/pages/**/*.html"
+      ]
+    }
+  },
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "keywords": [
+    "snippet",
+    "code snippet"
+  ],
+  "author": "lihzsky",
+  "license": "MIT",
+  "devDependencies": {
+    "@changesets/cli": "^2.27.11",
+    "@types/benchmark": "^2.1.5",
+    "benchmark": "^2.1.4",
+    "parcel": "^2.13.3",
+    "serve": "^14.2.4"
+  }
+}

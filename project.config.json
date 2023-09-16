@@ -1,0 +1,39 @@
+{
+  "appid": "wxf221ee13f2abd417",
+  "compileType": "miniprogram",
+  "libVersion": "3.0.2",
+  "miniprogramRoot": "mp-platform/weapp/",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "setting": {
+    "coverView": true,
+    "es6": true,
+    "swc": true,
+    "postcss": true,
+    "minified": true,
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "uglifyFileName": true,
+    "enhance": true,
+    "showShadowRootInWxmlPanel": true,
+    "compileHotReLoad": true,
+    "ignoreDevUnusedFiles": false,
+    "ignoreUploadUnusedFiles": false,
+    "bigPackageSizeSupport": true,
+    "skylineRenderEnable": false,
+    "packNpmRelationList": [],
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    }
+  },
+  "condition": {},
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  },
+  "srcMiniprogramRoot": "miniprogram/"
+}
