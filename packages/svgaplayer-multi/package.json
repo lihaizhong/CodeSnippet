@@ -1,7 +1,7 @@
 {
-  "name": "svgaplayer-worker",
+  "name": "svgaplayer-multi",
   "version": "1.0.0",
-  "description": "svga worker版本",
+  "description": "svga player for multiple client",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
