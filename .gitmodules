@@ -1,0 +1,15 @@
+[submodule "shared/svgaplayer-tt"]
+	path = shared/svgaplayer-tt
+	url = git@github.com:svga/svgaplayer-tt.git
+
+[submodule "shared/svgaplayer-weapp"]
+	path = shared/svgaplayer-weapp
+	url = git@github.com:svga/svgaplayer-weapp.git
+
+[submodule "shared/SVGAPlayer-Web"]
+	path = shared/SVGAPlayer-Web
+	url = git@github.com:svga/SVGAPlayer-Web.git
+
+[submodule "shared/SVGAPlayer-Web-Lite"]
+	path = shared/SVGAPlayer-Web-Lite
+	url = git@github.com:svga/SVGAPlayer-Web-Lite.git
