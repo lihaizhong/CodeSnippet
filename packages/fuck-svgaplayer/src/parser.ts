@@ -1,23 +1,29 @@
 import { VideoEntity } from "./video_entity";
-import { getMiniBridge } from "./adaptor";
+import { bridge } from "./adaptor";
+import { ProtoMovieEntity } from "./proto";
 const { inflate } = require("./pako");
-const { ProtoMovieEntity } = require("./proto");
-const wx = getMiniBridge();
 
 export class Parser {
+  private createVideoEntity(data: any): VideoEntity {
+    const inflatedData = inflate(data as any);
+    const movieData = ProtoMovieEntity.decode(inflatedData);
+    
+    return new VideoEntity(movieData);
+  }
+
   load(url: string): Promise<VideoEntity> {
     return new Promise((resolver, rejector) => {
       if (url.indexOf("http://") === 0 || url.indexOf("https://") === 0) {
-        wx.request({
+        bridge.request({
           url: url,
           // @ts-ignore
           dataType: "arraybuffer",
           responseType: "arraybuffer",
           success: (res) => {
             try {
-              const inflatedData = inflate(res.data as any);
-              const movieData = ProtoMovieEntity.decode(inflatedData);
-              resolver(new VideoEntity(movieData));
+              const videoItem = this.createVideoEntity(res.data);
+
+              resolver(videoItem);
             } catch (error) {
               rejector(error);
             }
@@ -27,13 +33,13 @@ export class Parser {
           },
         });
       } else {
-        wx.getFileSystemManager().readFile({
+        bridge.getFileSystemManager().readFile({
           filePath: url,
           success: (res) => {
             try {
-              const inflatedData = inflate(res.data as any);
-              const movieData = ProtoMovieEntity.decode(inflatedData);
-              resolver(new VideoEntity(movieData));
+              const videoItem = this.createVideoEntity(res.data);
+
+              resolver(videoItem);
             } catch (error) {
               rejector(error);
             }

@@ -220,8 +220,6 @@ export class Renderer {
     ctx.restore();
   }
 
-  playAudio(frame: number) {}
-
   resetShapeStyles(obj: any) {
     const ctx = this.ctx;
     const styles = obj._styles;

@@ -1,0 +1,20 @@
+{
+  "name": "fuck-svgaplayer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/svgaplayer.js",
+  "typings": "svgaplayer.d.ts",
+  "scripts": {
+    "build": "node build.js > ./dist/svgaplayer.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "miniprogram": "dist",
+  "devDependencies": {
+    "@types/wechat-miniprogram": "^3.4.7",
+    "browserify": "^17.0.0",
+    "tinyify": "^4.0.0",
+    "tsify": "^5.0.4",
+    "typescript": "^5.5.4"
+  }
+}

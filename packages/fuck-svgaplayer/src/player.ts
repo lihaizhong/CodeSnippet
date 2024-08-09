@@ -1,11 +1,8 @@
-"use strict";
-
 import { Renderer } from "./renderer";
 import { ValueAnimator } from "./value_animator";
 import { VideoEntity } from "./video_entity";
-import { getMiniBridge } from "./adaptor";
+import { bridge } from "./adaptor";
 
-const wx = getMiniBridge();
 interface Range {
   location: number;
   length: number;
@@ -28,7 +25,7 @@ export class Player {
     component?: WechatMiniprogram.Component.TrivialInstance
   ): Promise<any> {
     return new Promise((resolver, rej) => {
-      let query = wx.createSelectorQuery();
+      let query = bridge.createSelectorQuery();
       if (component) {
         query = query.in(component);
       }
@@ -46,7 +43,7 @@ export class Player {
             rej("canvas context not found.");
             return;
           }
-          const dpr = wx.getSystemInfoSync().pixelRatio;
+          const dpr = bridge.getSystemInfoSync().pixelRatio;
           this.canvas!.width = res[0].width * dpr;
           this.canvas!.height = res[0].height * dpr;
           resolver(undefined);
@@ -69,7 +66,7 @@ export class Player {
       const keyedImages = await Promise.all(
         Object.keys(videoItem.spec.images).map(async (it) => {
           try {
-            const data = await this.loadWXImage(videoItem.spec.images[it]);
+            const data = await this.loadImage(videoItem.spec.images[it]);
             return { key: it, value: data };
           } catch (error) {
             return { key: it, value: undefined };
@@ -89,7 +86,7 @@ export class Player {
     this._update();
   }
 
-  loadWXImage(data: Uint8Array | string): Promise<any> {
+  loadImage(data: Uint8Array | string): Promise<any> {
     if (!this.canvas) throw "no canvas";
     return new Promise((res, rej) => {
       const img: WechatMiniprogram.Image = this.canvas!.createImage();
@@ -103,7 +100,7 @@ export class Player {
       if (typeof data === "string") {
         img.src = data;
       } else {
-        img.src = "data:image/png;base64," + wx.arrayBufferToBase64(data);
+        img.src = "data:image/png;base64," + bridge.arrayBufferToBase64(data);
       }
     });
   }
@@ -144,7 +141,6 @@ export class Player {
 
   clear() {
     this._renderer?.clear();
-    // this._renderer?.clearAudios();
   }
 
   stepToFrame(frame: number, andPlay: boolean = false) {
@@ -172,7 +168,7 @@ export class Player {
   }
 
   async setImage(src: Uint8Array | string, forKey: string): Promise<any> {
-    const img = await this.loadWXImage(src);
+    const img = await this.loadImage(src);
     this._dynamicImage[forKey] = img;
   }
 
@@ -237,9 +233,6 @@ export class Player {
     this._animator.onUpdate = (value) => {
       if (this._currentFrame === Math.floor(value)) {
         return;
-      }
-      if (this._forwardAnimating && this._currentFrame > Math.floor(value)) {
-        // this._renderer.clearAudios();
       }
       this._currentFrame = Math.floor(value);
       this._update();
@@ -325,7 +318,6 @@ export class Player {
       this._renderer._dynamicImage = this._dynamicImage;
       this._renderer._dynamicText = this._dynamicText;
       this._renderer.drawFrame(this._currentFrame);
-      this._renderer.playAudio(this._currentFrame);
     }
   }
 }
