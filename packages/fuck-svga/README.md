@@ -1,4 +1,4 @@
-# svgaplayer-worker
+# svgaplayer-weapp
 
 专为微信小程序开发的 SVGA 播放器，已在 iOS 及 Android 手机上测试通过。
 
