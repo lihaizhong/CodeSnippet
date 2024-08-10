@@ -257,6 +257,10 @@ export class Renderer {
   }
 
   drawBezier(obj: any) {
+    if (!obj._styles || !(obj._styles.fill || obj._styles.stroke)) {
+      return
+    }
+
     const ctx = this.ctx;
     ctx.save();
     this.resetShapeStyles(obj);
@@ -283,10 +287,10 @@ export class Renderer {
         this.drawBezierElement(currentPoint, firstLetter, args);
       }
     });
-    if (obj._styles && obj._styles.fill) {
+    if (obj._styles.fill) {
       ctx.fill();
     }
-    if (obj._styles && obj._styles.stroke) {
+    if (obj._styles.stroke) {
       ctx.stroke();
     }
     ctx.restore();
@@ -469,6 +473,10 @@ export class Renderer {
   }
 
   drawEllipse(obj: any) {
+    if (!obj._styles || !(obj._styles.fill || obj._styles.stroke)) {
+      return
+    }
+
     const ctx = this.ctx;
     ctx.save();
     this.resetShapeStyles(obj);
@@ -500,16 +508,20 @@ export class Renderer {
     ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
     ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
     ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
-    if (obj._styles && obj._styles.fill) {
+    if (obj._styles.fill) {
       ctx.fill();
     }
-    if (obj._styles && obj._styles.stroke) {
+    if (obj._styles.stroke) {
       ctx.stroke();
     }
     ctx.restore();
   }
 
   drawRect(obj: any) {
+    if (!obj._styles || !(obj._styles.fill || obj._styles.stroke)) {
+      return
+    }
+
     const ctx = this.ctx;
     ctx.save();
     this.resetShapeStyles(obj);
@@ -545,10 +557,10 @@ export class Renderer {
     ctx.arcTo(x, y, x + width, y, radius);
     ctx.closePath();
 
-    if (obj._styles && obj._styles.fill) {
+    if (obj._styles.fill) {
       ctx.fill();
     }
-    if (obj._styles && obj._styles.stroke) {
+    if (obj._styles.stroke) {
       ctx.stroke();
     }
     ctx.restore();
