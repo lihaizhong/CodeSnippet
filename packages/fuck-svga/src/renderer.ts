@@ -43,7 +43,7 @@ export class Renderer {
   _dynamicText: { [key: string]: DynamicText } = {};
 
   clear() {
-    const ctx = this.ctx;
+    const { ctx } = this;
     const areaFrame = {
       x: 0.0,
       y: 0.0,
@@ -54,14 +54,8 @@ export class Renderer {
   }
 
   drawFrame(frame: number) {
-    const ctx = this.ctx;
-    const areaFrame = {
-      x: 0.0,
-      y: 0.0,
-      width: this.canvas.width,
-      height: this.canvas.height,
-    };
-    ctx.clearRect(areaFrame.x, areaFrame.y, areaFrame.width, areaFrame.height);
+    const { ctx } = this;
+    this.clear()
 
     var matteSprites: any = {};
     var isMatteing = false;
@@ -221,7 +215,7 @@ export class Renderer {
   }
 
   resetShapeStyles(obj: any) {
-    const ctx = this.ctx;
+    const { ctx } = this;
     const styles = obj._styles;
     if (!styles) {
       return;
@@ -261,7 +255,7 @@ export class Renderer {
       return
     }
 
-    const ctx = this.ctx;
+    const { ctx } = this;
     ctx.save();
     this.resetShapeStyles(obj);
     if (obj._transform !== undefined && obj._transform !== null) {
@@ -281,9 +275,9 @@ export class Renderer {
       if (segment.length == 0) {
         return;
       }
-      const firstLetter = segment.substr(0, 1);
+      const firstLetter = segment.substring(0, 1);
       if (validMethods.indexOf(firstLetter) >= 0) {
-        const args = segment.substr(1).trim().split(" ");
+        const args = segment.substring(1).trim().split(" ");
         this.drawBezierElement(currentPoint, firstLetter, args);
       }
     });
@@ -297,7 +291,7 @@ export class Renderer {
   }
 
   drawBezierElement(currentPoint: Point, method: string, args: any) {
-    const ctx = this.ctx;
+    const { ctx } = this;
     switch (method) {
       case "M":
         currentPoint.x = Number(args[0]);
@@ -477,7 +471,7 @@ export class Renderer {
       return
     }
 
-    const ctx = this.ctx;
+    const { ctx } = this;
     ctx.save();
     this.resetShapeStyles(obj);
     if (obj._transform !== undefined && obj._transform !== null) {
@@ -522,7 +516,7 @@ export class Renderer {
       return
     }
 
-    const ctx = this.ctx;
+    const { ctx } = this;
     ctx.save();
     this.resetShapeStyles(obj);
     if (obj._transform !== undefined && obj._transform !== null) {
