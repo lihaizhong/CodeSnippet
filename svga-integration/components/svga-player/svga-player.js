@@ -43,6 +43,7 @@ Component({
 
         const videoItem = await parser.load(this.properties.url);
         await player.setVideoItem(videoItem);
+        // player.loops = 1;
         player.startAnimation();
       } catch (ex) {
         console.error("svga初始化失败！", ex);

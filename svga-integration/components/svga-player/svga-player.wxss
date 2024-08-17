@@ -1,5 +1,9 @@
+.svga-palette-container {
+  padding: 100rpx auto 50rpx;
+}
+
 .svga-palette {
-  width: 548rpx;
-  height: 656rpx;
+  width: 90vw;
+  height: 160vw;
   margin: 100rpx auto 50rpx;
 }

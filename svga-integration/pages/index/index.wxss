@@ -11,5 +11,15 @@ page {
 }
 
 .footer {
+  display: flex;
+  padding: 0 20rpx;
   text-align: center;
+}
+
+.foot-btn {
+  flex: 1 auto;
+}
+
+.foot-btn + .foot-btn {
+  margin-left: 20rpx;
 }

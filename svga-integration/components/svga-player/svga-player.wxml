@@ -1,1 +1,3 @@
-<canvas type="2d" id="palette" class="svga-palette"></canvas>
+<view class="svga-palette-container">
+  <canvas type="2d" id="palette" class="svga-palette"></canvas>
+</view>
