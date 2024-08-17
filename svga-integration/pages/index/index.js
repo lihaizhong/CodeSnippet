@@ -1,20 +1,11 @@
-const app = getApp()
+import { ImageSources } from './constants'
 
-const Images = [
-  'https://assets.2dfire.com/frontend/73f92353f203291eff3e6d16f956e23a.svga',
-  'https://assets.2dfire.com/frontend/c4c57036cc9b5b3f4f02ecb60d714732.svga',
-  'https://assets.2dfire.com/frontend/91c263d52b2b1be71f52c2183d2d7194.svga',
-  'https://assets.2dfire.com/frontend/dafed8904c2ad588818c334a14dba5b5.svga',
-  'https://assets.2dfire.com/frontend/dd5cdd2b10095231661229a14b2038ec.svga',
-  'https://assets.2dfire.com/frontend/ba8343ea75162374d50dae084729b679.svga',
-  'https://assets.2dfire.com/frontend/248675ab8c6ff57dce0f26bd4020487b.svga',
-  'https://assets.2dfire.com/frontend/5b3e348766f24e3ab486f7cc2397f3be.svga',
-  'https://assets.2dfire.com/frontend/f84d377f3c1f4d0693ec5f3a7d6d6838.svga'
-]
+const app = getApp()
 
 Page({
   data: {
-    url: ''
+    url: '',
+    current: 0
   },
 
   shuffle (values) {
@@ -27,19 +18,41 @@ Page({
     }
   },
 
-  randomSwitch() {
-    const { length } = Images
+  switchRandom() {
+    const { length } = ImageSources
     const index = Math.floor(Math.random() * length)
 
-    this.shuffle(Images)
-    this.setData({ url: Images[index] })
+    this.shuffle(ImageSources)
+    this.setData({ url: ImageSources[index] })
   },
 
   handleSwitch() {
-    this.randomSwitch()
+    this.switchRandom()
+  },
+
+  handleSwitchPrev() {
+    const { current } = this.data
+    const prev = current - 1
+
+    if (prev < 0) {
+      prev = ImageSources.length - 1
+    }
+
+    this.setData({ url: ImageSources[prev], current: prev })
+  },
+
+  handleSwitchNext() {
+    const { current } = this.data
+    const next = current + 1
+
+    if (next > ImageSources.length - 1) {
+      next = 0
+    }
+
+    this.setData({ url: ImageSources[next], current: next })
   },
 
   onLoad() {
-    this.randomSwitch()
+    this.switchRandom()
   },
 })
