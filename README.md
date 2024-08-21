@@ -6,6 +6,9 @@
 - [如何排查网页在哪里发生了内存泄漏？](https://cloud.tencent.com/developer/article/2197388)
 - [一文带你了解如何排查内存泄漏导致的页面卡顿现象](https://xie.infoq.cn/article/aa6b0d97f38a1f8b98a61b024)
 - [Canvas 最佳实践（性能篇](https://fed.taobao.org/blog/taofed/do71ct/canvas-performance)
+- [Chrome DevTools - Performance Tab Summary](https://stackoverflow.com/questions/61922993/chrome-devtools-performance-tab-summary)
+- [Performance使用指南前端性能排查](https://pengzhenglong.github.io/2023/03/31/Performance%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E6%8E%92%E6%9F%A5/)
+- [Chrome Devtool](https://developer.chrome.com/docs/devtools/overview?hl=zh-cn)
 
 ## 数据结构
 
