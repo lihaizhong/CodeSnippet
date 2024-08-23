@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>wx.miniProgram.navigateTo()</title>
+  <script src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
+  <style>
+    .btn {
+      height: 40px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <button id="navigate-to-miniprogram-btn" class="btn">跳转小程序</button>
+
+  <script type="text/javascript">
+    const $jmb = document.getElementById('navigate-to-miniprogram-btn')
+
+    $jmb.addEventListener('click', () => {
+      wx.miniProgram.navigateTo({
+        url: '/pages/index/index'
+      })
+    })
+  </script>
+</body>
+</html>

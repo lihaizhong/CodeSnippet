@@ -1,54 +1,23 @@
-import { getImageSourceByShuffle } from './actions'
-import { ImageSources } from './constants'
-
-const app = getApp()
-
 Page({
   data: {
-    url: ImageSources[0],
-    current: 0
+    btnList: [
+      {
+        text: '跳转SVGA动画',
+        path: '/pages/svga/index'
+      },
+      {
+        text: '跳转Webview',
+        path: '/pages/webview/index'
+      }
+    ]
   },
+  handleNavigateTo(e) {
+    const { url } = e.currentTarget.dataset
 
-  switchRandom() {
-    const ShuffleImageSources = getImageSourceByShuffle()
-    const { length } = ShuffleImageSources
-    const index = Math.floor(Math.random() * length)
-
-    this.setData({
-      url: ShuffleImageSources[index],
-      current: index
-    })
-  },
-
-  handleSwitch() {
-    this.switchRandom()
-  },
-
-  handleSwitchPrev() {
-    const { current } = this.data
-    let prev = current - 1
-
-    if (prev < 0) {
-      prev = ImageSources.length - 1
+    if (url) {
+      wx.navigateTo({ url })
+    } else {
+      console.error('为获取到跳转路径', e)
     }
-
-    this.setData({
-      url: ImageSources[prev],
-      current: prev
-    })
-  },
-
-  handleSwitchNext() {
-    const { current } = this.data
-    let next = current + 1
-
-    if (next > ImageSources.length - 1) {
-      next = 0
-    }
-
-    this.setData({
-      url: ImageSources[next],
-      current: next
-    })
-  },
+  }
 })
