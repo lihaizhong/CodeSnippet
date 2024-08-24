@@ -1,3 +1,4 @@
+import { bridge } from "./adaptor";
 import { BezierPath } from "./bezier_path";
 import { EllipsePath } from "./ellipse_path";
 import { RectPath } from "./rect_path";
@@ -22,13 +23,22 @@ interface DynamicText {
 }
 
 const validMethods = "MLHVCSQRZmlhvcsqrz";
+const floor = (n: number | string) => ~~n
 
 export class Renderer {
-  constructor(
-    readonly videoItem: VideoEntity,
-    readonly ctx: WechatMiniprogram.CanvasContext,
-    readonly canvas: WechatMiniprogram.Canvas
-  ) {}
+  private readonly videoItem: VideoEntity;
+  private readonly canvas: WechatMiniprogram.OffscreenCanvas;
+  private readonly ctx: CanvasRenderingContext2D;
+
+  constructor(videoItem: VideoEntity, width: number, height: number) {
+    this.videoItem = videoItem;
+    this.canvas = bridge.createOffscreenCanvas({
+      type: '2d',
+      width,
+      height
+    })
+    this.ctx = this.canvas.getContext('2d')
+  }
 
   globalTransform?: {
     a: number;
@@ -53,24 +63,29 @@ export class Renderer {
     ctx.clearRect(areaFrame.x, areaFrame.y, areaFrame.width, areaFrame.height);
   }
 
-  drawFrame(frame: number) {
+  drawFrame(frame: number, range: [number, number] = [0, 1]) {
     const { ctx } = this;
     this.clear()
 
-    var matteSprites: any = {};
-    var isMatteing = false;
+    const matteSprites: any = {};
+    let isMatteing = false;
 
-    var sprites = this.videoItem.sprites;
-    sprites.forEach((sprite, index) => {
+    const { sprites } = this.videoItem;
+    const { length } = sprites;
+    const start = ~~(length * range[0]);
+    const end = ~~(length * range[1]);
+
+    for (let i = start; i < end; i++) {
+      const sprite = sprites[i]
       if (sprites[0].imageKey?.indexOf(".matte") == -1) {
         this.drawSprite(sprite, frame);
-        return;
+        continue;
       }
       if (sprite.imageKey?.indexOf(".matte") != -1) {
         matteSprite[sprite.imageKey!] = sprite;
-        return;
+        continue;
       }
-      var lastSprite = sprites[index - 1];
+      var lastSprite = sprites[i - 1];
       if (
         isMatteing &&
         (!sprite.matteKey ||
@@ -96,14 +111,14 @@ export class Renderer {
       }
       this.drawSprite(sprite, frame);
 
-      if (isMatteing && index == sprites.length - 1) {
+      if (isMatteing && i == sprites.length - 1) {
         var matteSprite = matteSprites.get(sprite.matteKey);
         ctx.globalCompositeOperation = "destination-in";
         this.drawSprite(matteSprite, frame);
         ctx.globalCompositeOperation = "source-over";
         ctx.restore();
       }
-    });
+    }
   }
 
   drawSprite(sprite: SpriteEntity, frameIndex: number) {
@@ -243,10 +258,8 @@ export class Renderer {
       ctx.fillStyle = "transparent";
     }
     if (styles && styles.lineDash) {
-      ctx.setLineDash(
-        [styles.lineDash[0], styles.lineDash[1]],
-        styles.lineDash[2]
-      );
+      ctx.lineDashOffset = styles.lineDash[2]
+      ctx.setLineDash([styles.lineDash[0], styles.lineDash[1]])
     }
   }
 
@@ -294,48 +307,48 @@ export class Renderer {
     const { ctx } = this;
     switch (method) {
       case "M":
-        currentPoint.x = Number(args[0]);
-        currentPoint.y = Number(args[1]);
+        currentPoint.x = floor(args[0]);
+        currentPoint.y = floor(args[1]);
         ctx.moveTo(currentPoint.x, currentPoint.y);
         break;
       case "m":
-        currentPoint.x += Number(args[0]);
-        currentPoint.y += Number(args[1]);
+        currentPoint.x += floor(args[0]);
+        currentPoint.y += floor(args[1]);
         ctx.moveTo(currentPoint.x, currentPoint.y);
         break;
       case "L":
-        currentPoint.x = Number(args[0]);
-        currentPoint.y = Number(args[1]);
+        currentPoint.x = floor(args[0]);
+        currentPoint.y = floor(args[1]);
         ctx.lineTo(currentPoint.x, currentPoint.y);
         break;
       case "l":
-        currentPoint.x += Number(args[0]);
-        currentPoint.y += Number(args[1]);
+        currentPoint.x += floor(args[0]);
+        currentPoint.y += floor(args[1]);
         ctx.lineTo(currentPoint.x, currentPoint.y);
         break;
       case "H":
-        currentPoint.x = Number(args[0]);
+        currentPoint.x = floor(args[0]);
         ctx.lineTo(currentPoint.x, currentPoint.y);
         break;
       case "h":
-        currentPoint.x += Number(args[0]);
+        currentPoint.x += floor(args[0]);
         ctx.lineTo(currentPoint.x, currentPoint.y);
         break;
       case "V":
-        currentPoint.y = Number(args[0]);
+        currentPoint.y = floor(args[0]);
         ctx.lineTo(currentPoint.x, currentPoint.y);
         break;
       case "v":
-        currentPoint.y += Number(args[0]);
+        currentPoint.y += floor(args[0]);
         ctx.lineTo(currentPoint.x, currentPoint.y);
         break;
       case "C":
-        currentPoint.x1 = Number(args[0]);
-        currentPoint.y1 = Number(args[1]);
-        currentPoint.x2 = Number(args[2]);
-        currentPoint.y2 = Number(args[3]);
-        currentPoint.x = Number(args[4]);
-        currentPoint.y = Number(args[5]);
+        currentPoint.x1 = floor(args[0]);
+        currentPoint.y1 = floor(args[1]);
+        currentPoint.x2 = floor(args[2]);
+        currentPoint.y2 = floor(args[3]);
+        currentPoint.x = floor(args[4]);
+        currentPoint.y = floor(args[5]);
         ctx.bezierCurveTo(
           currentPoint.x1,
           currentPoint.y1,
@@ -346,12 +359,12 @@ export class Renderer {
         );
         break;
       case "c":
-        currentPoint.x1 = currentPoint.x + Number(args[0]);
-        currentPoint.y1 = currentPoint.y + Number(args[1]);
-        currentPoint.x2 = currentPoint.x + Number(args[2]);
-        currentPoint.y2 = currentPoint.y + Number(args[3]);
-        currentPoint.x += Number(args[4]);
-        currentPoint.y += Number(args[5]);
+        currentPoint.x1 = currentPoint.x + floor(args[0]);
+        currentPoint.y1 = currentPoint.y + floor(args[1]);
+        currentPoint.x2 = currentPoint.x + floor(args[2]);
+        currentPoint.y2 = currentPoint.y + floor(args[3]);
+        currentPoint.x += floor(args[4]);
+        currentPoint.y += floor(args[5]);
         ctx.bezierCurveTo(
           currentPoint.x1,
           currentPoint.y1,
@@ -370,10 +383,10 @@ export class Renderer {
         ) {
           currentPoint.x1 = currentPoint.x - currentPoint.x2 + currentPoint.x;
           currentPoint.y1 = currentPoint.y - currentPoint.y2 + currentPoint.y;
-          currentPoint.x2 = Number(args[0]);
-          currentPoint.y2 = Number(args[1]);
-          currentPoint.x = Number(args[2]);
-          currentPoint.y = Number(args[3]);
+          currentPoint.x2 = floor(args[0]);
+          currentPoint.y2 = floor(args[1]);
+          currentPoint.x = floor(args[2]);
+          currentPoint.y = floor(args[3]);
           ctx.bezierCurveTo(
             currentPoint.x1,
             currentPoint.y1,
@@ -383,10 +396,10 @@ export class Renderer {
             currentPoint.y
           );
         } else {
-          currentPoint.x1 = Number(args[0]);
-          currentPoint.y1 = Number(args[1]);
-          currentPoint.x = Number(args[2]);
-          currentPoint.y = Number(args[3]);
+          currentPoint.x1 = floor(args[0]);
+          currentPoint.y1 = floor(args[1]);
+          currentPoint.x = floor(args[2]);
+          currentPoint.y = floor(args[3]);
           ctx.quadraticCurveTo(
             currentPoint.x1,
             currentPoint.y1,
@@ -404,10 +417,10 @@ export class Renderer {
         ) {
           currentPoint.x1 = currentPoint.x - currentPoint.x2 + currentPoint.x;
           currentPoint.y1 = currentPoint.y - currentPoint.y2 + currentPoint.y;
-          currentPoint.x2 = currentPoint.x + Number(args[0]);
-          currentPoint.y2 = currentPoint.y + Number(args[1]);
-          currentPoint.x += Number(args[2]);
-          currentPoint.y += Number(args[3]);
+          currentPoint.x2 = currentPoint.x + floor(args[0]);
+          currentPoint.y2 = currentPoint.y + floor(args[1]);
+          currentPoint.x += floor(args[2]);
+          currentPoint.y += floor(args[3]);
           ctx.bezierCurveTo(
             currentPoint.x1,
             currentPoint.y1,
@@ -417,10 +430,10 @@ export class Renderer {
             currentPoint.y
           );
         } else {
-          currentPoint.x1 = currentPoint.x + Number(args[0]);
-          currentPoint.y1 = currentPoint.y + Number(args[1]);
-          currentPoint.x += Number(args[2]);
-          currentPoint.y += Number(args[3]);
+          currentPoint.x1 = currentPoint.x + floor(args[0]);
+          currentPoint.y1 = currentPoint.y + floor(args[1]);
+          currentPoint.x += floor(args[2]);
+          currentPoint.y += floor(args[3]);
           ctx.quadraticCurveTo(
             currentPoint.x1,
             currentPoint.y1,
@@ -430,10 +443,10 @@ export class Renderer {
         }
         break;
       case "Q":
-        currentPoint.x1 = Number(args[0]);
-        currentPoint.y1 = Number(args[1]);
-        currentPoint.x = Number(args[2]);
-        currentPoint.y = Number(args[3]);
+        currentPoint.x1 = floor(args[0]);
+        currentPoint.y1 = floor(args[1]);
+        currentPoint.x = floor(args[2]);
+        currentPoint.y = floor(args[3]);
         ctx.quadraticCurveTo(
           currentPoint.x1,
           currentPoint.y1,
@@ -442,10 +455,10 @@ export class Renderer {
         );
         break;
       case "q":
-        currentPoint.x1 = currentPoint.x + Number(args[0]);
-        currentPoint.y1 = currentPoint.y + Number(args[1]);
-        currentPoint.x += Number(args[2]);
-        currentPoint.y += Number(args[3]);
+        currentPoint.x1 = currentPoint.x + floor(args[0]);
+        currentPoint.y1 = currentPoint.y + floor(args[1]);
+        currentPoint.x += floor(args[2]);
+        currentPoint.y += floor(args[3]);
         ctx.quadraticCurveTo(
           currentPoint.x1,
           currentPoint.y1,
@@ -558,5 +571,9 @@ export class Renderer {
       ctx.stroke();
     }
     ctx.restore();
+  }
+
+  getImageData(): ImageData {
+    return this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height)
   }
 }
