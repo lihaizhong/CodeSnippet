@@ -2,6 +2,7 @@
   "appid": "wx26fe472d23b35dff",
   "compileType": "miniprogram",
   "libVersion": "3.0.2",
+  "miniprogramRoot": "miniprogram/",
   "packOptions": {
     "ignore": [],
     "include": []
@@ -9,12 +10,19 @@
   "setting": {
     "coverView": true,
     "es6": true,
+    "swc": true,
     "postcss": true,
     "minified": true,
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "uglifyFileName": true,
     "enhance": true,
     "showShadowRootInWxmlPanel": true,
+    "compileHotReLoad": true,
     "ignoreDevUnusedFiles": false,
     "ignoreUploadUnusedFiles": false,
+    "bigPackageSizeSupport": true,
+    "skylineRenderEnable": true,
     "packNpmRelationList": [],
     "babelSetting": {
       "ignore": [],
@@ -26,5 +34,6 @@
   "editorSetting": {
     "tabIndent": "insertSpaces",
     "tabSize": 2
-  }
+  },
+  "srcMiniprogramRoot": "miniprogram/"
 }
