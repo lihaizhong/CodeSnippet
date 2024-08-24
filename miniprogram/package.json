@@ -1,13 +1,10 @@
 {
-  "name": "svga-integration",
+  "name": "miniprogram-code-snippets",
   "version": "1.0.0",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "lihzsky",
   "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "@ungap/url-search-params": "^0.2.2"
-  }
+  "description": "code snippets"
 }
