@@ -1,0 +1,3 @@
+<view>
+  <input type="nickname" onInput="onHandleNicknameInput" onBlur="onHandleNicknameBlur">
+</view>

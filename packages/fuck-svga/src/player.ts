@@ -1,7 +1,7 @@
 import { Renderer } from "./renderer";
 import { ValueAnimator } from "./value_animator";
 import { VideoEntity } from "./video_entity";
-import { bridge } from "./adaptor";
+import { bridge, getCanvas, loadImage } from "./adaptor";
 
 interface Range {
   location: number;
@@ -16,46 +16,33 @@ interface DynamicText {
   offset: { x: number; y: number };
 }
 
+export const AnimateFillMode = {
+  FORWARD: 'Forward',
+  BACKWARD: 'Backward'
+}
+
+export const AnimateContentMode = {
+
+}
+
 export class Player {
-  canvas?: WechatMiniprogram.Canvas;
-  ctx?: WechatMiniprogram.CanvasContext;
+  canvas?: WechatMiniprogram.Canvas | HTMLCanvasElement;
+  ctx?: CanvasRenderingContext2D;
 
   async setCanvas(
     selector: string,
     component?: WechatMiniprogram.Component.TrivialInstance
   ): Promise<any> {
-    return new Promise((resolver, rej) => {
-      let query = bridge.createSelectorQuery();
-      if (component) {
-        query = query.in(component);
-      }
-      query
-        .select(selector)
-        .fields({ node: true, size: true })
-        .exec((res) => {
-          this.canvas = res?.[0]?.node;
-          if (!this.canvas) {
-            rej("canvas not found.");
-            return;
-          }
-          this.ctx = this.canvas!.getContext("2d");
-          if (!this.ctx) {
-            rej("canvas context not found.");
-            return;
-          }
-          const dpr = bridge.getSystemInfoSync().pixelRatio;
-          this.canvas!.width = res[0].width * dpr;
-          this.canvas!.height = res[0].height * dpr;
-          resolver(undefined);
-        });
-    });
+    const { canvas, ctx } = await getCanvas(selector, component)
+    this.canvas = canvas
+    this.ctx = ctx
   }
 
   loops = 0;
 
   clearsAfterStop = true;
 
-  fillMode = "Forward";
+  fillMode = AnimateFillMode.FORWARD;
 
   _videoItem?: VideoEntity;
 
@@ -78,7 +65,8 @@ export class Player {
         decodedImages[it.key] = it.value;
       });
       videoItem.decodedImages = decodedImages;
-      this._renderer = new Renderer(this._videoItem!, this.ctx!, this.canvas!);
+      const { width, height } = this.canvas!
+      this._renderer = new Renderer(this._videoItem!, width, height);
     } else {
       this._renderer = undefined;
     }
@@ -88,21 +76,8 @@ export class Player {
 
   loadImage(data: Uint8Array | string): Promise<any> {
     if (!this.canvas) throw "no canvas";
-    return new Promise((res, rej) => {
-      const img: WechatMiniprogram.Image = this.canvas!.createImage();
-      img.onload = () => {
-        res(img);
-      };
-      img.onerror = (error) => {
-        console.log(error);
-        rej("image decoded fail.");
-      };
-      if (typeof data === "string") {
-        img.src = data;
-      } else {
-        img.src = "data:image/png;base64," + bridge.arrayBufferToBase64(data);
-      }
-    });
+
+    return loadImage(this.canvas, data)
   }
 
   _contentMode = "AspectFit";
@@ -229,7 +204,7 @@ export class Player {
       this._animator.duration = videoItem.frames * (1.0 / videoItem.FPS) * 1000;
     }
     this._animator.loops = this.loops <= 0 ? Infinity : this.loops;
-    this._animator.fillRule = this.fillMode === "Backward" ? 1 : 0;
+    this._animator.fillRule = this.fillMode === AnimateFillMode.BACKWARD ? 1 : 0;
     this._animator.onUpdate = (value) => {
       if (this._currentFrame === Math.floor(value)) {
         return;
@@ -264,7 +239,7 @@ export class Player {
   }
 
   _resize() {
-    const ctx = this.ctx;
+    const { ctx } = this;
     const videoItem = this._videoItem;
     if (!ctx) return;
     if (!videoItem) return;
@@ -317,7 +292,7 @@ export class Player {
     if (this._renderer) {
       this._renderer._dynamicImage = this._dynamicImage;
       this._renderer._dynamicText = this._dynamicText;
-      this._renderer.drawFrame(this._currentFrame);
+      this._renderer.draw(this._currentFrame);
     }
   }
 }

@@ -1,12 +1,14 @@
+import { startAnimationFrame } from "./adaptor";
+
 export class ValueAnimator {
-  static currentTimeMillsecond = () => {
+  static currentTimeMillSecond = () => {
     if (typeof performance === "undefined") {
       return new Date().getTime();
     }
     return performance.now();
   };
 
-  canvas?: WechatMiniprogram.Canvas;
+  canvas?: WechatMiniprogram.Canvas | HTMLCanvasElement;
   startValue = 0;
   endValue = 0;
   duration = 0;
@@ -43,7 +45,7 @@ export class ValueAnimator {
   doStart(reverse: boolean, currentValue: number | undefined = undefined) {
     this.mReverse = reverse;
     this.mRunning = true;
-    this.mStartTime = ValueAnimator.currentTimeMillsecond();
+    this.mStartTime = ValueAnimator.currentTimeMillSecond();
     if (currentValue) {
       if (reverse) {
         this.mStartTime -=
@@ -66,17 +68,10 @@ export class ValueAnimator {
   doFrame() {
     const renderLoop = () => {
       if (!this.mRunning) return;
-      this.doDeltaTime(ValueAnimator.currentTimeMillsecond() - this.mStartTime);
-      this.canvas?.requestAnimationFrame(renderLoop);
+      this.doDeltaTime(ValueAnimator.currentTimeMillSecond() - this.mStartTime);
+      startAnimationFrame(this.canvas!, renderLoop);
     };
-    this.canvas?.requestAnimationFrame(renderLoop);
-
-    // if (this.mRunning) {
-    //     this.doDeltaTime(ValueAnimator.currentTimeMillsecond() - this.mStartTime)
-    //     if (this.mRunning && this.canvas !== undefined) {
-    //         this.canvas.requestAnimationFrame(this.doFrame.bind(this))
-    //     }
-    // }
+    startAnimationFrame(this.canvas!, renderLoop);
   }
 
   doDeltaTime(deltaTime: number) {

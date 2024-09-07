@@ -1,4 +1,4 @@
-import { bridge } from "./adaptor";
+import { createOffscreenCanvas } from "./adaptor";
 import { BezierPath } from "./bezier_path";
 import { EllipsePath } from "./ellipse_path";
 import { RectPath } from "./rect_path";
@@ -27,12 +27,12 @@ const floor = (n: number | string) => ~~n
 
 export class Renderer {
   private readonly videoItem: VideoEntity;
-  private readonly canvas: WechatMiniprogram.OffscreenCanvas;
+  private readonly canvas: WechatMiniprogram.OffscreenCanvas | OffscreenCanvas;
   private readonly ctx: CanvasRenderingContext2D;
 
   constructor(videoItem: VideoEntity, width: number, height: number) {
     this.videoItem = videoItem;
-    this.canvas = bridge.createOffscreenCanvas({
+    this.canvas = createOffscreenCanvas({
       type: '2d',
       width,
       height
@@ -52,6 +52,58 @@ export class Renderer {
   _dynamicImage: { [key: string]: any } = {};
   _dynamicText: { [key: string]: DynamicText } = {};
 
+  isMatting: boolean = false;
+  matteSprites: Record<string, any> = {};
+
+
+
+  _resize() {
+    const { ctx } = this;
+    const videoItem = this._videoItem;
+    if (!ctx) return;
+    if (!videoItem) return;
+    let scaleX = 1.0;
+    let scaleY = 1.0;
+    let translateX = 0.0;
+    let translateY = 0.0;
+    let targetSize = {
+      width: this.canvas!.width,
+      height: this.canvas!.height,
+    };
+    let imageSize = videoItem.videoSize;
+    if (this._contentMode === "Fill") {
+      scaleX = targetSize.width / imageSize.width;
+      scaleY = targetSize.height / imageSize.height;
+    } else if (
+      this._contentMode === "AspectFit" ||
+      this._contentMode === "AspectFill"
+    ) {
+      const imageRatio = imageSize.width / imageSize.height;
+      const viewRatio = targetSize.width / targetSize.height;
+      if (
+        (imageRatio >= viewRatio && this._contentMode === "AspectFit") ||
+        (imageRatio <= viewRatio && this._contentMode === "AspectFill")
+      ) {
+        scaleX = scaleY = targetSize.width / imageSize.width;
+        translateY = (targetSize.height - imageSize.height * scaleY) / 2.0;
+      } else if (
+        (imageRatio < viewRatio && this._contentMode === "AspectFit") ||
+        (imageRatio > viewRatio && this._contentMode === "AspectFill")
+      ) {
+        scaleX = scaleY = targetSize.height / imageSize.height;
+        translateX = (targetSize.width - imageSize.width * scaleX) / 2.0;
+      }
+    }
+    this.globalTransform = {
+      a: scaleX,
+      b: 0.0,
+      c: 0.0,
+      d: scaleY,
+      tx: translateX,
+      ty: translateY,
+    };
+  }
+
   clear() {
     const { ctx } = this;
     const areaFrame = {
@@ -60,23 +112,23 @@ export class Renderer {
       width: this.canvas.width,
       height: this.canvas.height,
     };
+    this.matteSprites = {};
+    this.isMatting = false;
     ctx.clearRect(areaFrame.x, areaFrame.y, areaFrame.width, areaFrame.height);
   }
 
-  drawFrame(frame: number, range: [number, number] = [0, 1]) {
-    const { ctx } = this;
+  draw(frame: number, range: [number, number] = [0, 1]) {
     this.clear()
 
-    const matteSprites: any = {};
-    let isMatteing = false;
-
+    const { ctx, isMatting, matteSprites } = this
     const { sprites } = this.videoItem;
     const { length } = sprites;
-    const start = ~~(length * range[0]);
-    const end = ~~(length * range[1]);
+    const start = floor(length * range[0]);
+    const end = floor(length * range[1]);
 
     for (let i = start; i < end; i++) {
       const sprite = sprites[i]
+      let matteSprite
       if (sprites[0].imageKey?.indexOf(".matte") == -1) {
         this.drawSprite(sprite, frame);
         continue;
@@ -85,16 +137,16 @@ export class Renderer {
         matteSprite[sprite.imageKey!] = sprite;
         continue;
       }
-      var lastSprite = sprites[i - 1];
+      const lastSprite = sprites[i - 1];
       if (
-        isMatteing &&
+        isMatting &&
         (!sprite.matteKey ||
           sprite.matteKey.length == 0 ||
           sprite.matteKey != lastSprite.matteKey)
       ) {
-        isMatteing = false;
+        this.isMatting = false;
 
-        var matteSprite = matteSprites[sprite.matteKey!];
+        matteSprite = matteSprites[sprite.matteKey!];
         ctx.globalCompositeOperation = "destination-in";
         this.drawSprite(matteSprite, frame);
         ctx.globalCompositeOperation = "source-over";
@@ -106,13 +158,13 @@ export class Renderer {
           lastSprite.matteKey.length == 0 ||
           lastSprite.matteKey != sprite.matteKey)
       ) {
-        isMatteing = true;
+        this.isMatting = true;
         ctx.save();
       }
       this.drawSprite(sprite, frame);
 
-      if (isMatteing && i == sprites.length - 1) {
-        var matteSprite = matteSprites.get(sprite.matteKey);
+      if (isMatting && i == sprites.length - 1) {
+        const matteSprite = matteSprites.get(sprite.matteKey);
         ctx.globalCompositeOperation = "destination-in";
         this.drawSprite(matteSprite, frame);
         ctx.globalCompositeOperation = "source-over";
@@ -121,12 +173,12 @@ export class Renderer {
     }
   }
 
-  drawSprite(sprite: SpriteEntity, frameIndex: number) {
+  private drawSprite(sprite: SpriteEntity, frameIndex: number) {
     let frameItem = sprite.frames[frameIndex];
     if (frameItem.alpha < 0.05) {
       return;
     }
-    const ctx = this.ctx;
+    const { ctx } = this;
     ctx.save();
     if (this.globalTransform) {
       ctx.transform(
@@ -229,7 +281,7 @@ export class Renderer {
     ctx.restore();
   }
 
-  resetShapeStyles(obj: any) {
+  private resetShapeStyles(obj: any) {
     const { ctx } = this;
     const styles = obj._styles;
     if (!styles) {
@@ -263,7 +315,7 @@ export class Renderer {
     }
   }
 
-  drawBezier(obj: any) {
+  private drawBezier(obj: any) {
     if (!obj._styles || !(obj._styles.fill || obj._styles.stroke)) {
       return
     }
@@ -303,7 +355,7 @@ export class Renderer {
     ctx.restore();
   }
 
-  drawBezierElement(currentPoint: Point, method: string, args: any) {
+  private drawBezierElement(currentPoint: Point, method: string, args: any) {
     const { ctx } = this;
     switch (method) {
       case "M":
@@ -479,7 +531,7 @@ export class Renderer {
     }
   }
 
-  drawEllipse(obj: any) {
+  private drawEllipse(obj: any) {
     if (!obj._styles || !(obj._styles.fill || obj._styles.stroke)) {
       return
     }
@@ -501,7 +553,7 @@ export class Renderer {
     let y = obj._y - obj._radiusY;
     let w = obj._radiusX * 2;
     let h = obj._radiusY * 2;
-    var kappa = 0.5522848,
+    const kappa = 0.5522848,
       ox = (w / 2) * kappa,
       oy = (h / 2) * kappa,
       xe = x + w,
@@ -524,7 +576,7 @@ export class Renderer {
     ctx.restore();
   }
 
-  drawRect(obj: any) {
+  private drawRect(obj: any) {
     if (!obj._styles || !(obj._styles.fill || obj._styles.stroke)) {
       return
     }
