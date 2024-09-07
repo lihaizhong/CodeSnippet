@@ -2,7 +2,7 @@
   "appid": "wx26fe472d23b35dff",
   "compileType": "miniprogram",
   "libVersion": "3.0.2",
-  "miniprogramRoot": "weapp/",
+  "miniprogramRoot": "./mp-platform/weapp/",
   "packOptions": {
     "ignore": [],
     "include": []
