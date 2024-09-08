@@ -50,10 +50,16 @@ Page({
       search: '',
     });
   },
+  handleNickNameFocus(e) {
+    console.log('nickname focus', e)
+  },
   handleNickNameInput(e) {
     console.log('nickname input', e)
   },
   handleNickNameBlur(e) {
     console.log('nickname blur', e)
+  },
+  handleNickNameConfirm(e) {
+    console.log('nickname confirm', e)
   }
 });

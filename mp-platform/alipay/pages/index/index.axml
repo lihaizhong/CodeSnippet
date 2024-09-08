@@ -63,11 +63,19 @@
       </view>
     </view>
     <view class="form-line" />
-    <!-- 请在真机上测试，IOS无法触发事件 -->
     <view class="form-row">
       <view class="form-row-label">用户昵称</view>
       <view class="form-row-content">
-        <input class="input" type="nickname" placeholder="获取用户昵称" onInput="handleNickNameInput" onBlur="handleNickNameBlur" />
+        <!-- FIXME: 请在真机上测试，IOS无法触发事件 -->
+        <input
+          class="input"
+          type="nickname"
+          placeholder="获取用户昵称"
+          onFocus="handleNickNameFocus"
+          onInput="handleNickNameInput"
+          onBlur="handleNickNameBlur"
+          onConfirm="handleNickNameConfirm"
+        />
       </view>
     </view>
   </view>
