@@ -52,8 +52,6 @@ export function getBridge(): WechatMiniprogram.Wx | Window {
   throw new Error('不支持当前平台')
 }
 
-export const bridge = getBridge()
-
 export function createOffscreenCanvas(options: WechatMiniprogram.CreateOffscreenCanvasOption): WechatMiniprogram.OffscreenCanvas | OffscreenCanvas {
   if (platform === SupportedPlatform.WECHAT) {
     return wx.createOffscreenCanvas(options)
@@ -88,6 +86,7 @@ export interface IGetCanvasResult {
 
 export function getCanvas(selector: string, component?: WechatMiniprogram.Component.TrivialInstance): Promise<IGetCanvasResult> {
   return new Promise((resolve, reject) => {
+    const bridge = getBridge()
     const initCanvas = (canvas?: WechatMiniprogram.Canvas | HTMLCanvasElement, width: number = 0, height: number = 0) => {
       if (!canvas) {
         reject("canvas not found.");
@@ -124,8 +123,9 @@ export function getCanvas(selector: string, component?: WechatMiniprogram.Compon
   })
 }
 
-export function loadImage(canvas: WechatMiniprogram.Canvas | HTMLCanvasElement, data: Uint8Array | string) {
+export function loadImage(canvas: WechatMiniprogram.Canvas | HTMLCanvasElement, data: Uint8Array | string): Promise<WechatMiniprogram.Image | HTMLImageElement> {
   return new Promise((resolve, reject) => {
+    const bridge = getBridge()
     let img: WechatMiniprogram.Image | HTMLImageElement | null = null
 
     if (platform === SupportedPlatform.H5) {

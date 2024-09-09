@@ -1,7 +1,7 @@
 import { Renderer } from "./renderer";
 import { ValueAnimator } from "./value_animator";
 import { VideoEntity } from "./video_entity";
-import { bridge, getCanvas, loadImage } from "./adaptor";
+import { getCanvas, loadImage } from "./adaptor";
 
 interface Range {
   location: number;
@@ -22,7 +22,9 @@ export const AnimateFillMode = {
 }
 
 export const AnimateContentMode = {
-
+  ASPECT_FIT: 'AspectFit',
+  ASPECT_FILL: 'AspectFill',
+  FILL: 'Fill'
 }
 
 export class Player {
@@ -80,7 +82,7 @@ export class Player {
     return loadImage(this.canvas, data)
   }
 
-  _contentMode = "AspectFit";
+  _contentMode = AnimateContentMode.ASPECT_FIT;
 
   setContentMode(contentMode: string) {
     this._contentMode = contentMode;
@@ -252,29 +254,31 @@ export class Player {
       height: this.canvas!.height,
     };
     let imageSize = videoItem.videoSize;
-    if (this._contentMode === "Fill") {
+
+    if (this._contentMode === AnimateContentMode.FILL) {
       scaleX = targetSize.width / imageSize.width;
       scaleY = targetSize.height / imageSize.height;
     } else if (
-      this._contentMode === "AspectFit" ||
-      this._contentMode === "AspectFill"
+      this._contentMode === AnimateContentMode.ASPECT_FIT ||
+      this._contentMode === AnimateContentMode.ASPECT_FILL
     ) {
       const imageRatio = imageSize.width / imageSize.height;
       const viewRatio = targetSize.width / targetSize.height;
       if (
-        (imageRatio >= viewRatio && this._contentMode === "AspectFit") ||
-        (imageRatio <= viewRatio && this._contentMode === "AspectFill")
+        (imageRatio >= viewRatio && this._contentMode === AnimateContentMode.ASPECT_FIT) ||
+        (imageRatio <= viewRatio && this._contentMode === AnimateContentMode.ASPECT_FILL)
       ) {
         scaleX = scaleY = targetSize.width / imageSize.width;
         translateY = (targetSize.height - imageSize.height * scaleY) / 2.0;
       } else if (
-        (imageRatio < viewRatio && this._contentMode === "AspectFit") ||
-        (imageRatio > viewRatio && this._contentMode === "AspectFill")
+        (imageRatio < viewRatio && this._contentMode === AnimateContentMode.ASPECT_FIT) ||
+        (imageRatio > viewRatio && this._contentMode === AnimateContentMode.ASPECT_FILL)
       ) {
         scaleX = scaleY = targetSize.height / imageSize.height;
         translateX = (targetSize.width - imageSize.width * scaleX) / 2.0;
       }
     }
+
     if (this._renderer) {
       this._renderer.globalTransform = {
         a: scaleX,
