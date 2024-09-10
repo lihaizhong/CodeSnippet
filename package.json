@@ -13,7 +13,7 @@
     "snippet",
     "code snippet"
   ],
-  "author": "sky",
+  "author": "lihzsky",
   "license": "MIT",
   "devDependencies": {
     "serve": "^14.2.3"
