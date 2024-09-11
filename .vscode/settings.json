@@ -3,6 +3,10 @@
     "douyin",
     "Matteing",
     "miniprogram",
+    "nanos",
+    "oneof",
+    "oneofs",
+    "protobuf",
     "wechat"
   ]
 }
