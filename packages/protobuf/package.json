@@ -17,6 +17,8 @@
   "dependencies": {
     "@protobufjs/aspromise": "^1.1.2",
     "@protobufjs/base64": "^1.1.2",
+    "@protobufjs/float": "^1.0.2",
+    "@protobufjs/pool": "^1.1.0",
     "@protobufjs/utf8": "^1.1.0"
   }
 }

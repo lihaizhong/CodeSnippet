@@ -20,6 +20,12 @@ importers:
       '@protobufjs/base64':
         specifier: ^1.1.2
         version: 1.1.2
+      '@protobufjs/float':
+        specifier: ^1.0.2
+        version: 1.0.2
+      '@protobufjs/pool':
+        specifier: ^1.1.0
+        version: 1.1.0
       '@protobufjs/utf8':
         specifier: ^1.1.0
         version: 1.1.0
@@ -51,6 +57,12 @@ packages:
 
   '@protobufjs/base64@1.1.2':
     resolution: {integrity: sha512-AZkcAA5vnN/v4PDqKyMR5lx7hZttPDgClv83E//FMNhR2TMcLUhfRUBHCmSl0oi9zMgDDqRUJkSxO3wm85+XLg==}
+
+  '@protobufjs/float@1.0.2':
+    resolution: {integrity: sha512-Ddb+kVXlXst9d+R9PfTIxh1EdNkgoRe5tOX6t01f1lYWOvJnSPDBlG241QLzcyPdoNTsblLUdujGSE4RzrTZGQ==}
+
+  '@protobufjs/pool@1.1.0':
+    resolution: {integrity: sha512-0kELaGSIDBKvcgS4zkjz1PeddatrjYcmMWOlAuAPwAeccUrPHdUqo/J6LiymHHEiJT5NrF1UVwxY14f+fy4WQw==}
 
   '@protobufjs/utf8@1.1.0':
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
@@ -414,6 +426,10 @@ snapshots:
   '@protobufjs/aspromise@1.1.2': {}
 
   '@protobufjs/base64@1.1.2': {}
+
+  '@protobufjs/float@1.0.2': {}
+
+  '@protobufjs/pool@1.1.0': {}
 
   '@protobufjs/utf8@1.1.0': {}
 
