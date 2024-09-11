@@ -1,4 +1,4 @@
-import { BezierPath } from "./bezier_path";
+import { BezierPath } from "../draw/bezier_path";
 
 export class FrameEntity {
   alpha = 0.0;

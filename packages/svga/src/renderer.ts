@@ -1,9 +1,9 @@
 import { createOffscreenCanvas } from "./adaptor";
-import { BezierPath } from "./bezier_path";
-import { EllipsePath } from "./ellipse_path";
-import { RectPath } from "./rect_path";
-import { SpriteEntity } from "./sprite_entity";
-import { VideoEntity } from "./video_entity";
+import { BezierPath } from "./draw/bezier_path";
+import { EllipsePath } from "./draw/ellipse_path";
+import { RectPath } from "./draw/rect_path";
+import { SpriteEntity } from "./entity/sprite_entity";
+import { VideoEntity } from "./entity/video_entity";
 
 interface Point {
   x: number;
@@ -29,6 +29,22 @@ export class Renderer {
   private readonly videoItem: VideoEntity;
   private readonly canvas: WechatMiniprogram.OffscreenCanvas | OffscreenCanvas;
   private readonly ctx: CanvasRenderingContext2D;
+  private contentMode: string = 'AspectFit'
+
+  private globalTransform?: {
+    a: number;
+    b: number;
+    c: number;
+    d: number;
+    tx: number;
+    ty: number;
+  };
+
+  private dynamicImage: { [key: string]: any } = {};
+  private dynamicText: { [key: string]: DynamicText } = {};
+
+  private isMatting: boolean = false;
+  private matteSprites: Record<string, any> = {};
 
   constructor(videoItem: VideoEntity, width: number, height: number) {
     this.videoItem = videoItem;
@@ -40,26 +56,8 @@ export class Renderer {
     this.ctx = this.canvas.getContext('2d')
   }
 
-  globalTransform?: {
-    a: number;
-    b: number;
-    c: number;
-    d: number;
-    tx: number;
-    ty: number;
-  };
-
-  _dynamicImage: { [key: string]: any } = {};
-  _dynamicText: { [key: string]: DynamicText } = {};
-
-  isMatting: boolean = false;
-  matteSprites: Record<string, any> = {};
-
-
-
-  _resize() {
-    const { ctx } = this;
-    const videoItem = this._videoItem;
+  resize() {
+    const { ctx, videoItem } = this;
     if (!ctx) return;
     if (!videoItem) return;
     let scaleX = 1.0;
@@ -71,24 +69,24 @@ export class Renderer {
       height: this.canvas!.height,
     };
     let imageSize = videoItem.videoSize;
-    if (this._contentMode === "Fill") {
+    if (this.contentMode === "Fill") {
       scaleX = targetSize.width / imageSize.width;
       scaleY = targetSize.height / imageSize.height;
     } else if (
-      this._contentMode === "AspectFit" ||
-      this._contentMode === "AspectFill"
+      this.contentMode === "AspectFit" ||
+      this.contentMode === "AspectFill"
     ) {
       const imageRatio = imageSize.width / imageSize.height;
       const viewRatio = targetSize.width / targetSize.height;
       if (
-        (imageRatio >= viewRatio && this._contentMode === "AspectFit") ||
-        (imageRatio <= viewRatio && this._contentMode === "AspectFill")
+        (imageRatio >= viewRatio && this.contentMode === "AspectFit") ||
+        (imageRatio <= viewRatio && this.contentMode === "AspectFill")
       ) {
         scaleX = scaleY = targetSize.width / imageSize.width;
         translateY = (targetSize.height - imageSize.height * scaleY) / 2.0;
       } else if (
-        (imageRatio < viewRatio && this._contentMode === "AspectFit") ||
-        (imageRatio > viewRatio && this._contentMode === "AspectFill")
+        (imageRatio < viewRatio && this.contentMode === "AspectFit") ||
+        (imageRatio > viewRatio && this.contentMode === "AspectFill")
       ) {
         scaleX = scaleY = targetSize.height / imageSize.height;
         translateX = (targetSize.width - imageSize.width * scaleX) / 2.0;
@@ -202,7 +200,7 @@ export class Renderer {
     let bitmapKey = sprite.imageKey?.replace(".matte", "");
     if (!bitmapKey) return;
     let img =
-      this._dynamicImage[bitmapKey] ?? this.videoItem.decodedImages[bitmapKey];
+      this.dynamicImage[bitmapKey] ?? this.videoItem.decodedImages[bitmapKey];
     if (frameItem.maskPath !== undefined && frameItem.maskPath !== null) {
       frameItem.maskPath._styles = undefined;
       this.drawBezier(frameItem.maskPath);
@@ -255,7 +253,7 @@ export class Renderer {
           );
         }
       });
-    let dynamicText = this._dynamicText[bitmapKey];
+    let dynamicText = this.dynamicText[bitmapKey];
     if (dynamicText !== undefined) {
       ctx.font = `${dynamicText.size}px ${dynamicText.family ?? "Arial"}`;
       let textWidth = ctx.measureText(dynamicText.text).width;
@@ -576,7 +574,7 @@ export class Renderer {
     ctx.restore();
   }
 
-  private drawRect(obj: any) {
+  private drawRect(obj: any): void {
     if (!obj._styles || !(obj._styles.fill || obj._styles.stroke)) {
       return
     }
@@ -623,6 +621,14 @@ export class Renderer {
       ctx.stroke();
     }
     ctx.restore();
+  }
+
+  setDynamicImage(key: string, value: any): void {
+    this.dynamicImage[key] = value
+  }
+
+  setDynamicText(key: string, value: DynamicText): void {
+    this.dynamicText[key] = value
   }
 
   getImageData(): ImageData {

@@ -1,6 +1,6 @@
 import { Renderer } from "./renderer";
 import { ValueAnimator } from "./value_animator";
-import { VideoEntity } from "./video_entity";
+import { VideoEntity } from "./entity/video_entity";
 import { getCanvas, loadImage } from "./adaptor";
 
 interface Range {
@@ -28,8 +28,8 @@ export const AnimateContentMode = {
 }
 
 export class Player {
-  canvas?: WechatMiniprogram.Canvas | HTMLCanvasElement;
-  ctx?: CanvasRenderingContext2D;
+  private canvas?: WechatMiniprogram.Canvas | HTMLCanvasElement;
+  private ctx?: CanvasRenderingContext2D;
 
   async setCanvas(
     selector: string,
@@ -46,11 +46,18 @@ export class Player {
 
   fillMode = AnimateFillMode.FORWARD;
 
-  _videoItem?: VideoEntity;
+  private videoItem?: VideoEntity;
+  private renderer?: Renderer;
+  private animator?: ValueAnimator;
+  private currentFrame = 0;
+
+  _onFinished?: () => void;
+  _onFrame?: (frame: number) => void;
+  _onPercentage?: (percentage: number) => void;
 
   async setVideoItem(videoItem?: VideoEntity): Promise<any> {
-    this._currentFrame = 0;
-    this._videoItem = videoItem;
+    this.currentFrame = 0;
+    this.videoItem = videoItem;
     if (videoItem) {
       const keyedImages = await Promise.all(
         Object.keys(videoItem.spec.images).map(async (it) => {
@@ -68,12 +75,12 @@ export class Player {
       });
       videoItem.decodedImages = decodedImages;
       const { width, height } = this.canvas!
-      this._renderer = new Renderer(this._videoItem!, width, height);
+      this.renderer = new Renderer(this.videoItem!, width, height);
     } else {
-      this._renderer = undefined;
+      this.renderer = undefined;
     }
     this.clear();
-    this._update();
+    this.update();
   }
 
   loadImage(data: Uint8Array | string): Promise<any> {
@@ -86,17 +93,17 @@ export class Player {
 
   setContentMode(contentMode: string) {
     this._contentMode = contentMode;
-    this._update();
+    this.update();
   }
 
   startAnimation(reverse: boolean = false) {
     this.stopAnimation(false);
-    this._doStart(undefined, reverse, undefined);
+    this.doStart(undefined, reverse, undefined);
   }
 
   startAnimationWithRange(range: Range, reverse: boolean = false) {
     this.stopAnimation(false);
-    this._doStart(range, reverse, undefined);
+    this.doStart(range, reverse, undefined);
   }
 
   pauseAnimation() {
@@ -104,9 +111,8 @@ export class Player {
   }
 
   stopAnimation(clear?: boolean) {
-    this._forwardAnimating = false;
-    if (this._animator !== undefined) {
-      this._animator.stop();
+    if (this.animator !== undefined) {
+      this.animator.stop();
     }
     if (clear === undefined) {
       clear = this.clearsAfterStop;
@@ -117,25 +123,25 @@ export class Player {
   }
 
   clear() {
-    this._renderer?.clear();
+    this.renderer?.clear();
   }
 
   stepToFrame(frame: number, andPlay: boolean = false) {
-    const videoItem = this._videoItem;
+    const videoItem = this.videoItem;
     if (!videoItem) return;
     if (frame >= videoItem.frames || frame < 0) {
       return;
     }
     this.pauseAnimation();
-    this._currentFrame = frame;
-    this._update();
+    this.currentFrame = frame;
+    this.update();
     if (andPlay) {
-      this._doStart(undefined, false, this._currentFrame);
+      this.doStart(undefined, false, this.currentFrame);
     }
   }
 
   stepToPercentage(percentage: number, andPlay: boolean = false) {
-    const videoItem = this._videoItem;
+    const videoItem = this.videoItem;
     if (!videoItem) return;
     let frame = percentage * videoItem.frames;
     if (frame >= videoItem.frames && frame > 0) {
@@ -145,17 +151,16 @@ export class Player {
   }
 
   async setImage(src: Uint8Array | string, forKey: string): Promise<any> {
-    const img = await this.loadImage(src);
-    this._dynamicImage[forKey] = img;
+    if (this.renderer) {
+      const img = await this.loadImage(src);
+      this.renderer.setDynamicImage(forKey, img);
+    }
   }
 
   setText(dynamicText: DynamicText, forKey: string) {
-    this._dynamicText[forKey] = dynamicText;
-  }
-
-  clearDynamicObjects() {
-    this._dynamicImage = {};
-    this._dynamicText = {};
+    if (this.renderer) {
+      this.renderer.setDynamicText(forKey, dynamicText)
+    }
   }
 
   onFinished(callback: () => void) {
@@ -170,58 +175,42 @@ export class Player {
     this._onPercentage = callback;
   }
 
-  /**
-   * Private methods & properties
-   */
-
-  _renderer?: Renderer;
-  _animator: ValueAnimator = new ValueAnimator();
-  _forwardAnimating = false;
-  _currentFrame = 0;
-  _dynamicImage: { [key: string]: any } = {};
-  _dynamicText: { [key: string]: DynamicText } = {};
-
-  _onFinished?: () => void;
-  _onFrame?: (frame: number) => void;
-  _onPercentage?: (percentage: number) => void;
-
-  _doStart(range?: Range, reverse: boolean = false, fromFrame: number = 0) {
-    const videoItem = this._videoItem;
+  private doStart(range?: Range, reverse: boolean = false, fromFrame: number = 0) {
+    const videoItem = this.videoItem;
     if (!videoItem) return;
-    this._animator = new ValueAnimator();
-    this._animator.canvas = this.canvas;
+    this.animator = new ValueAnimator();
+    this.animator.canvas = this.canvas;
     if (range !== undefined) {
-      this._animator.startValue = Math.max(0, range.location);
-      this._animator.endValue = Math.min(
+      this.animator.startValue = Math.max(0, range.location);
+      this.animator.endValue = Math.min(
         videoItem.frames - 1,
         range.location + range.length
       );
-      this._animator.duration =
-        (this._animator.endValue - this._animator.startValue + 1) *
+      this.animator.duration =
+        (this.animator.endValue - this.animator.startValue + 1) *
         (1.0 / videoItem.FPS) *
         1000;
     } else {
-      this._animator.startValue = 0;
-      this._animator.endValue = videoItem.frames - 1;
-      this._animator.duration = videoItem.frames * (1.0 / videoItem.FPS) * 1000;
+      this.animator.startValue = 0;
+      this.animator.endValue = videoItem.frames - 1;
+      this.animator.duration = videoItem.frames * (1.0 / videoItem.FPS) * 1000;
     }
-    this._animator.loops = this.loops <= 0 ? Infinity : this.loops;
-    this._animator.fillRule = this.fillMode === AnimateFillMode.BACKWARD ? 1 : 0;
-    this._animator.onUpdate = (value) => {
-      if (this._currentFrame === Math.floor(value)) {
+    this.animator.loops = this.loops <= 0 ? Infinity : this.loops;
+    this.animator.fillRule = this.fillMode === AnimateFillMode.BACKWARD ? 1 : 0;
+    this.animator.onUpdate = (value) => {
+      if (this.currentFrame === Math.floor(value)) {
         return;
       }
-      this._currentFrame = Math.floor(value);
-      this._update();
+      this.currentFrame = Math.floor(value);
+      this.update();
       if (typeof this._onFrame === "function") {
-        this._onFrame(this._currentFrame);
+        this._onFrame(this.currentFrame);
       }
       if (typeof this._onPercentage === "function") {
-        this._onPercentage((this._currentFrame + 1) / videoItem.frames);
+        this._onPercentage((this.currentFrame + 1) / videoItem.frames);
       }
     };
-    this._animator.onEnd = () => {
-      this._forwardAnimating = false;
+    this.animator.onEnd = () => {
       if (this.clearsAfterStop === true) {
         this.clear();
       }
@@ -230,73 +219,20 @@ export class Player {
       }
     };
     if (reverse === true) {
-      this._animator.reverse(fromFrame);
-      this._forwardAnimating = false;
+      this.animator.reverse(fromFrame);
     } else {
-      this._animator.start(fromFrame);
-      this._forwardAnimating = true;
+      this.animator.start(fromFrame);
     }
-    this._currentFrame = this._animator.startValue;
-    this._update();
+    this.currentFrame = this.animator.startValue;
+    this.update();
   }
 
-  _resize() {
-    const { ctx } = this;
-    const videoItem = this._videoItem;
-    if (!ctx) return;
-    if (!videoItem) return;
-    let scaleX = 1.0;
-    let scaleY = 1.0;
-    let translateX = 0.0;
-    let translateY = 0.0;
-    let targetSize = {
-      width: this.canvas!.width,
-      height: this.canvas!.height,
-    };
-    let imageSize = videoItem.videoSize;
+  private updateChunk() {}
 
-    if (this._contentMode === AnimateContentMode.FILL) {
-      scaleX = targetSize.width / imageSize.width;
-      scaleY = targetSize.height / imageSize.height;
-    } else if (
-      this._contentMode === AnimateContentMode.ASPECT_FIT ||
-      this._contentMode === AnimateContentMode.ASPECT_FILL
-    ) {
-      const imageRatio = imageSize.width / imageSize.height;
-      const viewRatio = targetSize.width / targetSize.height;
-      if (
-        (imageRatio >= viewRatio && this._contentMode === AnimateContentMode.ASPECT_FIT) ||
-        (imageRatio <= viewRatio && this._contentMode === AnimateContentMode.ASPECT_FILL)
-      ) {
-        scaleX = scaleY = targetSize.width / imageSize.width;
-        translateY = (targetSize.height - imageSize.height * scaleY) / 2.0;
-      } else if (
-        (imageRatio < viewRatio && this._contentMode === AnimateContentMode.ASPECT_FIT) ||
-        (imageRatio > viewRatio && this._contentMode === AnimateContentMode.ASPECT_FILL)
-      ) {
-        scaleX = scaleY = targetSize.height / imageSize.height;
-        translateX = (targetSize.width - imageSize.width * scaleX) / 2.0;
-      }
-    }
-
-    if (this._renderer) {
-      this._renderer.globalTransform = {
-        a: scaleX,
-        b: 0.0,
-        c: 0.0,
-        d: scaleY,
-        tx: translateX,
-        ty: translateY,
-      };
-    }
-  }
-
-  _update() {
-    this._resize();
-    if (this._renderer) {
-      this._renderer._dynamicImage = this._dynamicImage;
-      this._renderer._dynamicText = this._dynamicText;
-      this._renderer.draw(this._currentFrame);
+  private update() {
+    if (this.renderer) {
+      this.renderer.resize();
+      this.renderer.draw(this.currentFrame);
     }
   }
 }

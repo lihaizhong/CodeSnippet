@@ -165,6 +165,54 @@ export function startAnimationFrame(canvas: WechatMiniprogram.Canvas | HTMLCanva
   throw new Error('暂不支持当前平台')
 }
 
+function request(url: string) {
+  const bridge = getBridge()
+
+  if (platform === SupportedPlatform.H5) {}
+
+  if (platform !== SupportedPlatform.UNKNOWN) {}
+}
+
+export function fetchFile(url: string): Promise<any> {
+  return new Promise((resolver, rejector) => {
+    if (url.indexOf("http://") === 0 || url.indexOf("https://") === 0) {
+      request({
+        url: url,
+        dataType: "arraybuffer",
+        responseType: "arraybuffer",
+        success: (res: any) => {
+          try {
+            const videoItem = this.createVideoEntity(res.data);
+
+            resolver(videoItem);
+          } catch (error) {
+            rejector(error);
+          }
+        },
+        fail: (error) => {
+          rejector(error);
+        },
+      });
+    } else {
+      bridge.getFileSystemManager().readFile({
+        filePath: url,
+        success: (res) => {
+          try {
+            const videoItem = this.createVideoEntity(res.data);
+
+            resolver(videoItem);
+          } catch (error) {
+            rejector(error);
+          }
+        },
+        fail: (error) => {
+          rejector(error);
+        },
+      });
+    }
+  });
+}
+
 function polyfill() {
   if (platform === SupportedPlatform.H5) {
     if (!('arrayBufferToBase64' in window)) {
