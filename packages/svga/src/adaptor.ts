@@ -9,6 +9,8 @@ export const SupportedPlatform = {
   UNKNOWN: 'unknown'
 }
 
+export const UNSUPPORTED_PLATFORM = '不支持当前平台'
+
 export function getPlatform() {
   // FIXME：由于抖音场景支持wx对象，所以需要放在wx对象之前检查
   if (typeof tt !== 'undefined') {
@@ -49,7 +51,7 @@ export function getBridge(): WechatMiniprogram.Wx | Window {
     return tt
   }
 
-  throw new Error('不支持当前平台')
+  throw new Error(UNSUPPORTED_PLATFORM)
 }
 
 export function createOffscreenCanvas(options: WechatMiniprogram.CreateOffscreenCanvasOption): WechatMiniprogram.OffscreenCanvas | OffscreenCanvas {
@@ -119,7 +121,7 @@ export function getCanvas(selector: string, component?: WechatMiniprogram.Compon
           });
     }
 
-    throw new Error('暂不支持当前平台')
+    throw new Error(UNSUPPORTED_PLATFORM)
   })
 }
 
@@ -149,7 +151,7 @@ export function loadImage(canvas: WechatMiniprogram.Canvas | HTMLCanvasElement, 
       }
     }
 
-    reject(new Error('暂不支持当前平台'))
+    reject(new Error(UNSUPPORTED_PLATFORM))
   });
 }
 
@@ -162,55 +164,65 @@ export function startAnimationFrame(canvas: WechatMiniprogram.Canvas | HTMLCanva
     return (canvas as WechatMiniprogram.Canvas).requestAnimationFrame(callback)
   }
 
-  throw new Error('暂不支持当前平台')
+  throw new Error(UNSUPPORTED_PLATFORM)
 }
 
-function request(url: string) {
-  const bridge = getBridge()
+function request(url: string): Promise<any> {
+  if (platform === SupportedPlatform.H5) {
+    return fetch(url, {
+      cache: 'no-cache'
+    })
+    .then((response) => {
+      if (response.ok) {
+        return response.arrayBuffer()
+      } else {
+        throw new Error(`HTTP error, status=${response.status}, statusText=${response.statusText}`)
+      }
+    })
+  }
 
-  if (platform === SupportedPlatform.H5) {}
+  if (platform !== SupportedPlatform.UNKNOWN) {
+    const bridge = getBridge() as WechatMiniprogram.Wx
 
-  if (platform !== SupportedPlatform.UNKNOWN) {}
+    return new Promise((resolve, reject) => {
+      bridge.request({
+        url,
+        dataType: '其他',
+        responseType: 'arraybuffer',
+        enableCache: true,
+        success(res: any) {
+          resolve(res.data)
+        },
+        fail: reject
+      })
+    })
+  }
+
+  return Promise.reject(UNSUPPORTED_PLATFORM)
 }
 
 export function fetchFile(url: string): Promise<any> {
-  return new Promise((resolver, rejector) => {
-    if (url.indexOf("http://") === 0 || url.indexOf("https://") === 0) {
-      request({
-        url: url,
-        dataType: "arraybuffer",
-        responseType: "arraybuffer",
-        success: (res: any) => {
-          try {
-            const videoItem = this.createVideoEntity(res.data);
+  if (url.indexOf("http://") === 0 || url.indexOf("https://") === 0) {
+    return request(url)
+  }
+  
+  if (platform !== SupportedPlatform.H5) {
+    return new Promise((resolve, reject) => {
+      const bridge = getBridge() as WechatMiniprogram.Wx
 
-            resolver(videoItem);
-          } catch (error) {
-            rejector(error);
-          }
-        },
-        fail: (error) => {
-          rejector(error);
-        },
-      });
-    } else {
       bridge.getFileSystemManager().readFile({
         filePath: url,
         success: (res) => {
-          try {
-            const videoItem = this.createVideoEntity(res.data);
-
-            resolver(videoItem);
-          } catch (error) {
-            rejector(error);
-          }
+          resolve(res.data)
         },
         fail: (error) => {
-          rejector(error);
+          reject(error)
         },
-      });
-    }
-  });
+      })
+    })
+  }
+
+  return Promise.reject(UNSUPPORTED_PLATFORM)
 }
 
 function polyfill() {
