@@ -12,7 +12,7 @@ export class LongBits {
    */
   static fromNumber(value: number) {
     if (value === 0) {
-      return zero
+      return zeroBits
     }
 
     const sign = value < 0
@@ -88,4 +88,4 @@ class ZeroBits extends LongBits {
  * @memberof util.LongBits
  * @type {util.LongBits}
  */
-const zero = new ZeroBits(0, 0)
+export const zeroBits = new ZeroBits(0, 0)
