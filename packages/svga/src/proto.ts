@@ -1,4 +1,4 @@
-const protobuf = require("../protobuf_mp/protobuf");
+import protobuf from './protobuf/index'
 
 export const proto = protobuf.Root.fromJSON({
   nested: {
