@@ -7,6 +7,17 @@
  * @param {string} name Namespace name
  * @param {Object.<string,*>} [options] Declared options
  */
+import ReflectionObject from "./object"
+
+type ANyExtensionField = IExtensionField | IExtensionMapField
+
+type AnyNestedObject = IEnum | IType | IService | AnyExtensionField | INamespace | IOneOf
+
+export interface INamespace {
+  options?: Record<string, any>
+
+  nested?: Record<string, AnyNestedObject>
+}
 
 /**
  * Not an actual constructor. Use {@link Namespace} instead.
@@ -90,9 +101,35 @@ export default class Namespace {
     return false
   }
 
-  constructor(name: string, options: Record<string, any>) {
-    
-  }
+  nested?: Record<string, ReflectionObject>
 
-  addJSON() {}
+  readonly nestedArray: ReflectionObject[]
+
+  constructor(readonly name: string, readonly options?: Record<string, any>) {}
+
+  toJSON(toJSONOptions?: IToJSONOptions): INamespace
+
+  addJSON(nestedJson: Record<string, ANyNestedObject>): Namespace {}
+
+  get(name: string): ReflectionObject {}
+
+  getEnum(name: string): Record<string, number> {}
+
+  add(object: ReflectionObject): Namespace {}
+
+  remove(object: ReflectionObject): Namespace {}
+
+  define(path: string | string[], json?: any): Namespace {}
+
+  resolveAll(): Namespace {}
+
+  lookup(path: string | string[], parentAlreadyChecked?: boolean): ReflectionObject | null {}
+
+  lookupType(path: string | string[]): Type {}
+
+  lookupEnum(path: string | string[]): Enum {}
+
+  lookupTypeOrEnum(path: string | string[]): Type {}
+
+  lookService(path: string | string[]): Service {}
 }

@@ -1,3 +1,5 @@
+import Namespace from "./namespace"
+
 /**
  * Constructs a new reflection object instance.
  * @classdesc Base class of all reflection objects.
@@ -7,37 +9,35 @@
  * @abstract
  */
 export default class ReflectionObject {
-  static Root: any
-
   /**
    * Parsed Options.
    * @type {Array.<Object.<string,*>>|undefined}
    */
-  private parsedOptions: any[] | null = null
+  parsedOptions?: Record<string, any>
 
   /**
    * Parent namespace.
    * @type {Namespace|null}
    */
-  private parent: any = null
+  parent: Namespace | null = null
 
   /**
    * Whether already resolved or not.
    * @type {boolean}
    */
-  private resolved: boolean = false
+  resolved: boolean = false
 
   /**
    * Comment text, if any.
    * @type {string|null}
    */
-  private comment: string | null = null
+  comment: string | null = null
 
   /**
    * Defining file name.
    * @type {string|null}
    */
-  private filename: string | null = null
+  filename: string | null = null
 
   constructor(
     /**
@@ -49,7 +49,7 @@ export default class ReflectionObject {
      * Options.
      * @type {Object.<string,*>|undefined}
      */
-    readonly options?: any
+    readonly options?: Record<string, any>
   ) {}
 
   /**
@@ -74,7 +74,7 @@ export default class ReflectionObject {
    * @type {string}
    * @readonly
    */
-  get fullName() {
+  get fullName(): string {
     const path = [ this.name ]
     let ptr = this.parent
 
@@ -86,17 +86,60 @@ export default class ReflectionObject {
     return path.join('.')
   }
 
-  onAdd(parent: ReflectionObject) {
-    if (this.parent && this.parent !== parent) {
-      this.parent.remove(this)
-    }
+  /**
+   * Called when this object is added to a parent.
+   * @param parent Parent added to
+   */
+  onAdd(parent: ReflectionObject): void {}
 
-    this.parent = parent
-    this.resolved = true
+  /**
+   * Called when this object is removed from a parent.
+   * @param parent Parent removed from
+   */
+  onRemove(parent: ReflectionObject): void {}
 
-    const root = parent.root
-    if (root instanceof ReflectionObject.Root) {
-      root._handleAdd(this)
-    }
-  }
+  /**
+   * Resolves this objects type references.
+   * @returns `this`
+   */
+  resolve(): ReflectionObject {}
+
+  /**
+   * Gets an option value.
+   * @param name Option name
+   * @returns Option value or `undefined` if not set
+   */
+  getOption(name: string): any {}
+
+  /**
+   * Sets an option.
+   * @param name Option name
+   * @param value Option value
+   * @param [ifNotSet] Sets the option only if it isn't currently set
+   * @returns `this`
+   */
+  setOption(name: string, value: any, ifNotSet?: boolean): ReflectionObject {}
+
+  /**
+   * Sets a parsed option.
+   * @param name parsed Option name
+   * @param value Option value
+   * @param propName dot '.' delimited full path of property within the option to set. if undefined\empty, will add a new option with that value
+   * @returns `this`
+   */
+  setParseOption(name: string, value: any, propName: string): ReflectionObject {}
+
+  /**
+   * Sets multiple options.
+   * @param options Options to set
+   * @param [ifNotSet] Sets an option only if it isn't currently set
+   * @returns `this`
+   */
+  setOptions(options: { [k: string]: any }, ifNotSet?: boolean): ReflectionObject {}
+
+  /**
+   * Converts this instance to its string representation.
+   * @returns Class name[, space, full name]
+   */
+  toString(): string {}
 }
