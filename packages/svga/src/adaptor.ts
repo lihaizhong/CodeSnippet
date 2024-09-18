@@ -1,6 +1,3 @@
-declare const my: WechatMiniprogram.Wx;
-declare const tt: WechatMiniprogram.Wx;
-
 export const SupportedPlatform = {
   ALIPAY: 'alipay',
   WECHAT: 'wechat',

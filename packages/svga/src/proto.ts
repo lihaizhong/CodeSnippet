@@ -1,4 +1,4 @@
-import protobuf from './protobuf/index'
+import { protobuf } from 'protobufjs'
 
 export const proto = protobuf.Root.fromJSON({
   nested: {
