@@ -7,11 +7,22 @@
  * @param {string} name Namespace name
  * @param {Object.<string,*>} [options] Declared options
  */
+import { IEnum } from "./enum";
+import { IExtensionField } from "./field";
+import { IExtensionMapField } from "./mapfield";
 import ReflectionObject from "./object"
+import { IOneOf } from "./oneof";
+import { IType } from "./type";
 
-type ANyExtensionField = IExtensionField | IExtensionMapField
 
-type AnyNestedObject = IEnum | IType | IService | AnyExtensionField | INamespace | IOneOf
+type AnyExtensionField = IExtensionField | IExtensionMapField
+type AnyNestedObject = IEnum | IType | AnyExtensionField | INamespace | IOneOf
+
+/** Options modifying the behavior of JSON serialization */
+export interface IToJSONOptions {
+  /** Serializes comments. */
+  keepComments?: boolean
+}
 
 export interface INamespace {
   options?: Record<string, any>
@@ -107,9 +118,9 @@ export default class Namespace {
 
   constructor(readonly name: string, readonly options?: Record<string, any>) {}
 
-  toJSON(toJSONOptions?: IToJSONOptions): INamespace
+  toJSON(toJSONOptions?: IToJSONOptions): INamespace {}
 
-  addJSON(nestedJson: Record<string, ANyNestedObject>): Namespace {}
+  addJSON(nestedJson: Record<string, AnyNestedObject>): Namespace {}
 
   get(name: string): ReflectionObject {}
 
@@ -130,6 +141,4 @@ export default class Namespace {
   lookupEnum(path: string | string[]): Enum {}
 
   lookupTypeOrEnum(path: string | string[]): Type {}
-
-  lookService(path: string | string[]): Service {}
 }
