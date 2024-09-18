@@ -2,8 +2,8 @@
   "name": "fuck-svga",
   "version": "0.0.1",
   "description": "",
-  "main": "dist/svgaplayer.js",
-  "typings": "svgaplayer.d.ts",
+  "main": "dist/index.js",
+  "typings": "index.d.ts",
   "scripts": {
     "build": "node build.js > ./dist/svgaplayer.js"
   },

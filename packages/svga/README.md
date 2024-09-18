@@ -1,6 +1,6 @@
-# svgaplayer-weapp
+# fuck-svga
 
-专为微信小程序开发的 SVGA 播放器，已在 iOS 及 Android 手机上测试通过。
+专为小程序/H5开发的 SVGA 播放器，支持微信小程序、抖音小程序、支付宝小程序以及H5
 
 示例代码片段 https://developers.weixin.qq.com/s/grK1TTmt7pth
 

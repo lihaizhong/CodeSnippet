@@ -1,4 +1,4 @@
-import { protobuf } from 'protobufjs'
+import protobuf from 'protobufjs'
 
 export const proto = protobuf.Root.fromJSON({
   nested: {
@@ -138,6 +138,7 @@ export const proto = protobuf.Root.fromJSON({
                   fields: {
                     version: { type: "string", id: 1 },
                     params: { type: "MovieParams", id: 2 },
+                    // @ts-ignore
                     images: { keyType: "string", type: "bytes", id: 3 },
                     sprites: { rule: "repeated", type: "SpriteEntity", id: 4 },
                     audios: { rule: "repeated", type: "AudioEntity", id: 5 },
