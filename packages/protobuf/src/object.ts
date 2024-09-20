@@ -1,23 +1,38 @@
-export interface Namespace {
+import Namespace from "./namespace"
 
-}
+/**
+ * Constructs a new reflection object instance.
+ * @classdesc Base class of all reflection objects.
+ * @constructor
+ * @param {string} name Object name
+ * @param {Object.<string,*>} [options] Declared options
+ * @abstract
+ */
+export default class ReflectionObject {
+  /**
+   * Parsed Options.
+   * @type {Array.<Object.<string,*>>|undefined}
+   */
+  parsedOptions?: Record<string, any>
 
-export class ReflectionObject<T extends Namespace> {
   /**
    * Parent namespace.
    * @type {Namespace|null}
    */
-  parent: ReflectionObject<T> | null = null
+  parent: Namespace | null = null
+
   /**
    * Whether already resolved or not.
    * @type {boolean}
    */
-  resolved = false
+  resolved: boolean = false
+
   /**
    * Comment text, if any.
    * @type {string|null}
    */
   comment: string | null = null
+
   /**
    * Defining file name.
    * @type {string|null}
@@ -34,7 +49,7 @@ export class ReflectionObject<T extends Namespace> {
      * Options.
      * @type {Object.<string,*>|undefined}
      */
-    readonly options: Record<string, any>
+    readonly options?: Record<string, any>
   ) {}
 
   /**
@@ -43,8 +58,8 @@ export class ReflectionObject<T extends Namespace> {
    * @type {Root}
    * @readonly
    */
-  get root() {
-    let ptr: ReflectionObject<T> = this
+  get root(): ReflectionObject {
+    let ptr = this
 
     while (ptr.parent !== null) {
       ptr = ptr.parent
@@ -59,7 +74,7 @@ export class ReflectionObject<T extends Namespace> {
    * @type {string}
    * @readonly
    */
-  get fullName() {
+  get fullName(): string {
     const path = [ this.name ]
     let ptr = this.parent
 
@@ -70,55 +85,61 @@ export class ReflectionObject<T extends Namespace> {
 
     return path.join('.')
   }
+
   /**
    * Called when this object is added to a parent.
-   * @param {ReflectionObject} parent Parent added to
-   * @returns {undefined}
+   * @param parent Parent added to
    */
-  onAdd(parent: ReflectionObject<T>): void {
-    if (this.parent && this.parent !== parent) {
-      this.parent.remove(this)
-    }
-
-    this.parent = parent
-    this.resolved = false
-
-    const root = parent.root
-
-    if (root instanceof Root) {
-      root._handleAdd(this)
-    }
-  }
+  onAdd(parent: ReflectionObject): void {}
 
   /**
    * Called when this object is removed from a parent.
-   * @param {ReflectionObject} parent Parent removed from
-   * @returns {undefined}
+   * @param parent Parent removed from
    */
-  onRemove(parent) {
-    const root = parent.root
-
-    if (root instanceof Root) {
-      root._handleRemove(this)
-    }
-
-    this.parent = null
-    this.resolved = false
-  }
+  onRemove(parent: ReflectionObject): void {}
 
   /**
    * Resolves this objects type references.
-   * @returns {ReflectionObject} `this`
+   * @returns `this`
    */
-  resolve() {
-    if (this.resolved) {
-      return this
-    }
+  resolve(): ReflectionObject {}
 
-    if (this.root instanceof Root) {
-      this.resolved = true // only if part of a root
-    }
+  /**
+   * Gets an option value.
+   * @param name Option name
+   * @returns Option value or `undefined` if not set
+   */
+  getOption(name: string): any {}
 
-    return this
-  }
+  /**
+   * Sets an option.
+   * @param name Option name
+   * @param value Option value
+   * @param [ifNotSet] Sets the option only if it isn't currently set
+   * @returns `this`
+   */
+  setOption(name: string, value: any, ifNotSet?: boolean): ReflectionObject {}
+
+  /**
+   * Sets a parsed option.
+   * @param name parsed Option name
+   * @param value Option value
+   * @param propName dot '.' delimited full path of property within the option to set. if undefined\empty, will add a new option with that value
+   * @returns `this`
+   */
+  setParseOption(name: string, value: any, propName: string): ReflectionObject {}
+
+  /**
+   * Sets multiple options.
+   * @param options Options to set
+   * @param [ifNotSet] Sets an option only if it isn't currently set
+   * @returns `this`
+   */
+  setOptions(options: { [k: string]: any }, ifNotSet?: boolean): ReflectionObject {}
+
+  /**
+   * Converts this instance to its string representation.
+   * @returns Class name[, space, full name]
+   */
+  toString(): string {}
 }
