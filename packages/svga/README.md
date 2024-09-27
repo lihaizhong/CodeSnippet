@@ -1,16 +1,12 @@
 # fuck-svga
 
-专为小程序/H5开发的 SVGA 播放器，支持微信小程序、抖音小程序、支付宝小程序以及H5
+专为小程序/H5开发的 SVGA 播放器，支持微信小程序、抖音小程序、支付宝小程序以及H5。
 
-示例代码片段 https://developers.weixin.qq.com/s/grK1TTmt7pth
-
-请仔细阅读文档和示例，如有疑问，可添加作者微信(ponycui)，可提供有偿技术服务（建议先通过下方二维码赞赏 200 元）。
+请仔细阅读文档和示例，如有疑问，请提issue。
 
 ## 支持本仓库
 
 轻点 GitHub Star，让更多人看到该项目。
-
-关注作者另外一个开源项目，[MPFlutter](https://mpflutter.com)，使用 Flutter 开发微信小程序。
 
 ## 安装方法
 
@@ -227,7 +223,3 @@ interface DynamicText {
   offset: { x: number; y: number };
 }
 ```
-
-## 感谢或联系作者
-
-![](https://cdn.jsdelivr.net/gh/PonyCui/ponycui.github.io@master/contact.png)
