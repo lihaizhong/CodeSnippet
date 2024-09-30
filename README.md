@@ -19,3 +19,7 @@
 - [掌握JavaScript中的二进制运算，提升你的编程技能](https://developer.aliyun.com/article/1511057)
 - [JS 二进制详解](https://juejin.cn/post/6933152793721208845)
 - [运算符](https://wangdoc.com/javascript/operators/)
+
+## SVGA
+
+- [protobuf优缺点及编码原理](https://www.cnblogs.com/niuben/p/14212711.html)
