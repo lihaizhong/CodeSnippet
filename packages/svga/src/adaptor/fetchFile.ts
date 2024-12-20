@@ -1,7 +1,13 @@
-import { getBridge } from "./birdge"
-import { platform, SupportedPlatform, UNSUPPORTED_PLATFORM } from "./platform"
+import { getBridge } from './bridge'
+import { platform, SupportedPlatform, UNSUPPORTED_PLATFORM } from './platform'
 
-function request(url: string): Promise<any> {
+/**
+ * 读取远程文件
+ * @param url 文件资源地址
+ * @returns 
+ */
+function readRemoteFile(url: string): Promise<ArrayBuffer> {
+  // H5环境
   if (platform === SupportedPlatform.H5) {
     return fetch(url, {
       cache: 'no-cache'
@@ -15,6 +21,7 @@ function request(url: string): Promise<any> {
     })
   }
 
+  // 小程序环境
   if (platform !== SupportedPlatform.UNKNOWN) {
     const bridge = getBridge() as WechatMiniprogram.Wx
 
@@ -35,25 +42,37 @@ function request(url: string): Promise<any> {
   return Promise.reject(UNSUPPORTED_PLATFORM)
 }
 
-export function fetchFile(url: string): Promise<any> {
-  if (url.indexOf("http://") === 0 || url.indexOf("https://") === 0) {
-    return request(url)
+/**
+ * 读取本地文件
+ * @param url 文件资源地址
+ * @returns 
+ */
+function readLocalFile(url: string): Promise<ArrayBuffer> {
+  return new Promise((resolve, reject) => {
+    const bridge = getBridge() as WechatMiniprogram.Wx
+
+    bridge.getFileSystemManager().readFile({
+      filePath: url,
+      success: (res: any) => resolve(res.data),
+      fail: reject,
+    })
+  })
+}
+
+/**
+ * 读取文件资源
+ * @param url 文件资源地址
+ * @returns 
+ */
+export function fetchFile(url: string): Promise<ArrayBuffer> {
+  // 读取远程文件
+  if (/^http(s):\/\//.test(url)) {
+    return readRemoteFile(url)
   }
   
+  // 读取本地文件
   if (platform !== SupportedPlatform.H5) {
-    return new Promise((resolve, reject) => {
-      const bridge = getBridge() as WechatMiniprogram.Wx
-
-      bridge.getFileSystemManager().readFile({
-        filePath: url,
-        success: (res) => {
-          resolve(res.data)
-        },
-        fail: (error) => {
-          reject(error)
-        },
-      })
-    })
+    return readLocalFile(url)
   }
 
   return Promise.reject(UNSUPPORTED_PLATFORM)

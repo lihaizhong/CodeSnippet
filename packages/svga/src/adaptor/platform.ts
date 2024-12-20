@@ -8,6 +8,10 @@ export const SupportedPlatform = {
 
 export const UNSUPPORTED_PLATFORM = '不支持当前平台'
 
+/**
+ * 获取平台信息
+ * @returns 
+ */
 export function getPlatform() {
   // FIXME：由于抖音场景支持wx对象，所以需要放在wx对象之前检查
   if (typeof tt !== 'undefined') {

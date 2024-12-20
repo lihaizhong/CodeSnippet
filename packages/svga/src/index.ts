@@ -1,2 +1,2 @@
-export { Parser } from "./parser";
-export { Player } from "./player";
+export { Parser } from './parser'
+export { Player } from './player'

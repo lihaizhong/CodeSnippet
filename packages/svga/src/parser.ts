@@ -1,16 +1,15 @@
-import { inflate } from "pako";
-import { fetchFile } from "./adaptor";
-import { VideoEntity } from "./entity/video_entity";
-import { ProtoMovieEntity } from "./proto";
+import { inflateSync } from 'fflate'
+import { fetchFile } from './adaptor'
+import { VideoEntity } from './entity/video_entity'
+import { ProtoMovieEntity } from './proto'
 
 export class Parser {
-  load(url: string): Promise<VideoEntity> {
-    return fetchFile(url)
-      .then((data: ArrayBuffer) => {
-        const inflatedData = inflate(data as any);
-        const movieData = ProtoMovieEntity.decode(inflatedData);
-        
-        return new VideoEntity(movieData);
-      })
+  async load(url: string): Promise<VideoEntity> {
+    const data: ArrayBuffer = await fetchFile(url)
+    const u8a: Uint8Array<ArrayBuffer> = new Uint8Array(data)
+    const inflatedData = inflateSync(u8a)
+    const movieData = ProtoMovieEntity.decode(inflatedData)
+    
+    return new VideoEntity(movieData)
   }
 }

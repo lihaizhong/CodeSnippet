@@ -1,4 +1,4 @@
-import { platform, SupportedPlatform, UNSUPPORTED_PLATFORM } from "./platform"
+import { platform, SupportedPlatform, UNSUPPORTED_PLATFORM } from './platform'
 
 export function getBridge(): WechatMiniprogram.Wx | Window {
   if (platform === SupportedPlatform.WECHAT) {
