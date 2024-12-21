@@ -1,7 +1,6 @@
 import { inflateSync } from 'fflate'
 import { fetchFile } from './adaptor'
 import { VideoEntity } from './entity/video_entity'
-import { ProtoMovieEntity } from './proto'
 
 export class Parser {
   async load(url: string): Promise<VideoEntity> {

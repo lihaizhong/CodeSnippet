@@ -1,18 +1,18 @@
-import { FrameEntity } from "./frame_entity";
+import { FrameEntity } from './frame_entity'
 
 export class SpriteEntity {
-  matteKey?: string;
+  matteKey?: string
 
-  imageKey?: string;
+  imageKey?: string
 
-  frames: any[];
+  frames: any[]
 
   constructor(spec: any) {
-    this.matteKey = spec.matteKey;
-    this.imageKey = spec.imageKey;
+    this.matteKey = spec.matteKey
+    this.imageKey = spec.imageKey
     this.frames =
       spec.frames?.map((obj: any) => {
-        return new FrameEntity(obj);
-      }) ?? [];
+        return new FrameEntity(obj)
+      }) ?? []
   }
 }

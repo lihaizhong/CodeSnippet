@@ -1,7 +1,7 @@
 {
   "name": "code-snippets",
   "version": "1.0.0",
-  "description": "",
+  "description": "代码片段整理",
   "main": "index.js",
   "packageManager": "pnpm@9.8.0",
   "scripts": {
@@ -16,6 +16,7 @@
   "author": "lihzsky",
   "license": "MIT",
   "devDependencies": {
+    "@changesets/cli": "^2.27.11",
     "serve": "^14.2.4"
   }
 }

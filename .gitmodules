@@ -13,3 +13,7 @@
 [submodule "shared/SVGAPlayer-Web-Lite"]
 	path = shared/SVGAPlayer-Web-Lite
 	url = git@github.com:svga/SVGAPlayer-Web-Lite.git
+
+[submodule "shared/protobuf-javascript"]
+	path = shared/protobuf-javascript
+	url = git@github.com:protocolbuffers/protobuf-javascript.git

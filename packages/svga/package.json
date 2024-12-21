@@ -1,11 +1,12 @@
 {
   "name": "fuck-svga",
   "version": "0.0.1",
-  "description": "",
+  "description": "高性能SVGA播放器",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "scripts": {
-    "build": "node build.js > ./dist/svgaplayer.js"
+    "build": "node build.js > ./dist/fuck-svga.js",
+    "compiler": "protoc --plugin=protoc-gen-js=../../shared/protobuf-javascript/bazel-bin/generator/protoc-gen-js --proto_path=protos --js_out=import_style=commonjs,binary:src com.opensource.svga.proto"
   },
   "author": "lihzsky",
   "license": "ISC",
