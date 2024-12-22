@@ -6,7 +6,7 @@
   "typings": "index.d.ts",
   "scripts": {
     "build": "node build.js > ./dist/fuck-svga.js",
-    "compiler": "protoc --plugin=protoc-gen-js=../../shared/protobuf-javascript/bazel-bin/generator/protoc-gen-js --proto_path=protos --js_out=import_style=commonjs,binary:src com.opensource.svga.proto"
+    "compiler": "protoc --plugin=protoc-gen-js=../../shared/protobuf-javascript/bazel-bin/generator/protoc-gen-js --proto_path=protos --js_out=import_style=commonjs,binary:src svga.proto"
   },
   "author": "lihzsky",
   "license": "ISC",

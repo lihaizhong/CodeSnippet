@@ -1,4 +1,4 @@
-// source: com.opensource.svga.proto
+// source: svga.proto
 /**
  * @fileoverview
  * @enhanceable
@@ -26,6 +26,7 @@ goog.exportSymbol('proto.com.opensource.svga.Layout', null, global);
 goog.exportSymbol('proto.com.opensource.svga.MovieEntity', null, global);
 goog.exportSymbol('proto.com.opensource.svga.MovieParams', null, global);
 goog.exportSymbol('proto.com.opensource.svga.ShapeEntity', null, global);
+goog.exportSymbol('proto.com.opensource.svga.ShapeEntity.ArgsCase', null, global);
 goog.exportSymbol('proto.com.opensource.svga.ShapeEntity.EllipseArgs', null, global);
 goog.exportSymbol('proto.com.opensource.svga.ShapeEntity.RectArgs', null, global);
 goog.exportSymbol('proto.com.opensource.svga.ShapeEntity.ShapeArgs', null, global);
@@ -131,7 +132,7 @@ if (goog.DEBUG && !COMPILED) {
  * @constructor
  */
 proto.com.opensource.svga.ShapeEntity = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, null, proto.com.opensource.svga.ShapeEntity.oneofGroups_);
 };
 goog.inherits(proto.com.opensource.svga.ShapeEntity, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -1229,6 +1230,33 @@ proto.com.opensource.svga.Transform.prototype.setTy = function(value) {
 
 
 
+/**
+ * Oneof group definitions for this message. Each group defines the field
+ * numbers belonging to that group. When of these fields' value is set, all
+ * other fields in the group are cleared. During deserialization, if multiple
+ * fields are encountered for a group, only the last value seen will be kept.
+ * @private {!Array<!Array<number>>}
+ * @const
+ */
+proto.com.opensource.svga.ShapeEntity.oneofGroups_ = [[2,3,4]];
+
+/**
+ * @enum {number}
+ */
+proto.com.opensource.svga.ShapeEntity.ArgsCase = {
+  ARGS_NOT_SET: 0,
+  SHAPE: 2,
+  RECT: 3,
+  ELLIPSE: 4
+};
+
+/**
+ * @return {proto.com.opensource.svga.ShapeEntity.ArgsCase}
+ */
+proto.com.opensource.svga.ShapeEntity.prototype.getArgsCase = function() {
+  return /** @type {proto.com.opensource.svga.ShapeEntity.ArgsCase} */(jspb.Message.computeOneofCase(this, proto.com.opensource.svga.ShapeEntity.oneofGroups_[0]));
+};
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -2236,18 +2264,18 @@ proto.com.opensource.svga.ShapeEntity.ShapeStyle.serializeBinaryToWriter = funct
  * @enum {number}
  */
 proto.com.opensource.svga.ShapeEntity.ShapeStyle.LineCap = {
-  LINECAPBUTT: 0,
-  LINECAPROUND: 1,
-  LINECAPSQUARE: 2
+  LINECAP_BUTT: 0,
+  LINECAP_ROUND: 1,
+  LINECAP_SQUARE: 2
 };
 
 /**
  * @enum {number}
  */
 proto.com.opensource.svga.ShapeEntity.ShapeStyle.LineJoin = {
-  LINEJOINMITER: 0,
-  LINEJOINROUND: 1,
-  LINEJOINBEVEL: 2
+  LINEJOIN_MITER: 0,
+  LINEJOIN_ROUND: 1,
+  LINEJOIN_BEVEL: 2
 };
 
 
@@ -2703,7 +2731,7 @@ proto.com.opensource.svga.ShapeEntity.prototype.getShape = function() {
  * @return {!proto.com.opensource.svga.ShapeEntity} returns this
 */
 proto.com.opensource.svga.ShapeEntity.prototype.setShape = function(value) {
-  return jspb.Message.setWrapperField(this, 2, value);
+  return jspb.Message.setOneofWrapperField(this, 2, proto.com.opensource.svga.ShapeEntity.oneofGroups_[0], value);
 };
 
 
@@ -2740,7 +2768,7 @@ proto.com.opensource.svga.ShapeEntity.prototype.getRect = function() {
  * @return {!proto.com.opensource.svga.ShapeEntity} returns this
 */
 proto.com.opensource.svga.ShapeEntity.prototype.setRect = function(value) {
-  return jspb.Message.setWrapperField(this, 3, value);
+  return jspb.Message.setOneofWrapperField(this, 3, proto.com.opensource.svga.ShapeEntity.oneofGroups_[0], value);
 };
 
 
@@ -2777,7 +2805,7 @@ proto.com.opensource.svga.ShapeEntity.prototype.getEllipse = function() {
  * @return {!proto.com.opensource.svga.ShapeEntity} returns this
 */
 proto.com.opensource.svga.ShapeEntity.prototype.setEllipse = function(value) {
-  return jspb.Message.setWrapperField(this, 4, value);
+  return jspb.Message.setOneofWrapperField(this, 4, proto.com.opensource.svga.ShapeEntity.oneofGroups_[0], value);
 };
 
 
