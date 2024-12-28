@@ -15,15 +15,7 @@ importers:
         specifier: ^14.2.4
         version: 14.2.4
 
-  mp-platform/alipay: {}
-
-  mp-platform/weapp:
-    dependencies:
-      '@ungap/url-search-params':
-        specifier: ^0.2.2
-        version: 0.2.2
-
-  packages/svga:
+  packages/fuck-svga:
     dependencies:
       '@rollup/plugin-terser':
         specifier: ^0.4.4
@@ -443,9 +435,6 @@ packages:
 
   '@types/wechat-miniprogram@3.4.8':
     resolution: {integrity: sha512-lOqddA707X3SZxVhlZNBZPzYzj7lG/ED2fF30k+aE2oT6R4wfw0Wiup2k2hGrmzYUFyJXfGs01sDCuJMhQMAdg==}
-
-  '@ungap/url-search-params@0.2.2':
-    resolution: {integrity: sha512-qQsguKXZVKdCixOHX9jqnX/K/1HekPDpGKyEcXHT+zR6EjGA7S4boSuelL4uuPv6YfhN0n8c4UxW+v/Z3gM2iw==}
 
   '@zeit/schemas@2.36.0':
     resolution: {integrity: sha512-7kjMwcChYEzMKjeex9ZFXkt1AyNov9R5HZtjBKVsmVpw7pa7ZtlCGvCBC2vnnXctaYN+aRI61HjIqeetZW5ROg==}
@@ -1756,8 +1745,6 @@ snapshots:
   '@types/resolve@1.20.2': {}
 
   '@types/wechat-miniprogram@3.4.8': {}
-
-  '@ungap/url-search-params@0.2.2': {}
 
   '@zeit/schemas@2.36.0': {}
 

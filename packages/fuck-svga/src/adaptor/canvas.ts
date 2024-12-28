@@ -1,9 +1,13 @@
+import type { PlatformOffscreenCanvas } from "../types"
 import { getBridge } from "./bridge"
 import { platform, SupportedPlatform, UNSUPPORTED_ERROR } from './platform'
 
-export function createOffscreenCanvas(options: WechatMiniprogram.CreateOffscreenCanvasOption): WechatMiniprogram.OffscreenCanvas | OffscreenCanvas {
+export function createOffscreenCanvas(options: WechatMiniprogram.CreateOffscreenCanvasOption): PlatformOffscreenCanvas {
   if (platform === SupportedPlatform.WECHAT) {
-    return wx.createOffscreenCanvas(options)
+    return wx.createOffscreenCanvas({
+      ...options,
+      type: '2d'
+    })
   }
 
   if (platform === SupportedPlatform.H5 && 'OffscreenCanvas' in window) {

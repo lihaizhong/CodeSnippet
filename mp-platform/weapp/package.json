@@ -9,5 +9,8 @@
   "description": "code snippets",
   "dependencies": {
     "@ungap/url-search-params": "^0.2.2"
+  },
+  "devDependencies": {
+    "fflate": "^0.8.2"
   }
 }

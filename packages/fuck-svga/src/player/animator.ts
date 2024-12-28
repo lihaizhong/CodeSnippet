@@ -1,9 +1,11 @@
+import type { PlatformCanvas, PlatformOffscreenCanvas } from "../types"
+import { startAnimationFrame } from "../adaptor"
+
 export class Animator {
+  private canvas: PlatformCanvas | PlatformOffscreenCanvas
   private isRunning = false
   private startTime = 0
   private currentFrication: number = 0.0
-  private worker: Worker | null = null
-  public isOpenNoExecutionDelay = false
   public startValue: number = 0
   public endValue: number = 0
   public duration: number = 0
@@ -14,7 +16,11 @@ export class Animator {
   public onUpdate: (currentValue: number) => void = () => {}
   public onEnd: () => void = () => {}
 
-  public currentTimeMillsecond: () => number = () => {
+  constructor(canvas: PlatformCanvas | PlatformOffscreenCanvas) {
+    this.canvas = canvas
+  }
+
+  public currentTimeMillSecond: () => number = () => {
     if (window.performance === undefined) {
       return Date.now()
     }
@@ -23,21 +29,14 @@ export class Animator {
 
   public start (): void {
     this.isRunning = true
-    this.startTime = this.currentTimeMillsecond()
+    this.startTime = this.currentTimeMillSecond()
     this.currentFrication = 0.0
-    if (this.isOpenNoExecutionDelay && this.worker === null) {
-      this.worker = new Worker(window.URL.createObjectURL(new Blob([WORKER])))
-    }
     this.onStart()
     this.doFrame()
   }
 
   public stop (): void {
     this.isRunning = false
-    if (this.worker !== null) {
-      this.worker.terminate()
-      this.worker = null
-    }
   }
 
   public get animatedValue (): number {
@@ -46,14 +45,9 @@ export class Animator {
 
   private doFrame (): void {
     if (this.isRunning) {
-      this.doDeltaTime(this.currentTimeMillsecond() - this.startTime)
+      this.doDeltaTime(this.currentTimeMillSecond() - this.startTime)
       if (this.isRunning) {
-        if (this.worker !== null) {
-          this.worker.onmessage = this.doFrame.bind(this)
-          this.worker.postMessage(null)
-        } else {
-          window.requestAnimationFrame(this.doFrame.bind(this))
-        }
+        startAnimationFrame(this.canvas, this.doFrame.bind(this))
       }
     }
   }
@@ -69,10 +63,6 @@ export class Animator {
     }
     this.onUpdate(this.animatedValue)
     if (!this.isRunning) {
-      if (this.worker !== null) {
-        this.worker.terminate()
-        this.worker = null
-      }
       this.onEnd()
     }
   }

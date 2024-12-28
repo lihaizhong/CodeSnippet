@@ -1,26 +1,6 @@
-export interface ParserPostMessageArgs {
-  url: string
-  options: {
-    isDisableImageBitmapShim: boolean
-  }
-}
+export type PlatformCanvas = HTMLCanvasElement | WechatMiniprogram.Canvas
 
-export interface MockWebWorker {
-  onmessage: (event: { data: ParserPostMessageArgs }) => void
-  onmessageCallback: (data: Video | Error) => void
-  postMessage: (data: Video | Error) => void
-}
-
-export interface ParserConfigOptions {
-  /**
-   * 是否取消使用 WebWorker，默认值 false
-   */
-  isDisableWebWorker?: boolean
-  /**
-   * 是否取消使用 ImageBitmap 垫片，默认值 false
-   */
-  isDisableImageBitmapShim?: boolean
-}
+export type PlatformOffscreenCanvas = WechatMiniprogram.OffscreenCanvas | OffscreenCanvas
 
 export interface RawImages {
   [key: string]: string | HTMLImageElement | ImageBitmap
@@ -261,7 +241,7 @@ export interface PlayerConfig {
   /**
    * 播放动画的 Canvas 元素
    */
-  container: HTMLCanvasElement
+  container: PlatformCanvas | null
   /**
    * 循环次数，默认值 0（无限循环）
    */

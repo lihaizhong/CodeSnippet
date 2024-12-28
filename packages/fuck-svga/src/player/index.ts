@@ -1,10 +1,12 @@
+import { createOffscreenCanvas } from '../adaptor'
 import {
   PLAYER_FILL_MODE,
   PLAYER_PLAY_MODE,
   PlayerConfigOptions,
   Video,
   BitmapsCache,
-  PlayerConfig
+  PlayerConfig,
+  PlatformCanvas
 } from '../types'
 import { Animator } from './animator'
 import render from './render'
@@ -35,7 +37,7 @@ export class Player {
    * 当前配置项
    */
   public readonly config: PlayerConfig = {
-    container: document.createElement('canvas'),
+    container: null,
     loop: 0,
     fillMode: PLAYER_FILL_MODE.FORWARDS,
     playMode: PLAYER_PLAY_MODE.FORWARDS,
@@ -48,19 +50,20 @@ export class Player {
   }
 
   private readonly animator: Animator
-  private readonly ofsCanvas: HTMLCanvasElement | OffscreenCanvas
+  private readonly ofsCanvas: WechatMiniprogram.OffscreenCanvas | OffscreenCanvas
 
   private isBeIntersection = true
   private intersectionObserver: IntersectionObserver | null = null
   private bitmapsCache: BitmapsCache = {}
   private readonly cacheFrames: { [key: string]: HTMLImageElement | ImageBitmap} = {}
 
-  constructor (options: HTMLCanvasElement | PlayerConfigOptions) {
-    this.animator = new Animator()
+  constructor (options: PlatformCanvas | PlayerConfigOptions) {
+    this.ofsCanvas = createOffscreenCanvas({})
+    this.animator = new Animator(this.ofsCanvas)
     this.animator.onEnd = () => {
       if (this.onEnd !== undefined) this.onEnd()
     }
-    let container: HTMLCanvasElement | undefined
+    let container: PlatformCanvas | null | undefined
     if (options instanceof HTMLCanvasElement) {
       container = options
     } else if (options.container !== undefined) {
@@ -68,7 +71,6 @@ export class Player {
       this.setConfig(options)
     }
     this.config.container = container ?? this.config.container
-    this.ofsCanvas = window.OffscreenCanvas !== undefined ? new window.OffscreenCanvas(this.config.container.width, this.config.container.height) : document.createElement('canvas')
   }
 
   /**
@@ -90,8 +92,6 @@ export class Player {
     this.config.loopStartFrame = options.loopStartFrame ?? 0
     this.config.isCacheFrames = options.isCacheFrames ?? false
     this.config.isUseIntersectionObserver = options.isUseIntersectionObserver ?? false
-    this.config.isOpenNoExecutionDelay = options.isOpenNoExecutionDelay ?? false
-    this.animator.isOpenNoExecutionDelay = options.isOpenNoExecutionDelay ?? false
     // 监听容器是否处于浏览器视窗内
     this.setIntersectionObserver()
   }

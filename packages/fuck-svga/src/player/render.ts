@@ -10,7 +10,8 @@ import {
   BitmapsCache,
   Bitmap,
   ReplaceElement,
-  ReplaceElements
+  ReplaceElements,
+  PlatformOffscreenCanvas
 } from '../types'
 
 interface CurrentPoint {
@@ -25,7 +26,7 @@ interface CurrentPoint {
 const validMethods = 'MLHVCSQRZmlhvcsqrz'
 
 function render (
-  canvas: HTMLCanvasElement | OffscreenCanvas,
+  canvas: PlatformOffscreenCanvas,
   bitmapsCache: BitmapsCache,
   dynamicElements: DynamicElements,
   replaceElements: ReplaceElements,
@@ -34,8 +35,9 @@ function render (
 ): void {
   const context = canvas.getContext('2d')
 
-  if (context === null) throw new Error('Render Context cannot be null')
-  if (!('save' in context)) throw new Error('Render Context is not context2d')
+  if (context === null) {
+    throw new Error('Render Context cannot be null')
+  }
 
   videoEntity.sprites.forEach(sprite => {
     const bitmap = bitmapsCache[sprite.imageKey]
@@ -46,7 +48,7 @@ function render (
 }
 
 function drawSprite (
-  context: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+  context: OffscreenCanvasRenderingContext2D,
   sprite: VideoSprite,
   currentFrame: number,
   bitmap: Bitmap | undefined,
@@ -91,7 +93,7 @@ function drawSprite (
 }
 
 function drawShape (
-  context: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+  context: OffscreenCanvasRenderingContext2D,
   shape: VideoFrameShape
 ): void {
   switch (shape.type) {
@@ -130,7 +132,7 @@ function drawShape (
 }
 
 function resetShapeStyles (
-  context: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+  context: OffscreenCanvasRenderingContext2D,
   styles: VideoStyles | undefined
 ): void {
   if (styles === undefined) return
@@ -156,7 +158,7 @@ function resetShapeStyles (
 }
 
 function drawBezier (
-  context: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+  context: OffscreenCanvasRenderingContext2D,
   d: string | undefined,
   transform: Transform | undefined,
   styles: VideoStyles
@@ -179,7 +181,7 @@ function drawBezier (
     d = d.replace(/([a-zA-Z])/g, '|||$1 ').replace(/,/g, ' ')
     d.split('|||').forEach(segment => {
       if (segment.length === 0) return
-      const firstLetter = segment.substr(0, 1)
+      const firstLetter = segment.substring(0, 1)
       if (validMethods.includes(firstLetter)) {
         const args = segment.substr(1).trim().split(' ')
         drawBezierElement(context, currentPoint, firstLetter, args)
@@ -196,80 +198,80 @@ function drawBezier (
 }
 
 function drawBezierElement (
-  context: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+  context: OffscreenCanvasRenderingContext2D,
   currentPoint: CurrentPoint,
   method: string,
   args: string[]
 ): void {
   switch (method) {
     case 'M':
-      currentPoint.x = Number(args[0])
-      currentPoint.y = Number(args[1])
+      currentPoint.x = +args[0]
+      currentPoint.y = +args[1]
       context.moveTo(currentPoint.x, currentPoint.y)
       break
     case 'm':
-      currentPoint.x += Number(args[0])
-      currentPoint.y += Number(args[1])
+      currentPoint.x += +args[0]
+      currentPoint.y += +args[1]
       context.moveTo(currentPoint.x, currentPoint.y)
       break
     case 'L':
-      currentPoint.x = Number(args[0])
-      currentPoint.y = Number(args[1])
+      currentPoint.x = +args[0]
+      currentPoint.y = +args[1]
       context.lineTo(currentPoint.x, currentPoint.y)
       break
     case 'l':
-      currentPoint.x += Number(args[0])
-      currentPoint.y += Number(args[1])
+      currentPoint.x += +args[0]
+      currentPoint.y += +args[1]
       context.lineTo(currentPoint.x, currentPoint.y)
       break
     case 'H':
-      currentPoint.x = Number(args[0])
+      currentPoint.x = +args[0]
       context.lineTo(currentPoint.x, currentPoint.y)
       break
     case 'h':
-      currentPoint.x += Number(args[0])
+      currentPoint.x += +args[0]
       context.lineTo(currentPoint.x, currentPoint.y)
       break
     case 'V':
-      currentPoint.y = Number(args[0])
+      currentPoint.y = +args[0]
       context.lineTo(currentPoint.x, currentPoint.y)
       break
     case 'v':
-      currentPoint.y += Number(args[0])
+      currentPoint.y += +args[0]
       context.lineTo(currentPoint.x, currentPoint.y)
       break
     case 'C':
-      currentPoint.x1 = Number(args[0])
-      currentPoint.y1 = Number(args[1])
-      currentPoint.x2 = Number(args[2])
-      currentPoint.y2 = Number(args[3])
-      currentPoint.x = Number(args[4])
-      currentPoint.y = Number(args[5])
+      currentPoint.x1 = +args[0]
+      currentPoint.y1 = +args[1]
+      currentPoint.x2 = +args[2]
+      currentPoint.y2 = +args[3]
+      currentPoint.x = +args[4]
+      currentPoint.y = +args[5]
       context.bezierCurveTo(currentPoint.x1, currentPoint.y1, currentPoint.x2, currentPoint.y2, currentPoint.x, currentPoint.y)
       break
     case 'c':
-      currentPoint.x1 = currentPoint.x + Number(args[0])
-      currentPoint.y1 = currentPoint.y + Number(args[1])
-      currentPoint.x2 = currentPoint.x + Number(args[2])
-      currentPoint.y2 = currentPoint.y + Number(args[3])
-      currentPoint.x += Number(args[4])
-      currentPoint.y += Number(args[5])
+      currentPoint.x1 = currentPoint.x + +args[0]
+      currentPoint.y1 = currentPoint.y + +args[1]
+      currentPoint.x2 = currentPoint.x + +args[2]
+      currentPoint.y2 = currentPoint.y + +args[3]
+      currentPoint.x += +args[4]
+      currentPoint.y += +args[5]
       context.bezierCurveTo(currentPoint.x1, currentPoint.y1, currentPoint.x2, currentPoint.y2, currentPoint.x, currentPoint.y)
       break
     case 'S':
       if (currentPoint.x1 !== undefined && currentPoint.y1 !== undefined && currentPoint.x2 !== undefined && currentPoint.y2 !== undefined) {
         currentPoint.x1 = currentPoint.x - currentPoint.x2 + currentPoint.x
         currentPoint.y1 = currentPoint.y - currentPoint.y2 + currentPoint.y
-        currentPoint.x2 = Number(args[0])
-        currentPoint.y2 = Number(args[1])
-        currentPoint.x = Number(args[2])
-        currentPoint.y = Number(args[3])
+        currentPoint.x2 = +args[0]
+        currentPoint.y2 = +args[1]
+        currentPoint.x = +args[2]
+        currentPoint.y = +args[3]
         context.bezierCurveTo(currentPoint.x1, currentPoint.y1, currentPoint.x2, currentPoint.y2, currentPoint.x, currentPoint.y)
       } else {
-        currentPoint.x1 = Number(args[0])
-        currentPoint.y1 = Number(args[1])
-        currentPoint.x = Number(args[2])
-        currentPoint.y = Number(args[3])
+        currentPoint.x1 = +args[0]
+        currentPoint.y1 = +args[1]
+        currentPoint.x = +args[2]
+        currentPoint.y = +args[3]
         context.quadraticCurveTo(currentPoint.x1, currentPoint.y1, currentPoint.x, currentPoint.y)
       }
       break
@@ -277,31 +279,31 @@ function drawBezierElement (
       if (currentPoint.x1 !== undefined && currentPoint.y1 !== undefined && currentPoint.x2 !== undefined && currentPoint.y2 !== undefined) {
         currentPoint.x1 = currentPoint.x - currentPoint.x2 + currentPoint.x
         currentPoint.y1 = currentPoint.y - currentPoint.y2 + currentPoint.y
-        currentPoint.x2 = currentPoint.x + Number(args[0])
-        currentPoint.y2 = currentPoint.y + Number(args[1])
-        currentPoint.x += Number(args[2])
-        currentPoint.y += Number(args[3])
+        currentPoint.x2 = currentPoint.x + +args[0]
+        currentPoint.y2 = currentPoint.y + +args[1]
+        currentPoint.x += +args[2]
+        currentPoint.y += +args[3]
         context.bezierCurveTo(currentPoint.x1, currentPoint.y1, currentPoint.x2, currentPoint.y2, currentPoint.x, currentPoint.y)
       } else {
-        currentPoint.x1 = currentPoint.x + Number(args[0])
-        currentPoint.y1 = currentPoint.y + Number(args[1])
-        currentPoint.x += Number(args[2])
-        currentPoint.y += Number(args[3])
+        currentPoint.x1 = currentPoint.x + +args[0]
+        currentPoint.y1 = currentPoint.y + +args[1]
+        currentPoint.x += +args[2]
+        currentPoint.y += +args[3]
         context.quadraticCurveTo(currentPoint.x1, currentPoint.y1, currentPoint.x, currentPoint.y)
       }
       break
     case 'Q':
-      currentPoint.x1 = Number(args[0])
-      currentPoint.y1 = Number(args[1])
-      currentPoint.x = Number(args[2])
-      currentPoint.y = Number(args[3])
+      currentPoint.x1 = +args[0]
+      currentPoint.y1 = +args[1]
+      currentPoint.x = +args[2]
+      currentPoint.y = +args[3]
       context.quadraticCurveTo(currentPoint.x1, currentPoint.y1, currentPoint.x, currentPoint.y)
       break
     case 'q':
-      currentPoint.x1 = currentPoint.x + Number(args[0])
-      currentPoint.y1 = currentPoint.y + Number(args[1])
-      currentPoint.x += Number(args[2])
-      currentPoint.y += Number(args[3])
+      currentPoint.x1 = currentPoint.x + +args[0]
+      currentPoint.y1 = currentPoint.y + +args[1]
+      currentPoint.x += +args[2]
+      currentPoint.y += +args[3]
       context.quadraticCurveTo(currentPoint.x1, currentPoint.y1, currentPoint.x, currentPoint.y)
       break
     case 'A':
@@ -318,7 +320,7 @@ function drawBezierElement (
 }
 
 function drawEllipse (
-  context: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+  context: OffscreenCanvasRenderingContext2D,
   x: number,
   y: number,
   radiusX: number,
@@ -365,7 +367,7 @@ function drawEllipse (
 }
 
 function drawRect (
-  context: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+  context: OffscreenCanvasRenderingContext2D,
   x: number,
   y: number,
   width: number,

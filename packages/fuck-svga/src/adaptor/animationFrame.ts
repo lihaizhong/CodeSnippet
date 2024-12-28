@@ -1,6 +1,9 @@
 import { platform, SupportedPlatform, UNSUPPORTED_ERROR } from './platform'
 
-export function startAnimationFrame(canvas: WechatMiniprogram.Canvas | HTMLCanvasElement, callback: () => void): number {
+export function startAnimationFrame(
+  canvas: WechatMiniprogram.Canvas | HTMLCanvasElement | WechatMiniprogram.OffscreenCanvas | OffscreenCanvas,
+  callback: () => void
+): number {
   if (platform === SupportedPlatform.H5) {
     return requestAnimationFrame(callback)
   }

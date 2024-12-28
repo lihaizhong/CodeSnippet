@@ -1,3 +1,4 @@
+import type { PlatformCanvas } from '../types'
 import { uint8ArrayToString } from '../utils'
 import { getBridge } from './bridge'
 import { platform, SupportedPlatform, UNSUPPORTED_ERROR } from './platform'
@@ -57,7 +58,7 @@ function createImageSource(data: Uint8Array | string): string {
  * @returns 
  */
 export function loadImage(
-  canvas: WechatMiniprogram.Canvas | HTMLCanvasElement,
+  canvas: PlatformCanvas,
   data: Uint8Array | string
 ): Promise<WechatMiniprogram.Image | HTMLImageElement> {
   return new Promise((resolve, reject) => {
