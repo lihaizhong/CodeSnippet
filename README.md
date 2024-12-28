@@ -26,6 +26,30 @@ git submodule update --init --recursive
 
 ## 学习参考
 
+### protobuf
+
+- [深入 ProtoBuf - 简介](https://www.jianshu.com/p/a24c88c0526a)
+- [深入 ProtoBuf - 编码](https://www.jianshu.com/p/73c9ed3a4877)
+- [深入 ProtoBuf - 序列化源码解析](https://www.jianshu.com/p/62f0238beec8)
+- [深入 ProtoBuf - 反射原理解析](https://www.jianshu.com/p/ddc1aaca3691)
+- [图解protobuf的编码varints,zigzag与数据组织形式](https://juejin.cn/post/7267780768982908986)
+
+#### ProtoBuf 官方文档翻译
+
+- [[翻译] ProtoBuf 官方文档（一）- 开发者指南](https://www.jianshu.com/p/bdd94a32fbd1)
+- [[翻译] ProtoBuf 官方文档（二）- 语法指引（proto2）](https://www.jianshu.com/p/6f68fb2c7d19)
+- [[翻译] ProtoBuf 官方文档（三）- 语法指引（proto3）](https://www.jianshu.com/p/fc7485af828d)
+- [[翻译] ProtoBuf 官方文档（四）- 规范指引](https://www.jianshu.com/p/8c55fb0a09b5)
+- [[翻译] ProtoBuf 官方文档（五）- 编码](https://www.jianshu.com/p/82ff31c6adc6)
+- [[翻译] ProtoBuf 官方文档（六）- 相关技术](https://www.jianshu.com/p/d1d947d19c32)
+- [[翻译] ProtoBuf 官方文档（七）- 第三方组件](https://www.jianshu.com/p/64b57684e1ab)
+- [[翻译] ProtoBuf 官方文档（八）- （开发）教程](https://www.jianshu.com/p/ffc9a898552b)
+- [[翻译] ProtoBuf 官方文档（九）- （C++开发）教程](https://www.jianshu.com/p/d2bed3614259)
+
+### 反射技术
+
+- [JavaScript利用反射实现方法注入](https://www.cnblogs.com/jiujiubashiyi/p/17578718.html)
+
 ### 性能优化
 
 - [手把手教你排查Javascript内存泄漏](https://zhuanlan.zhihu.com/p/322356761)

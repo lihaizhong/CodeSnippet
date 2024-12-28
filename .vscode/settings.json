@@ -5,6 +5,8 @@
     "douyin",
     "fflate",
     "gitmodules",
+    "ldelim",
+    "mapfield",
     "Matteing",
     "miniprogram",
     "nanos",
@@ -14,6 +16,10 @@
     "protobuf",
     "protoc",
     "protos",
+    "sfixed",
+    "ungap",
+    "Varint",
+    "weapp",
     "wechat"
   ]
 }
