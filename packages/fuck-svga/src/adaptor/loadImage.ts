@@ -1,7 +1,7 @@
-import type { PlatformCanvas } from '../types'
+import type { PlatformCanvas, PlatformOffscreenCanvas } from '../types'
 import { uint8ArrayToString } from '../utils'
 import { getBridge } from './bridge'
-import { platform, SupportedPlatform, UNSUPPORTED_ERROR } from './platform'
+import { platform, SupportedPlatform, throwUnsupportedPlatform } from './platform'
 
 /**
  * 将ArrayBuffer转为base64
@@ -13,7 +13,7 @@ function toBase64(data: Uint8Array): string {
   if (platform === SupportedPlatform.H5) {
     const str = uint8ArrayToString(data)
 
-    return window.btoa(str)
+    return btoa(str)
   }
 
   return (getBridge() as WechatMiniprogram.Wx).arrayBufferToBase64(data.buffer as ArrayBuffer)
@@ -25,14 +25,14 @@ function toBase64(data: Uint8Array): string {
  * @returns 
  */
 function createImage(
-  canvas: WechatMiniprogram.Canvas | HTMLCanvasElement
+  canvas: PlatformCanvas | PlatformOffscreenCanvas
 ): WechatMiniprogram.Image | HTMLImageElement | null {
   if (platform === SupportedPlatform.H5) {
     return new Image()
   }
   
   if (platform !== SupportedPlatform.UNKNOWN) {
-    return (canvas as WechatMiniprogram.Canvas).createImage()
+    return (canvas as WechatMiniprogram.Canvas | WechatMiniprogram.OffscreenCanvas).createImage()
   }
 
   return null
@@ -58,7 +58,7 @@ function createImageSource(data: Uint8Array | string): string {
  * @returns 
  */
 export function loadImage(
-  canvas: PlatformCanvas,
+  canvas: PlatformCanvas | PlatformOffscreenCanvas,
   data: Uint8Array | string
 ): Promise<WechatMiniprogram.Image | HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -70,6 +70,6 @@ export function loadImage(
       img.src = createImageSource(data)
     }
 
-    reject(UNSUPPORTED_ERROR)
+    reject(throwUnsupportedPlatform())
   });
 }

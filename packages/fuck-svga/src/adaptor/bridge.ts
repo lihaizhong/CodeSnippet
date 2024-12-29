@@ -1,4 +1,4 @@
-import { platform, SupportedPlatform, UNSUPPORTED_ERROR } from './platform'
+import { platform, SupportedPlatform, throwUnsupportedPlatform } from './platform'
 
 let bridge: any = null
 
@@ -27,5 +27,5 @@ export function getBridge(): WechatMiniprogram.Wx | Window {
     return tt
   }
 
-  throw UNSUPPORTED_ERROR
+  throw throwUnsupportedPlatform()
 }

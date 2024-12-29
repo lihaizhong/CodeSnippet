@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "scripts": {
-    "build": "node build.js > ./dist/fuck-svga.js"
+    "build": "rimraf -rf dist && rollup -c"
   },
   "author": "lihzsky",
   "license": "ISC",
@@ -18,6 +18,7 @@
     "@rollup/plugin-typescript": "^12.1.2",
     "@types/wechat-miniprogram": "^3.4.8",
     "fflate": "^0.8.2",
+    "rimraf": "^6.0.1",
     "rollup": "^4.29.1",
     "tslib": "^2.8.1",
     "typescript": "^5.7.2"

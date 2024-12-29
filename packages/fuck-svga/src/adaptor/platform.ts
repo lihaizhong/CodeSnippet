@@ -6,7 +6,7 @@ export const SupportedPlatform = {
   UNKNOWN: 'unknown'
 }
 
-export const UNSUPPORTED_ERROR = new Error('Unsupported platform')
+export const throwUnsupportedPlatform = () => new Error('Unsupported platform')
 
 /**
  * 获取平台信息

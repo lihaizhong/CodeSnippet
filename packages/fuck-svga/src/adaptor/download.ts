@@ -1,5 +1,5 @@
 import { getBridge } from './bridge'
-import { platform, SupportedPlatform, UNSUPPORTED_ERROR } from './platform'
+import { platform, SupportedPlatform, throwUnsupportedPlatform } from './platform'
 
 /**
  * 读取远程文件
@@ -38,7 +38,7 @@ function readRemoteFile(url: string): Promise<ArrayBuffer> {
     })
   }
 
-  return Promise.reject(UNSUPPORTED_ERROR)
+  return Promise.reject(throwUnsupportedPlatform())
 }
 
 /**
@@ -74,5 +74,5 @@ export default function download(url: string): Promise<ArrayBuffer> {
     return readLocalFile(url)
   }
 
-  return Promise.reject(UNSUPPORTED_ERROR)
+  return Promise.reject(throwUnsupportedPlatform())
 }

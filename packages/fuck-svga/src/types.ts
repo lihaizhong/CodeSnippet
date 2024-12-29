@@ -243,6 +243,10 @@ export interface PlayerConfig {
    */
   container: PlatformCanvas | null
   /**
+   * 播放动画的 Context 对象
+   */
+  context: CanvasRenderingContext2D | null
+  /**
    * 循环次数，默认值 0（无限循环）
    */
   loop: number | boolean
@@ -267,19 +271,10 @@ export interface PlayerConfig {
    */
   loopStartFrame: number
   /**
-   * 是否开启缓存已播放过的帧数据，默认值 false
-   */
-  isCacheFrames: boolean
-  /**
    * 是否开启动画容器视窗检测，默认值 false
    * 开启后利用 Intersection Observer API 检测动画容器是否处于视窗内，若处于视窗外，停止描绘渲染帧避免造成资源消耗
    */
   isUseIntersectionObserver: boolean
-  /**
-   * 是否使用避免执行延迟，默认值 false
-   * 开启后使用 `WebWorker` 确保动画按时执行（避免个别情况下浏览器延迟或停止执行动画任务）
-   */
-  isOpenNoExecutionDelay: boolean
 }
 
-export type PlayerConfigOptions = Partial<PlayerConfig>
+export type PlayerConfigOptions = Partial<Omit<PlayerConfig, 'container' | 'context'> & { container: string }>

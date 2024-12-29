@@ -42,6 +42,9 @@ importers:
       fflate:
         specifier: ^0.8.2
         version: 0.8.2
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.0.1
       rollup:
         specifier: ^4.29.1
         version: 4.29.1

@@ -1,4 +1,4 @@
-import { platform, SupportedPlatform, UNSUPPORTED_ERROR } from './platform'
+import { platform, SupportedPlatform, throwUnsupportedPlatform } from './platform'
 
 export function startAnimationFrame(
   canvas: WechatMiniprogram.Canvas | HTMLCanvasElement | WechatMiniprogram.OffscreenCanvas | OffscreenCanvas,
@@ -12,5 +12,5 @@ export function startAnimationFrame(
     return (canvas as WechatMiniprogram.Canvas).requestAnimationFrame(callback)
   }
 
-  throw UNSUPPORTED_ERROR
+  throw throwUnsupportedPlatform()
 }

@@ -1,5 +1,5 @@
 import { unzlibSync } from 'fflate'
-import { MovieEntity } from 'svga-protobuf'
+import { MovieEntity } from '../../utils/svga-protobuf'
 
 Page({
   data: {

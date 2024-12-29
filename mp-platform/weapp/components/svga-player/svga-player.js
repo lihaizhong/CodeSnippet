@@ -1,4 +1,5 @@
-import { Parser, Player } from "../../utils/svgaplayer.weapp";
+// import { Parser, Player } from "../../utils/svgaplayer.weapp";
+import { Parser, Player } from "../../utils/fuck-svga";
 
 let player;
 let parser;
@@ -36,22 +37,21 @@ Component({
 
         if (!player) {
           player = new Player();
-          await player.setCanvas("#palette", this);
+          await player.setConfig("#palette", this);
         } else {
-          player.stopAnimation();
+          player.stop();
         }
 
         const videoItem = await parser.load(this.properties.url);
-        await player.setVideoItem(videoItem);
-        // player.loops = 1;
-        player.startAnimation();
+        await player.mount(videoItem);
+        player.start();
       } catch (ex) {
         console.error("svga初始化失败！", ex);
       }
     },
     stop() {
       if (player) {
-        player.stopAnimation();
+        player.stop();
       }
     },
   },

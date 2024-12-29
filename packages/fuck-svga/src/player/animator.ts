@@ -1,5 +1,5 @@
 import type { PlatformCanvas, PlatformOffscreenCanvas } from "../types"
-import { startAnimationFrame } from "../adaptor"
+import { platform, startAnimationFrame, SupportedPlatform } from "../adaptor"
 
 export class Animator {
   private canvas: PlatformCanvas | PlatformOffscreenCanvas
@@ -20,11 +20,12 @@ export class Animator {
     this.canvas = canvas
   }
 
-  public currentTimeMillSecond: () => number = () => {
-    if (window.performance === undefined) {
-      return Date.now()
+  public currentTimeMillSecond (): number {
+    if (platform === SupportedPlatform.H5 && performance) {
+      return performance.now()
     }
-    return performance.now()
+    
+    return Date.now()
   }
 
   public start (): void {

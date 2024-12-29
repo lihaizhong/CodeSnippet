@@ -8,6 +8,8 @@ function shuffle (values) {
     values[i] = values[ranIndex]
     values[ranIndex] = itemAtIndex
   }
+
+  return values
 }
 
 export function getImageSourceByShuffle () {

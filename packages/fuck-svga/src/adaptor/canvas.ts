@@ -1,6 +1,6 @@
 import type { PlatformOffscreenCanvas } from "../types"
 import { getBridge } from "./bridge"
-import { platform, SupportedPlatform, UNSUPPORTED_ERROR } from './platform'
+import { platform, SupportedPlatform, throwUnsupportedPlatform } from './platform'
 
 export function createOffscreenCanvas(options: WechatMiniprogram.CreateOffscreenCanvasOption): PlatformOffscreenCanvas {
   if (platform === SupportedPlatform.WECHAT) {
@@ -10,7 +10,7 @@ export function createOffscreenCanvas(options: WechatMiniprogram.CreateOffscreen
     })
   }
 
-  if (platform === SupportedPlatform.H5 && 'OffscreenCanvas' in window) {
+  if (platform === SupportedPlatform.H5) {
     return new OffscreenCanvas(options.width as number, options.height as number)
   }
 
@@ -29,7 +29,7 @@ export function createOffscreenCanvas(options: WechatMiniprogram.CreateOffscreen
     return canvas
   }
 
-  throw UNSUPPORTED_ERROR
+  throw throwUnsupportedPlatform()
 }
 
 
@@ -38,7 +38,7 @@ export interface IGetCanvasResult {
   ctx: CanvasRenderingContext2D
 }
 
-export function getCanvas(selector: string, component?: WechatMiniprogram.Component.TrivialInstance): Promise<IGetCanvasResult> {
+export function getCanvas(selector: string, component?: WechatMiniprogram.Component.TrivialInstance | null): Promise<IGetCanvasResult> {
   return new Promise((resolve, reject) => {
     const bridge = getBridge()
     const initCanvas = (canvas?: WechatMiniprogram.Canvas | HTMLCanvasElement, width: number = 0, height: number = 0) => {
@@ -68,11 +68,12 @@ export function getCanvas(selector: string, component?: WechatMiniprogram.Compon
         query
           .select(selector)
           .fields({ node: true, size: true })
-          .exec((res) => {            
-            initCanvas(res?.[0]?.node, res?.[0].width, res?.[0].height)
+          .exec((res) => {
+            const { node, width, height } = res?.[0] || {}
+            initCanvas(node, width, height)
           });
+    } else {
+      reject(throwUnsupportedPlatform())
     }
-
-    throw UNSUPPORTED_ERROR
   })
 }

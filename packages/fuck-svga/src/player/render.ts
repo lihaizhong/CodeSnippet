@@ -32,7 +32,7 @@ function render (
   replaceElements: ReplaceElements,
   videoEntity: Video,
   currentFrame: number
-): void {
+): ImageData {
   const context = canvas.getContext('2d')
 
   if (context === null) {
@@ -45,6 +45,8 @@ function render (
     const dynamicElement = dynamicElements[sprite.imageKey]
     drawSprite(context, sprite, currentFrame, bitmap, replaceElement, dynamicElement)
   })
+
+  return context.getImageData(0, 0, canvas.width, canvas.height)
 }
 
 function drawSprite (
