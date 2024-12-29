@@ -3,7 +3,7 @@ export type PlatformCanvas = HTMLCanvasElement | WechatMiniprogram.Canvas
 export type PlatformOffscreenCanvas = WechatMiniprogram.OffscreenCanvas | OffscreenCanvas
 
 export interface RawImages {
-  [key: string]: string | HTMLImageElement | ImageBitmap
+  [key: string]: string | HTMLImageElement | Uint8Array
 }
 
 export interface Rect {
@@ -169,7 +169,7 @@ export interface VideoSprite {
   frames: VideoFrame[]
 }
 
-export type Bitmap = HTMLImageElement | OffscreenCanvas | ImageBitmap
+export type Bitmap = WechatMiniprogram.Image | HTMLImageElement | OffscreenCanvas | ImageBitmap
 
 export interface BitmapsCache {
   [key: string]: Bitmap | ImageBitmap

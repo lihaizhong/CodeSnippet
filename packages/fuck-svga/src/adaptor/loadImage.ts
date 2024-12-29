@@ -9,14 +9,15 @@ import { platform, SupportedPlatform, throwUnsupportedPlatform } from './platfor
  * @returns 
  */
 function toBase64(data: Uint8Array): string {
-  // H5环境
-  if (platform === SupportedPlatform.H5) {
-    const str = uint8ArrayToString(data)
+  const ab = createArrayBuffer(data)
 
-    return btoa(str)
-  }
+  return "data:image/png;base64," + (getBridge() as WechatMiniprogram.Wx).arrayBufferToBase64(ab)
+}
 
-  return (getBridge() as WechatMiniprogram.Wx).arrayBufferToBase64(data.buffer as ArrayBuffer)
+function toBitmap(data: Uint8Array): Promise<ImageBitmap> {
+  const ab = createArrayBuffer(data)
+
+  return createImageBitmap(new Blob([ab]))
 }
 
 /**
@@ -39,16 +40,25 @@ function createImage(
 }
 
 /**
+ * Uint8Array转换成ArrayBuffer
+ * @param data 
+ * @returns 
+ */
+function createArrayBuffer(data: Uint8Array): ArrayBuffer {
+  return data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength) as ArrayBuffer
+}
+
+/**
  * 创建图片src元信息
  * @param data 
  * @returns 
  */
-function createImageSource(data: Uint8Array | string): string {
+ function createImageSource(data: Uint8Array | string): string {
   if (typeof data === "string") {
     return data
   }
 
-  return "data:image/png;base64," + toBase64(data)
+  return toBase64(data)
 }
 
 /**
@@ -60,7 +70,11 @@ function createImageSource(data: Uint8Array | string): string {
 export function loadImage(
   canvas: PlatformCanvas | PlatformOffscreenCanvas,
   data: Uint8Array | string
-): Promise<WechatMiniprogram.Image | HTMLImageElement> {
+): Promise<WechatMiniprogram.Image | HTMLImageElement | ImageBitmap> {
+  if (platform === SupportedPlatform.H5) {
+    return toBitmap(data as Uint8Array)
+  }
+
   return new Promise((resolve, reject) => {
     let img = createImage(canvas)
 
@@ -68,8 +82,8 @@ export function loadImage(
       img.onload = () => resolve(img)
       img.onerror = (error: Error) => reject(new Error(`[SVGA LOADING FAILURE]: ${error.message}`))
       img.src = createImageSource(data)
+    } else {
+      reject(throwUnsupportedPlatform())
     }
-
-    reject(throwUnsupportedPlatform())
   });
 }

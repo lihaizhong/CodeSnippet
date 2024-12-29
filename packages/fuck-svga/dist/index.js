@@ -37,12 +37,12 @@ fl[28] = 258, revfl[258] = 28;
 var _b = freb(fdeb, 0), fd = _b.b;
 // map of value to reverse (assuming 16 bits)
 var rev = new u16(32768);
-for (var i$1 = 0; i$1 < 32768; ++i$1) {
+for (var i = 0; i < 32768; ++i) {
     // reverse table algorithm from SO
-    var x$1 = ((i$1 & 0xAAAA) >> 1) | ((i$1 & 0x5555) << 1);
-    x$1 = ((x$1 & 0xCCCC) >> 2) | ((x$1 & 0x3333) << 2);
-    x$1 = ((x$1 & 0xF0F0) >> 4) | ((x$1 & 0x0F0F) << 4);
-    rev[i$1] = (((x$1 & 0xFF00) >> 8) | ((x$1 & 0x00FF) << 8)) >> 1;
+    var x = ((i & 0xAAAA) >> 1) | ((i & 0x5555) << 1);
+    x = ((x & 0xCCCC) >> 2) | ((x & 0x3333) << 2);
+    x = ((x & 0xF0F0) >> 4) | ((x & 0x0F0F) << 4);
+    rev[i] = (((x & 0xFF00) >> 8) | ((x & 0x00FF) << 8)) >> 1;
 }
 // create huffman tree from u8 "map": index -> code length for code index
 // mb (max bits) must be at most 15
@@ -98,18 +98,18 @@ var hMap = (function (cd, mb, r) {
 });
 // fixed length tree
 var flt = new u8(288);
-for (var i$1 = 0; i$1 < 144; ++i$1)
-    flt[i$1] = 8;
-for (var i$1 = 144; i$1 < 256; ++i$1)
-    flt[i$1] = 9;
-for (var i$1 = 256; i$1 < 280; ++i$1)
-    flt[i$1] = 7;
-for (var i$1 = 280; i$1 < 288; ++i$1)
-    flt[i$1] = 8;
+for (var i = 0; i < 144; ++i)
+    flt[i] = 8;
+for (var i = 144; i < 256; ++i)
+    flt[i] = 9;
+for (var i = 256; i < 280; ++i)
+    flt[i] = 7;
+for (var i = 280; i < 288; ++i)
+    flt[i] = 8;
 // fixed distance tree
 var fdt = new u8(32);
-for (var i$1 = 0; i$1 < 32; ++i$1)
-    fdt[i$1] = 5;
+for (var i = 0; i < 32; ++i)
+    fdt[i] = 5;
 // fixed length map
 var flrm = /*#__PURE__*/ hMap(flt, 9, 1);
 // fixed distance map
@@ -380,7 +380,5307 @@ try {
 }
 catch (e) { }
 
-function e(e){return e&&e.__esModule&&Object.prototype.hasOwnProperty.call(e,"default")?e.default:e}var t,n={};var r,i,o=(t||(t=1,function(){var e=n;e.length=function(e){var t=e.length;if(!t)return 0;for(var n=0;--t%4>1&&"="===e.charAt(t);)++n;return Math.ceil(3*e.length)/4-n};for(var t=new Array(64),r=new Array(123),i=0;i<64;)r[t[i]=i<26?i+65:i<52?i+71:i<62?i-4:i-59|43]=i++;e.encode=function(e,n,r){for(var i,o=null,s=[],a=0,l=0;n<r;){var u=e[n++];switch(l){case 0:s[a++]=t[u>>2],i=(3&u)<<4,l=1;break;case 1:s[a++]=t[i|u>>4],i=(15&u)<<2,l=2;break;case 2:s[a++]=t[i|u>>6],s[a++]=t[63&u],l=0;}a>8191&&((o||(o=[])).push(String.fromCharCode.apply(String,s)),a=0);}return l&&(s[a++]=t[i],s[a++]=61,1===l&&(s[a++]=61)),o?(a&&o.push(String.fromCharCode.apply(String,s.slice(0,a))),o.join("")):String.fromCharCode.apply(String,s.slice(0,a))};var o="invalid encoding";e.decode=function(e,t,n){for(var i,s=n,a=0,l=0;l<e.length;){var u=e.charCodeAt(l++);if(61===u&&a>1)break;if(void 0===(u=r[u]))throw Error(o);switch(a){case 0:i=u,a=1;break;case 1:t[n++]=i<<2|(48&u)>>4,i=u,a=2;break;case 2:t[n++]=(15&i)<<4|(60&u)>>2,i=u,a=3;break;case 3:t[n++]=(3&i)<<6|u,a=0;}}if(1===a)throw Error(o);return n-s},e.test=function(e){return /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(e)};}()),n),s=e(o),a={};var l,u,c=e(i?r:(i=1,r=function(e,t,n){var r=n||8192,i=r>>>1,o=null,s=r;return function(n){if(n<1||n>i)return e(n);s+n>r&&(o=e(r),s=0);var a=t.call(o,s,s+=n);return 7&s&&(s=1+(7|s)),a}}));var p,h=e(function(){if(u)return l;function e(e){return "undefined"!=typeof Float32Array?function(){var t=new Float32Array([-0]),n=new Uint8Array(t.buffer),r=128===n[3];function i(e,r,i){t[0]=e,r[i]=n[0],r[i+1]=n[1],r[i+2]=n[2],r[i+3]=n[3];}function o(e,r,i){t[0]=e,r[i]=n[3],r[i+1]=n[2],r[i+2]=n[1],r[i+3]=n[0];}function s(e,r){return n[0]=e[r],n[1]=e[r+1],n[2]=e[r+2],n[3]=e[r+3],t[0]}function a(e,r){return n[3]=e[r],n[2]=e[r+1],n[1]=e[r+2],n[0]=e[r+3],t[0]}e.writeFloatLE=r?i:o,e.writeFloatBE=r?o:i,e.readFloatLE=r?s:a,e.readFloatBE=r?a:s;}():function(){function o(e,t,n,r){var i=t<0?1:0;if(i&&(t=-t),0===t)e(1/t>0?0:2147483648,n,r);else if(isNaN(t))e(2143289344,n,r);else if(t>34028234663852886e22)e((i<<31|2139095040)>>>0,n,r);else if(t<11754943508222875e-54)e((i<<31|Math.round(t/1401298464324817e-60))>>>0,n,r);else {var o=Math.floor(Math.log(t)/Math.LN2);e((i<<31|o+127<<23|8388607&Math.round(t*Math.pow(2,-o)*8388608))>>>0,n,r);}}function s(e,t,n){var r=e(t,n),i=2*(r>>31)+1,o=r>>>23&255,s=8388607&r;return 255===o?s?NaN:i*(1/0):0===o?1401298464324817e-60*i*s:i*Math.pow(2,o-150)*(s+8388608)}e.writeFloatLE=o.bind(null,t),e.writeFloatBE=o.bind(null,n),e.readFloatLE=s.bind(null,r),e.readFloatBE=s.bind(null,i);}(),"undefined"!=typeof Float64Array?function(){var t=new Float64Array([-0]),n=new Uint8Array(t.buffer),r=128===n[7];function i(e,r,i){t[0]=e,r[i]=n[0],r[i+1]=n[1],r[i+2]=n[2],r[i+3]=n[3],r[i+4]=n[4],r[i+5]=n[5],r[i+6]=n[6],r[i+7]=n[7];}function o(e,r,i){t[0]=e,r[i]=n[7],r[i+1]=n[6],r[i+2]=n[5],r[i+3]=n[4],r[i+4]=n[3],r[i+5]=n[2],r[i+6]=n[1],r[i+7]=n[0];}function s(e,r){return n[0]=e[r],n[1]=e[r+1],n[2]=e[r+2],n[3]=e[r+3],n[4]=e[r+4],n[5]=e[r+5],n[6]=e[r+6],n[7]=e[r+7],t[0]}function a(e,r){return n[7]=e[r],n[6]=e[r+1],n[5]=e[r+2],n[4]=e[r+3],n[3]=e[r+4],n[2]=e[r+5],n[1]=e[r+6],n[0]=e[r+7],t[0]}e.writeDoubleLE=r?i:o,e.writeDoubleBE=r?o:i,e.readDoubleLE=r?s:a,e.readDoubleBE=r?a:s;}():function(){function o(e,t,n,r,i,o){var s=r<0?1:0;if(s&&(r=-r),0===r)e(0,i,o+t),e(1/r>0?0:2147483648,i,o+n);else if(isNaN(r))e(0,i,o+t),e(2146959360,i,o+n);else if(r>17976931348623157e292)e(0,i,o+t),e((s<<31|2146435072)>>>0,i,o+n);else {var a;if(r<22250738585072014e-324)e((a=r/5e-324)>>>0,i,o+t),e((s<<31|a/4294967296)>>>0,i,o+n);else {var l=Math.floor(Math.log(r)/Math.LN2);1024===l&&(l=1023),e(4503599627370496*(a=r*Math.pow(2,-l))>>>0,i,o+t),e((s<<31|l+1023<<20|1048576*a&1048575)>>>0,i,o+n);}}}function s(e,t,n,r,i){var o=e(r,i+t),s=e(r,i+n),a=2*(s>>31)+1,l=s>>>20&2047,u=4294967296*(1048575&s)+o;return 2047===l?u?NaN:a*(1/0):0===l?5e-324*a*u:a*Math.pow(2,l-1075)*(u+4503599627370496)}e.writeDoubleLE=o.bind(null,t,0,4),e.writeDoubleBE=o.bind(null,n,4,0),e.readDoubleLE=s.bind(null,r,0,4),e.readDoubleBE=s.bind(null,i,4,0);}(),e}function t(e,t,n){t[n]=255&e,t[n+1]=e>>>8&255,t[n+2]=e>>>16&255,t[n+3]=e>>>24;}function n(e,t,n){t[n]=e>>>24,t[n+1]=e>>>16&255,t[n+2]=e>>>8&255,t[n+3]=255&e;}function r(e,t){return (e[t]|e[t+1]<<8|e[t+2]<<16|e[t+3]<<24)>>>0}function i(e,t){return (e[t]<<24|e[t+1]<<16|e[t+2]<<8|e[t+3])>>>0}return u=1,l=e(e)}()),f={};var y=(p||(p=1,function(){var e=f;e.length=function(e){for(var t=0,n=0,r=0;r<e.length;++r)(n=e.charCodeAt(r))<128?t+=1:n<2048?t+=2:55296==(64512&n)&&56320==(64512&e.charCodeAt(r+1))?(++r,t+=4):t+=3;return t},e.read=function(e,t,n){if(n-t<1)return "";for(var r,i=null,o=[],s=0;t<n;)(r=e[t++])<128?o[s++]=r:r>191&&r<224?o[s++]=(31&r)<<6|63&e[t++]:r>239&&r<365?(r=((7&r)<<18|(63&e[t++])<<12|(63&e[t++])<<6|63&e[t++])-65536,o[s++]=55296+(r>>10),o[s++]=56320+(1023&r)):o[s++]=(15&r)<<12|(63&e[t++])<<6|63&e[t++],s>8191&&((i||(i=[])).push(String.fromCharCode.apply(String,o)),s=0);return i?(s&&i.push(String.fromCharCode.apply(String,o.slice(0,s))),i.join("")):String.fromCharCode.apply(String,o.slice(0,s))},e.write=function(e,t,n){for(var r,i,o=n,s=0;s<e.length;++s)(r=e.charCodeAt(s))<128?t[n++]=r:r<2048?(t[n++]=r>>6|192,t[n++]=63&r|128):55296==(64512&r)&&56320==(64512&(i=e.charCodeAt(s+1)))?(r=65536+((1023&r)<<10)+(1023&i),++s,t[n++]=r>>18|240,t[n++]=r>>12&63|128,t[n++]=r>>6&63|128,t[n++]=63&r|128):(t[n++]=r>>12|224,t[n++]=r>>6&63|128,t[n++]=63&r|128);return n-o};}()),f),d=e(y);function m(){}function g(e,t,n){t[n]=255&e;}function b(e,t,n){t.set(e,n);}function w(e,t,n){for(;e>127;)t[n++]=127&e|128,e>>>=7;t[n]=e;}function O(e,t,n){for(;e.hi;)t[n++]=127&e.lo|128,e.lo=(e.lo>>>7|e.hi<<25)>>>0,e.hi>>>=7;for(;e.lo>127;)t[n++]=127&e.lo|128,e.lo=e.lo>>>7;t[n++]=e.lo;}function v(e,t,n){t[n]=255&e,t[n+1]=e>>>8&255,t[n+2]=e>>>16&255,t[n+3]=e>>>24;}function S(e){return "string"==typeof e||e instanceof String}function j(e){return "number"==typeof e&&isFinite(e)&&Math.floor(e)===e}const x=Object.freeze([]),E=Object.freeze({});function k(e){for(var t={},n=0;n<e.length;++n)t[e[n]]=1;return function(){for(var e=Object.keys(this),n=e.length-1;n>-1;--n)if(1===t[e[n]]&&void 0!==this[e[n]]&&null!==this[e[n]])return e[n]}}class P{head=null;tail=null;len;next=null;constructor(e){this.head=e.head,this.tail=e.tail,this.len=e.len,this.next=e.states;}}class I{fn;len;next=null;val;constructor(e,t,n){this.fn=e,this.len=t,this.val=n;}}class D{static fromNumber(e){if(0===e)return new A;const t=e<0;t&&(e=-e);let n=e>>>0,r=(e-n)/4294967296>>>0;return t&&(r=~r>>>0,n=~n>>>0,++n>4294967295&&(n=0,++r>4294967295&&(r=0))),new D(n,r)}static from(e){return "number"==typeof e?D.fromNumber(e):S(e)?D.fromNumber(parseInt(e,10)):e.low||e.high?new D(e.low>>>0,e.high>>>0):new A}static fromHash(e){if(e===A.zeroHash)return new A;const t=String.prototype.charCodeAt;return new D((t.call(e,0)|t.call(e,1)<<8|t.call(e,2)<<16|t.call(e,3)<<24)>>>0,(t.call(e,4)|t.call(e,5)<<8|t.call(e,6)<<16|t.call(e,7)<<24)>>>0)}lo;hi;constructor(e,t){this.lo=e>>>0,this.hi=t>>>0;}toNumber(e){if(!e&&this.hi>>>31){const e=1+~this.lo>>>0;let t=~this.hi>>>0;return e||(t=t+1>>>0),-(e+4294967296*t)}return this.lo+4294967296*this.hi}toHash(){return String.fromCharCode(255&this.lo,this.lo>>>8&255,this.lo>>>16&255,this.lo>>>24,255&this.hi,this.hi>>>8&255,this.hi>>>16&255,this.hi>>>24)}zzEncode(){const e=this.hi>>31;return this.hi=((this.hi<<1|this.lo>>>31)^e)>>>0,this.lo=(this.lo<<1^e)>>>0,this}zzDecode(){const e=-(1&this.lo);return this.lo=((this.lo>>>1|this.hi<<31)^e)>>>0,this.hi=(this.hi>>>1^e)>>>0,this}length(){const e=this.lo,t=(this.lo>>>28|this.hi<<4)>>>0,n=this.hi>>>24;return 0===n?0===t?e<16384?e<128?1:2:e<2097152?3:4:t<16384?t<128?5:6:t<2097152?7:8:n<128?9:10}}class A extends D{static zeroHash="\0\0\0\0\0\0\0\0";constructor(){super(0,0);}toNumber(){return 0}zzDecode(){return this}length(){return 1}}class N{static create(){return new N}static alloc(e){return c((e=>new Uint8Array(e)),Uint8Array.prototype.subarray)(e)}len;head;tail;states;constructor(){this.len=0,this.head=new I(m,0,null),this.tail=this.head,this.states=null;}push(e,t,n){return this.tail=this.tail.next=new I(e,t,n),this.len+=t,this}uint32(e){return this.len+=(this.tail=this.tail.next=new I(w,(e>>>=0)<128?1:e<16384?2:e<2097152?3:e<268435456?4:5,e)).len,this}int32(e){return e<0?this.push(O,e<-2147483648?10:5,e):this.uint32(e)}sint32(e){return this.uint32((e<<1^e>>31)>>>0)}uint64(e){const t=D.from(e);return this.push(O,t.length(),t)}int64(e){return this.uint64(e)}sint64(e){const t=D.from(e).zzEncode();return this.push(O,t.length(),t)}bool(e){return this.push(g,1,e?1:0)}fixed32(e){return this.push(v,4,e>>>0)}sfixed32(e){return this.fixed32(e)}fixed64(e){const t=D.from(e);return this.push(v,4,t.lo).push(v,4,t.hi)}sfixed64(e){return this.fixed64(e)}float(e){return this.push(h.writeFloatLE,4,e)}double(e){return this.push(h.writeDoubleLE,8,e)}bytes(e){let t=e.length;if(!t)return this.push(g,1,0);if(S(e)){var n=N.alloc(t=s.length(e));s.decode(e,n,0),e=n;}return this.uint32(t).push(b,t,e)}string(e){const t=d.length(e);return t?this.uint32(t).push(d.write,t,e):this.push(g,1,0)}fork(){return this.states=new P(this),this.head=this.tail=new I(m,0,0),this.len=0,this}reset(){return this.states?(this.head=this.states.head,this.tail=this.states.tail,this.len=this.states.len,this.states=this.states.next):(this.head=this.tail=new I(m,0,0),this.len=0),this}ldelim(){const e=this.head,t=this.tail,n=this.len;return this.reset().uint32(n),n&&(this.tail.next=e.next,this.tail=t,this.len+=n),this}finish(){const e=N.alloc(this.len);let t=this.head.next,n=0;for(;t;)t.fn(t.val,e,n),n+=t.len,t=t.next;return e}}function L(e,t){return RangeError("index out of range: "+e.pos+" + "+(t||1)+" > "+e.len)}class T{static create(e){if(e instanceof Uint8Array)return new T(e);throw Error("illegal buffer")}buf;pos;len;constructor(e){this.buf=e,this.pos=0,this.len=e.length;}slice(e,t,n){return e.subarray(t,n)}readLongVarint(){const e=new D(0,0);let t=0;if(!(this.len-this.pos>4)){for(;t<3;++t){if(this.pos>=this.len)throw L(this);if(e.lo=(e.lo|(127&this.buf[this.pos])<<7*t)>>>0,this.buf[this.pos++]<128)return e}return e.lo=(e.lo|(127&this.buf[this.pos++])<<7*t)>>>0,e}for(let t=0;t<4;++t)if(e.lo=(e.lo|(127&this.buf[this.pos])<<7*t)>>>0,this.buf[this.pos++]<128)return e;if(e.lo=(e.lo|(127&this.buf[this.pos])<<28)>>>0,e.hi=(e.hi|(127&this.buf[this.pos])>>4)>>>0,this.buf[this.pos++]<128)return e;if(t=0,this.len-this.pos>4){for(;t<5;++t)if(e.hi=(e.hi|(127&this.buf[this.pos])<<7*t+3)>>>0,this.buf[this.pos++]<128)return e}else for(;t<5;++t){if(this.pos>=this.len)throw L(this);if(e.hi=(e.hi|(127&this.buf[this.pos])<<7*t+3)>>>0,this.buf[this.pos++]<128)return e}throw Error("invalid varint encoding")}readFixed32_end(e,t){return (e[t-4]|e[t-3]<<8|e[t-2]<<16|e[t-1]<<24)>>>0}readFixed64(){if(this.pos+8>this.len)throw L(this,8);return new D(this.readFixed32_end(this.buf,this.pos+=4),this.readFixed32_end(this.buf,this.pos+=4))}uint32(){let e=4294967295;if(e=(127&this.buf[this.pos])>>>0,this.buf[this.pos++]<128)return e;if(e=(e|(127&this.buf[this.pos])<<7)>>>0,this.buf[this.pos++]<128)return e;if(e=(e|(127&this.buf[this.pos])<<14)>>>0,this.buf[this.pos++]<128)return e;if(e=(e|(127&this.buf[this.pos])<<21)>>>0,this.buf[this.pos++]<128)return e;if(e=(e|(15&this.buf[this.pos])<<28)>>>0,this.buf[this.pos++]<128)return e;if((this.pos+=5)>this.len)throw this.pos=this.len,L(this,10);return e}int32(){return 0|this.uint32()}sint32(){const e=this.uint32();return e>>>1^-(1&e)}uint64(){return this.readLongVarint().toNumber(!0)}int64(){return this.readLongVarint().toNumber(!1)}sint64(){return this.readLongVarint().zzDecode().toNumber(!1)}bool(){return 0!==this.uint32()}fixed32(){if(this.pos+4>this.len)throw L(this,4);return this.readFixed32_end(this.buf,this.pos+=4)}sfixed32(){if(this.pos+4>this.len)throw L(this,4);return 0|this.readFixed32_end(this.buf,this.pos+=4)}fixed64(){return this.readFixed64().toNumber(!0)}sfixed64(){return this.readFixed64().zzDecode().toNumber(!1)}float(){if(this.pos+4>this.len)throw L(this,4);const e=h.readFloatLE(this.buf,this.pos);return this.pos+=4,e}double(){if(this.pos+8>this.len)throw L(this,4);const e=h.readDoubleLE(this.buf,this.pos);return this.pos+=8,e}bytes(){const e=this.uint32(),t=this.pos,n=this.pos+e;if(n>this.len)throw L(this,e);return this.pos+=e,t===n?new Uint8Array(0):this.slice(this.buf,t,n)}string(){const e=this.bytes();return d.read(e,0,e.length)}skip(e){if("number"==typeof e){if(this.pos+e>this.len)throw L(this,e);this.pos+=e;}else do{if(this.pos>=this.len)throw L(this)}while(128&this.buf[this.pos++]);return this}skipType(e){switch(e){case 0:this.skip();break;case 1:this.skip(8);break;case 2:this.skip(this.uint32());break;case 3:for(;4!=(e=7&this.uint32());)this.skipType(e);break;case 5:this.skip(4);break;default:throw Error("invalid wire type "+e+" at offset "+this.pos)}return this}}const C=a.com=(()=>{const e={};return e.opensource=function(){const e={};return e.svga=function(){const e={};return e.MovieParams=function(){function e(e){if(e)for(let t=Object.keys(e),n=0;n<t.length;++n)null!=e[t[n]]&&(this[t[n]]=e[t[n]]);}return e.prototype.viewBoxWidth=0,e.prototype.viewBoxHeight=0,e.prototype.fps=0,e.prototype.frames=0,e.create=function(t){return new e(t)},e.encode=function(e,t){return t||(t=N.create()),null!=e.viewBoxWidth&&Object.hasOwn(e,"viewBoxWidth")&&t.uint32(13).float(e.viewBoxWidth),null!=e.viewBoxHeight&&Object.hasOwn(e,"viewBoxHeight")&&t.uint32(21).float(e.viewBoxHeight),null!=e.fps&&Object.hasOwn(e,"fps")&&t.uint32(24).int32(e.fps),null!=e.frames&&Object.hasOwn(e,"frames")&&t.uint32(32).int32(e.frames),t},e.encodeDelimited=function(e,t){return this.encode(e,t).ldelim()},e.decode=function(e,t){e instanceof T||(e=T.create(e));let n=void 0===t?e.len:e.pos+t,r=new a.com.opensource.svga.MovieParams;for(;e.pos<n;){let t=e.uint32();switch(t>>>3){case 1:r.viewBoxWidth=e.float();break;case 2:r.viewBoxHeight=e.float();break;case 3:r.fps=e.int32();break;case 4:r.frames=e.int32();break;default:e.skipType(7&t);}}return r},e.decodeDelimited=function(e){return e instanceof T||(e=new T(e)),this.decode(e,e.uint32())},e.verify=function(e){return "object"!=typeof e||null===e?"object expected":null!=e.viewBoxWidth&&e.hasOwnProperty("viewBoxWidth")&&"number"!=typeof e.viewBoxWidth?"viewBoxWidth: number expected":null!=e.viewBoxHeight&&e.hasOwnProperty("viewBoxHeight")&&"number"!=typeof e.viewBoxHeight?"viewBoxHeight: number expected":null!=e.fps&&e.hasOwnProperty("fps")&&!j(e.fps)?"fps: integer expected":null!=e.frames&&e.hasOwnProperty("frames")&&!j(e.frames)?"frames: integer expected":null},e.fromObject=function(e){if(e instanceof a.com.opensource.svga.MovieParams)return e;let t=new a.com.opensource.svga.MovieParams;return null!=e.viewBoxWidth&&(t.viewBoxWidth=Number(e.viewBoxWidth)),null!=e.viewBoxHeight&&(t.viewBoxHeight=Number(e.viewBoxHeight)),null!=e.fps&&(t.fps=0|e.fps),null!=e.frames&&(t.frames=0|e.frames),t},e.toObject=function(e,t){t||(t={});let n={};return t.defaults&&(n.viewBoxWidth=0,n.viewBoxHeight=0,n.fps=0,n.frames=0),null!=e.viewBoxWidth&&e.hasOwnProperty("viewBoxWidth")&&(n.viewBoxWidth=t.json&&!isFinite(e.viewBoxWidth)?String(e.viewBoxWidth):e.viewBoxWidth),null!=e.viewBoxHeight&&e.hasOwnProperty("viewBoxHeight")&&(n.viewBoxHeight=t.json&&!isFinite(e.viewBoxHeight)?String(e.viewBoxHeight):e.viewBoxHeight),null!=e.fps&&e.hasOwnProperty("fps")&&(n.fps=e.fps),null!=e.frames&&e.hasOwnProperty("frames")&&(n.frames=e.frames),n},e.prototype.toJSON=function(){return this.constructor.toObject(this,$protobuf.util.toJSONOptions)},e.getTypeUrl=function(e){return void 0===e&&(e="type.googleapis.com"),e+"/com.opensource.svga.MovieParams"},e}(),e.SpriteEntity=function(){function e(e){if(this.frames=[],e)for(let t=Object.keys(e),n=0;n<t.length;++n)null!=e[t[n]]&&(this[t[n]]=e[t[n]]);}return e.prototype.imageKey="",e.prototype.frames=x,e.prototype.matteKey="",e.create=function(t){return new e(t)},e.encode=function(e,t){if(t||(t=N.create()),null!=e.imageKey&&Object.hasOwn(e,"imageKey")&&t.uint32(10).string(e.imageKey),null!=e.frames&&e.frames.length)for(let n=0;n<e.frames.length;++n)a.com.opensource.svga.FrameEntity.encode(e.frames[n],t.uint32(18).fork()).ldelim();return null!=e.matteKey&&Object.hasOwn(e,"matteKey")&&t.uint32(26).string(e.matteKey),t},e.encodeDelimited=function(e,t){return this.encode(e,t).ldelim()},e.decode=function(e,t){e instanceof T||(e=T.create(e));let n=void 0===t?e.len:e.pos+t,r=new a.com.opensource.svga.SpriteEntity;for(;e.pos<n;){let t=e.uint32();switch(t>>>3){case 1:r.imageKey=e.string();break;case 2:r.frames&&r.frames.length||(r.frames=[]),r.frames.push(a.com.opensource.svga.FrameEntity.decode(e,e.uint32()));break;case 3:r.matteKey=e.string();break;default:e.skipType(7&t);}}return r},e.decodeDelimited=function(e){return e instanceof T||(e=new T(e)),this.decode(e,e.uint32())},e.verify=function(e){if("object"!=typeof e||null===e)return "object expected";if(null!=e.imageKey&&e.hasOwnProperty("imageKey")&&!S(e.imageKey))return "imageKey: string expected";if(null!=e.frames&&e.hasOwnProperty("frames")){if(!Array.isArray(e.frames))return "frames: array expected";for(let t=0;t<e.frames.length;++t){let n=a.com.opensource.svga.FrameEntity.verify(e.frames[t]);if(n)return "frames."+n}}return null!=e.matteKey&&e.hasOwnProperty("matteKey")&&!S(e.matteKey)?"matteKey: string expected":null},e.fromObject=function(e){if(e instanceof a.com.opensource.svga.SpriteEntity)return e;let t=new a.com.opensource.svga.SpriteEntity;if(null!=e.imageKey&&(t.imageKey=String(e.imageKey)),e.frames){if(!Array.isArray(e.frames))throw TypeError(".com.opensource.svga.SpriteEntity.frames: array expected");t.frames=[];for(let n=0;n<e.frames.length;++n){if("object"!=typeof e.frames[n])throw TypeError(".com.opensource.svga.SpriteEntity.frames: object expected");t.frames[n]=a.com.opensource.svga.FrameEntity.fromObject(e.frames[n]);}}return null!=e.matteKey&&(t.matteKey=String(e.matteKey)),t},e.toObject=function(e,t){t||(t={});let n={};if((t.arrays||t.defaults)&&(n.frames=[]),t.defaults&&(n.imageKey="",n.matteKey=""),null!=e.imageKey&&e.hasOwnProperty("imageKey")&&(n.imageKey=e.imageKey),e.frames&&e.frames.length){n.frames=[];for(let r=0;r<e.frames.length;++r)n.frames[r]=a.com.opensource.svga.FrameEntity.toObject(e.frames[r],t);}return null!=e.matteKey&&e.hasOwnProperty("matteKey")&&(n.matteKey=e.matteKey),n},e.prototype.toJSON=function(){return this.constructor.toObject(this,$protobuf.util.toJSONOptions)},e.getTypeUrl=function(e){return void 0===e&&(e="type.googleapis.com"),e+"/com.opensource.svga.SpriteEntity"},e}(),e.Layout=function(){function e(e){if(e)for(let t=Object.keys(e),n=0;n<t.length;++n)null!=e[t[n]]&&(this[t[n]]=e[t[n]]);}return e.prototype.x=0,e.prototype.y=0,e.prototype.width=0,e.prototype.height=0,e.create=function(t){return new e(t)},e.encode=function(e,t){return t||(t=N.create()),null!=e.x&&Object.hasOwn(e,"x")&&t.uint32(13).float(e.x),null!=e.y&&Object.hasOwn(e,"y")&&t.uint32(21).float(e.y),null!=e.width&&Object.hasOwn(e,"width")&&t.uint32(29).float(e.width),null!=e.height&&Object.hasOwn(e,"height")&&t.uint32(37).float(e.height),t},e.encodeDelimited=function(e,t){return this.encode(e,t).ldelim()},e.decode=function(e,t){e instanceof T||(e=T.create(e));let n=void 0===t?e.len:e.pos+t,r=new a.com.opensource.svga.Layout;for(;e.pos<n;){let t=e.uint32();switch(t>>>3){case 1:r.x=e.float();break;case 2:r.y=e.float();break;case 3:r.width=e.float();break;case 4:r.height=e.float();break;default:e.skipType(7&t);}}return r},e.decodeDelimited=function(e){return e instanceof T||(e=new T(e)),this.decode(e,e.uint32())},e.verify=function(e){return "object"!=typeof e||null===e?"object expected":null!=e.x&&e.hasOwnProperty("x")&&"number"!=typeof e.x?"x: number expected":null!=e.y&&e.hasOwnProperty("y")&&"number"!=typeof e.y?"y: number expected":null!=e.width&&e.hasOwnProperty("width")&&"number"!=typeof e.width?"width: number expected":null!=e.height&&e.hasOwnProperty("height")&&"number"!=typeof e.height?"height: number expected":null},e.fromObject=function(e){if(e instanceof a.com.opensource.svga.Layout)return e;let t=new a.com.opensource.svga.Layout;return null!=e.x&&(t.x=Number(e.x)),null!=e.y&&(t.y=Number(e.y)),null!=e.width&&(t.width=Number(e.width)),null!=e.height&&(t.height=Number(e.height)),t},e.toObject=function(e,t){t||(t={});let n={};return t.defaults&&(n.x=0,n.y=0,n.width=0,n.height=0),null!=e.x&&e.hasOwnProperty("x")&&(n.x=t.json&&!isFinite(e.x)?String(e.x):e.x),null!=e.y&&e.hasOwnProperty("y")&&(n.y=t.json&&!isFinite(e.y)?String(e.y):e.y),null!=e.width&&e.hasOwnProperty("width")&&(n.width=t.json&&!isFinite(e.width)?String(e.width):e.width),null!=e.height&&e.hasOwnProperty("height")&&(n.height=t.json&&!isFinite(e.height)?String(e.height):e.height),n},e.prototype.toJSON=function(){return this.constructor.toObject(this,$protobuf.util.toJSONOptions)},e.getTypeUrl=function(e){return void 0===e&&(e="type.googleapis.com"),e+"/com.opensource.svga.Layout"},e}(),e.Transform=function(){function e(e){if(e)for(let t=Object.keys(e),n=0;n<t.length;++n)null!=e[t[n]]&&(this[t[n]]=e[t[n]]);}return e.prototype.a=0,e.prototype.b=0,e.prototype.c=0,e.prototype.d=0,e.prototype.tx=0,e.prototype.ty=0,e.create=function(t){return new e(t)},e.encode=function(e,t){return t||(t=N.create()),null!=e.a&&Object.hasOwn(e,"a")&&t.uint32(13).float(e.a),null!=e.b&&Object.hasOwn(e,"b")&&t.uint32(21).float(e.b),null!=e.c&&Object.hasOwn(e,"c")&&t.uint32(29).float(e.c),null!=e.d&&Object.hasOwn(e,"d")&&t.uint32(37).float(e.d),null!=e.tx&&Object.hasOwn(e,"tx")&&t.uint32(45).float(e.tx),null!=e.ty&&Object.hasOwn(e,"ty")&&t.uint32(53).float(e.ty),t},e.encodeDelimited=function(e,t){return this.encode(e,t).ldelim()},e.decode=function(e,t){e instanceof T||(e=T.create(e));let n=void 0===t?e.len:e.pos+t,r=new a.com.opensource.svga.Transform;for(;e.pos<n;){let t=e.uint32();switch(t>>>3){case 1:r.a=e.float();break;case 2:r.b=e.float();break;case 3:r.c=e.float();break;case 4:r.d=e.float();break;case 5:r.tx=e.float();break;case 6:r.ty=e.float();break;default:e.skipType(7&t);}}return r},e.decodeDelimited=function(e){return e instanceof T||(e=new T(e)),this.decode(e,e.uint32())},e.verify=function(e){return "object"!=typeof e||null===e?"object expected":null!=e.a&&e.hasOwnProperty("a")&&"number"!=typeof e.a?"a: number expected":null!=e.b&&e.hasOwnProperty("b")&&"number"!=typeof e.b?"b: number expected":null!=e.c&&e.hasOwnProperty("c")&&"number"!=typeof e.c?"c: number expected":null!=e.d&&e.hasOwnProperty("d")&&"number"!=typeof e.d?"d: number expected":null!=e.tx&&e.hasOwnProperty("tx")&&"number"!=typeof e.tx?"tx: number expected":null!=e.ty&&e.hasOwnProperty("ty")&&"number"!=typeof e.ty?"ty: number expected":null},e.fromObject=function(e){if(e instanceof a.com.opensource.svga.Transform)return e;let t=new a.com.opensource.svga.Transform;return null!=e.a&&(t.a=Number(e.a)),null!=e.b&&(t.b=Number(e.b)),null!=e.c&&(t.c=Number(e.c)),null!=e.d&&(t.d=Number(e.d)),null!=e.tx&&(t.tx=Number(e.tx)),null!=e.ty&&(t.ty=Number(e.ty)),t},e.toObject=function(e,t){t||(t={});let n={};return t.defaults&&(n.a=0,n.b=0,n.c=0,n.d=0,n.tx=0,n.ty=0),null!=e.a&&e.hasOwnProperty("a")&&(n.a=t.json&&!isFinite(e.a)?String(e.a):e.a),null!=e.b&&e.hasOwnProperty("b")&&(n.b=t.json&&!isFinite(e.b)?String(e.b):e.b),null!=e.c&&e.hasOwnProperty("c")&&(n.c=t.json&&!isFinite(e.c)?String(e.c):e.c),null!=e.d&&e.hasOwnProperty("d")&&(n.d=t.json&&!isFinite(e.d)?String(e.d):e.d),null!=e.tx&&e.hasOwnProperty("tx")&&(n.tx=t.json&&!isFinite(e.tx)?String(e.tx):e.tx),null!=e.ty&&e.hasOwnProperty("ty")&&(n.ty=t.json&&!isFinite(e.ty)?String(e.ty):e.ty),n},e.prototype.toJSON=function(){return this.constructor.toObject(this,$protobuf.util.toJSONOptions)},e.getTypeUrl=function(e){return void 0===e&&(e="type.googleapis.com"),e+"/com.opensource.svga.Transform"},e}(),e.ShapeEntity=function(){function e(e){if(e)for(let t=Object.keys(e),n=0;n<t.length;++n)null!=e[t[n]]&&(this[t[n]]=e[t[n]]);}let t;var n;return e.prototype.type=0,e.prototype.shape=null,e.prototype.rect=null,e.prototype.ellipse=null,e.prototype.styles=null,e.prototype.transform=null,Object.defineProperty(e.prototype,"args",{get:k(t=["shape","rect","ellipse"]),set:(n=t,function(e){for(var t=0;t<n.length;++t)n[t]!==e&&delete this[n[t]];})}),e.create=function(t){return new e(t)},e.encode=function(e,t){return t||(t=N.create()),null!=e.type&&Object.hasOwn(e,"type")&&t.uint32(8).int32(e.type),null!=e.shape&&Object.hasOwn(e,"shape")&&a.com.opensource.svga.ShapeEntity.ShapeArgs.encode(e.shape,t.uint32(18).fork()).ldelim(),null!=e.rect&&Object.hasOwn(e,"rect")&&a.com.opensource.svga.ShapeEntity.RectArgs.encode(e.rect,t.uint32(26).fork()).ldelim(),null!=e.ellipse&&Object.hasOwn(e,"ellipse")&&a.com.opensource.svga.ShapeEntity.EllipseArgs.encode(e.ellipse,t.uint32(34).fork()).ldelim(),null!=e.styles&&Object.hasOwn(e,"styles")&&a.com.opensource.svga.ShapeEntity.ShapeStyle.encode(e.styles,t.uint32(82).fork()).ldelim(),null!=e.transform&&Object.hasOwn(e,"transform")&&a.com.opensource.svga.Transform.encode(e.transform,t.uint32(90).fork()).ldelim(),t},e.encodeDelimited=function(e,t){return this.encode(e,t).ldelim()},e.decode=function(e,t){e instanceof T||(e=T.create(e));let n=void 0===t?e.len:e.pos+t,r=new a.com.opensource.svga.ShapeEntity;for(;e.pos<n;){let t=e.uint32();switch(t>>>3){case 1:r.type=e.int32();break;case 2:r.shape=a.com.opensource.svga.ShapeEntity.ShapeArgs.decode(e,e.uint32());break;case 3:r.rect=a.com.opensource.svga.ShapeEntity.RectArgs.decode(e,e.uint32());break;case 4:r.ellipse=a.com.opensource.svga.ShapeEntity.EllipseArgs.decode(e,e.uint32());break;case 10:r.styles=a.com.opensource.svga.ShapeEntity.ShapeStyle.decode(e,e.uint32());break;case 11:r.transform=a.com.opensource.svga.Transform.decode(e,e.uint32());break;default:e.skipType(7&t);}}return r},e.decodeDelimited=function(e){return e instanceof T||(e=new T(e)),this.decode(e,e.uint32())},e.verify=function(e){if("object"!=typeof e||null===e)return "object expected";let t={};if(null!=e.type&&e.hasOwnProperty("type"))switch(e.type){default:return "type: enum value expected";case 0:case 1:case 2:case 3:}if(null!=e.shape&&e.hasOwnProperty("shape")){t.args=1;{let t=a.com.opensource.svga.ShapeEntity.ShapeArgs.verify(e.shape);if(t)return "shape."+t}}if(null!=e.rect&&e.hasOwnProperty("rect")){if(1===t.args)return "args: multiple values";t.args=1;{let t=a.com.opensource.svga.ShapeEntity.RectArgs.verify(e.rect);if(t)return "rect."+t}}if(null!=e.ellipse&&e.hasOwnProperty("ellipse")){if(1===t.args)return "args: multiple values";t.args=1;{let t=a.com.opensource.svga.ShapeEntity.EllipseArgs.verify(e.ellipse);if(t)return "ellipse."+t}}if(null!=e.styles&&e.hasOwnProperty("styles")){let t=a.com.opensource.svga.ShapeEntity.ShapeStyle.verify(e.styles);if(t)return "styles."+t}if(null!=e.transform&&e.hasOwnProperty("transform")){let t=a.com.opensource.svga.Transform.verify(e.transform);if(t)return "transform."+t}return null},e.fromObject=function(e){if(e instanceof a.com.opensource.svga.ShapeEntity)return e;let t=new a.com.opensource.svga.ShapeEntity;switch(e.type){default:if("number"==typeof e.type){t.type=e.type;break}break;case"SHAPE":case 0:t.type=0;break;case"RECT":case 1:t.type=1;break;case"ELLIPSE":case 2:t.type=2;break;case"KEEP":case 3:t.type=3;}if(null!=e.shape){if("object"!=typeof e.shape)throw TypeError(".com.opensource.svga.ShapeEntity.shape: object expected");t.shape=a.com.opensource.svga.ShapeEntity.ShapeArgs.fromObject(e.shape);}if(null!=e.rect){if("object"!=typeof e.rect)throw TypeError(".com.opensource.svga.ShapeEntity.rect: object expected");t.rect=a.com.opensource.svga.ShapeEntity.RectArgs.fromObject(e.rect);}if(null!=e.ellipse){if("object"!=typeof e.ellipse)throw TypeError(".com.opensource.svga.ShapeEntity.ellipse: object expected");t.ellipse=a.com.opensource.svga.ShapeEntity.EllipseArgs.fromObject(e.ellipse);}if(null!=e.styles){if("object"!=typeof e.styles)throw TypeError(".com.opensource.svga.ShapeEntity.styles: object expected");t.styles=a.com.opensource.svga.ShapeEntity.ShapeStyle.fromObject(e.styles);}if(null!=e.transform){if("object"!=typeof e.transform)throw TypeError(".com.opensource.svga.ShapeEntity.transform: object expected");t.transform=a.com.opensource.svga.Transform.fromObject(e.transform);}return t},e.toObject=function(e,t){t||(t={});let n={};return t.defaults&&(n.type=t.enums===String?"SHAPE":0,n.styles=null,n.transform=null),null!=e.type&&e.hasOwnProperty("type")&&(n.type=t.enums===String?void 0===a.com.opensource.svga.ShapeEntity.ShapeType[e.type]?e.type:a.com.opensource.svga.ShapeEntity.ShapeType[e.type]:e.type),null!=e.shape&&e.hasOwnProperty("shape")&&(n.shape=a.com.opensource.svga.ShapeEntity.ShapeArgs.toObject(e.shape,t),t.oneofs&&(n.args="shape")),null!=e.rect&&e.hasOwnProperty("rect")&&(n.rect=a.com.opensource.svga.ShapeEntity.RectArgs.toObject(e.rect,t),t.oneofs&&(n.args="rect")),null!=e.ellipse&&e.hasOwnProperty("ellipse")&&(n.ellipse=a.com.opensource.svga.ShapeEntity.EllipseArgs.toObject(e.ellipse,t),t.oneofs&&(n.args="ellipse")),null!=e.styles&&e.hasOwnProperty("styles")&&(n.styles=a.com.opensource.svga.ShapeEntity.ShapeStyle.toObject(e.styles,t)),null!=e.transform&&e.hasOwnProperty("transform")&&(n.transform=a.com.opensource.svga.Transform.toObject(e.transform,t)),n},e.prototype.toJSON=function(){return this.constructor.toObject(this,$protobuf.util.toJSONOptions)},e.getTypeUrl=function(e){return void 0===e&&(e="type.googleapis.com"),e+"/com.opensource.svga.ShapeEntity"},e.ShapeType=function(){const e={},t=Object.create(e);return t[e[0]="SHAPE"]=0,t[e[1]="RECT"]=1,t[e[2]="ELLIPSE"]=2,t[e[3]="KEEP"]=3,t}(),e.ShapeArgs=function(){function e(e){if(e)for(let t=Object.keys(e),n=0;n<t.length;++n)null!=e[t[n]]&&(this[t[n]]=e[t[n]]);}return e.prototype.d="",e.create=function(t){return new e(t)},e.encode=function(e,t){return t||(t=N.create()),null!=e.d&&Object.hasOwn(e,"d")&&t.uint32(10).string(e.d),t},e.encodeDelimited=function(e,t){return this.encode(e,t).ldelim()},e.decode=function(e,t){e instanceof T||(e=T.create(e));let n=void 0===t?e.len:e.pos+t,r=new a.com.opensource.svga.ShapeEntity.ShapeArgs;for(;e.pos<n;){let t=e.uint32();if(t>>>3==1)r.d=e.string();else e.skipType(7&t);}return r},e.decodeDelimited=function(e){return e instanceof T||(e=new T(e)),this.decode(e,e.uint32())},e.verify=function(e){return "object"!=typeof e||null===e?"object expected":null!=e.d&&e.hasOwnProperty("d")&&!S(e.d)?"d: string expected":null},e.fromObject=function(e){if(e instanceof a.com.opensource.svga.ShapeEntity.ShapeArgs)return e;let t=new a.com.opensource.svga.ShapeEntity.ShapeArgs;return null!=e.d&&(t.d=String(e.d)),t},e.toObject=function(e,t){t||(t={});let n={};return t.defaults&&(n.d=""),null!=e.d&&e.hasOwnProperty("d")&&(n.d=e.d),n},e.prototype.toJSON=function(){return this.constructor.toObject(this,$protobuf.util.toJSONOptions)},e.getTypeUrl=function(e){return void 0===e&&(e="type.googleapis.com"),e+"/com.opensource.svga.ShapeEntity.ShapeArgs"},e}(),e.RectArgs=function(){function e(e){if(e)for(let t=Object.keys(e),n=0;n<t.length;++n)null!=e[t[n]]&&(this[t[n]]=e[t[n]]);}return e.prototype.x=0,e.prototype.y=0,e.prototype.width=0,e.prototype.height=0,e.prototype.cornerRadius=0,e.create=function(t){return new e(t)},e.encode=function(e,t){return t||(t=N.create()),null!=e.x&&Object.hasOwn(e,"x")&&t.uint32(13).float(e.x),null!=e.y&&Object.hasOwn(e,"y")&&t.uint32(21).float(e.y),null!=e.width&&Object.hasOwn(e,"width")&&t.uint32(29).float(e.width),null!=e.height&&Object.hasOwn(e,"height")&&t.uint32(37).float(e.height),null!=e.cornerRadius&&Object.hasOwn(e,"cornerRadius")&&t.uint32(45).float(e.cornerRadius),t},e.encodeDelimited=function(e,t){return this.encode(e,t).ldelim()},e.decode=function(e,t){e instanceof T||(e=T.create(e));let n=void 0===t?e.len:e.pos+t,r=new a.com.opensource.svga.ShapeEntity.RectArgs;for(;e.pos<n;){let t=e.uint32();switch(t>>>3){case 1:r.x=e.float();break;case 2:r.y=e.float();break;case 3:r.width=e.float();break;case 4:r.height=e.float();break;case 5:r.cornerRadius=e.float();break;default:e.skipType(7&t);}}return r},e.decodeDelimited=function(e){return e instanceof T||(e=new T(e)),this.decode(e,e.uint32())},e.verify=function(e){return "object"!=typeof e||null===e?"object expected":null!=e.x&&e.hasOwnProperty("x")&&"number"!=typeof e.x?"x: number expected":null!=e.y&&e.hasOwnProperty("y")&&"number"!=typeof e.y?"y: number expected":null!=e.width&&e.hasOwnProperty("width")&&"number"!=typeof e.width?"width: number expected":null!=e.height&&e.hasOwnProperty("height")&&"number"!=typeof e.height?"height: number expected":null!=e.cornerRadius&&e.hasOwnProperty("cornerRadius")&&"number"!=typeof e.cornerRadius?"cornerRadius: number expected":null},e.fromObject=function(e){if(e instanceof a.com.opensource.svga.ShapeEntity.RectArgs)return e;let t=new a.com.opensource.svga.ShapeEntity.RectArgs;return null!=e.x&&(t.x=Number(e.x)),null!=e.y&&(t.y=Number(e.y)),null!=e.width&&(t.width=Number(e.width)),null!=e.height&&(t.height=Number(e.height)),null!=e.cornerRadius&&(t.cornerRadius=Number(e.cornerRadius)),t},e.toObject=function(e,t){t||(t={});let n={};return t.defaults&&(n.x=0,n.y=0,n.width=0,n.height=0,n.cornerRadius=0),null!=e.x&&e.hasOwnProperty("x")&&(n.x=t.json&&!isFinite(e.x)?String(e.x):e.x),null!=e.y&&e.hasOwnProperty("y")&&(n.y=t.json&&!isFinite(e.y)?String(e.y):e.y),null!=e.width&&e.hasOwnProperty("width")&&(n.width=t.json&&!isFinite(e.width)?String(e.width):e.width),null!=e.height&&e.hasOwnProperty("height")&&(n.height=t.json&&!isFinite(e.height)?String(e.height):e.height),null!=e.cornerRadius&&e.hasOwnProperty("cornerRadius")&&(n.cornerRadius=t.json&&!isFinite(e.cornerRadius)?String(e.cornerRadius):e.cornerRadius),n},e.prototype.toJSON=function(){return this.constructor.toObject(this,$protobuf.util.toJSONOptions)},e.getTypeUrl=function(e){return void 0===e&&(e="type.googleapis.com"),e+"/com.opensource.svga.ShapeEntity.RectArgs"},e}(),e.EllipseArgs=function(){function e(e){if(e)for(let t=Object.keys(e),n=0;n<t.length;++n)null!=e[t[n]]&&(this[t[n]]=e[t[n]]);}return e.prototype.x=0,e.prototype.y=0,e.prototype.radiusX=0,e.prototype.radiusY=0,e.create=function(t){return new e(t)},e.encode=function(e,t){return t||(t=N.create()),null!=e.x&&Object.hasOwn(e,"x")&&t.uint32(13).float(e.x),null!=e.y&&Object.hasOwn(e,"y")&&t.uint32(21).float(e.y),null!=e.radiusX&&Object.hasOwn(e,"radiusX")&&t.uint32(29).float(e.radiusX),null!=e.radiusY&&Object.hasOwn(e,"radiusY")&&t.uint32(37).float(e.radiusY),t},e.encodeDelimited=function(e,t){return this.encode(e,t).ldelim()},e.decode=function(e,t){e instanceof T||(e=T.create(e));let n=void 0===t?e.len:e.pos+t,r=new a.com.opensource.svga.ShapeEntity.EllipseArgs;for(;e.pos<n;){let t=e.uint32();switch(t>>>3){case 1:r.x=e.float();break;case 2:r.y=e.float();break;case 3:r.radiusX=e.float();break;case 4:r.radiusY=e.float();break;default:e.skipType(7&t);}}return r},e.decodeDelimited=function(e){return e instanceof T||(e=new T(e)),this.decode(e,e.uint32())},e.verify=function(e){return "object"!=typeof e||null===e?"object expected":null!=e.x&&e.hasOwnProperty("x")&&"number"!=typeof e.x?"x: number expected":null!=e.y&&e.hasOwnProperty("y")&&"number"!=typeof e.y?"y: number expected":null!=e.radiusX&&e.hasOwnProperty("radiusX")&&"number"!=typeof e.radiusX?"radiusX: number expected":null!=e.radiusY&&e.hasOwnProperty("radiusY")&&"number"!=typeof e.radiusY?"radiusY: number expected":null},e.fromObject=function(e){if(e instanceof a.com.opensource.svga.ShapeEntity.EllipseArgs)return e;let t=new a.com.opensource.svga.ShapeEntity.EllipseArgs;return null!=e.x&&(t.x=Number(e.x)),null!=e.y&&(t.y=Number(e.y)),null!=e.radiusX&&(t.radiusX=Number(e.radiusX)),null!=e.radiusY&&(t.radiusY=Number(e.radiusY)),t},e.toObject=function(e,t){t||(t={});let n={};return t.defaults&&(n.x=0,n.y=0,n.radiusX=0,n.radiusY=0),null!=e.x&&e.hasOwnProperty("x")&&(n.x=t.json&&!isFinite(e.x)?String(e.x):e.x),null!=e.y&&e.hasOwnProperty("y")&&(n.y=t.json&&!isFinite(e.y)?String(e.y):e.y),null!=e.radiusX&&e.hasOwnProperty("radiusX")&&(n.radiusX=t.json&&!isFinite(e.radiusX)?String(e.radiusX):e.radiusX),null!=e.radiusY&&e.hasOwnProperty("radiusY")&&(n.radiusY=t.json&&!isFinite(e.radiusY)?String(e.radiusY):e.radiusY),n},e.prototype.toJSON=function(){return this.constructor.toObject(this,$protobuf.util.toJSONOptions)},e.getTypeUrl=function(e){return void 0===e&&(e="type.googleapis.com"),e+"/com.opensource.svga.ShapeEntity.EllipseArgs"},e}(),e.ShapeStyle=function(){function e(e){if(e)for(let t=Object.keys(e),n=0;n<t.length;++n)null!=e[t[n]]&&(this[t[n]]=e[t[n]]);}return e.prototype.fill=null,e.prototype.stroke=null,e.prototype.strokeWidth=0,e.prototype.lineCap=0,e.prototype.lineJoin=0,e.prototype.miterLimit=0,e.prototype.lineDashI=0,e.prototype.lineDashII=0,e.prototype.lineDashIII=0,e.create=function(t){return new e(t)},e.encode=function(e,t){return t||(t=N.create()),null!=e.fill&&Object.hasOwn(e,"fill")&&a.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.encode(e.fill,t.uint32(10).fork()).ldelim(),null!=e.stroke&&Object.hasOwn(e,"stroke")&&a.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.encode(e.stroke,t.uint32(18).fork()).ldelim(),null!=e.strokeWidth&&Object.hasOwn(e,"strokeWidth")&&t.uint32(29).float(e.strokeWidth),null!=e.lineCap&&Object.hasOwn(e,"lineCap")&&t.uint32(32).int32(e.lineCap),null!=e.lineJoin&&Object.hasOwn(e,"lineJoin")&&t.uint32(40).int32(e.lineJoin),null!=e.miterLimit&&Object.hasOwn(e,"miterLimit")&&t.uint32(53).float(e.miterLimit),null!=e.lineDashI&&Object.hasOwn(e,"lineDashI")&&t.uint32(61).float(e.lineDashI),null!=e.lineDashII&&Object.hasOwn(e,"lineDashII")&&t.uint32(69).float(e.lineDashII),null!=e.lineDashIII&&Object.hasOwn(e,"lineDashIII")&&t.uint32(77).float(e.lineDashIII),t},e.encodeDelimited=function(e,t){return this.encode(e,t).ldelim()},e.decode=function(e,t){e instanceof T||(e=T.create(e));let n=void 0===t?e.len:e.pos+t,r=new a.com.opensource.svga.ShapeEntity.ShapeStyle;for(;e.pos<n;){let t=e.uint32();switch(t>>>3){case 1:r.fill=a.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.decode(e,e.uint32());break;case 2:r.stroke=a.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.decode(e,e.uint32());break;case 3:r.strokeWidth=e.float();break;case 4:r.lineCap=e.int32();break;case 5:r.lineJoin=e.int32();break;case 6:r.miterLimit=e.float();break;case 7:r.lineDashI=e.float();break;case 8:r.lineDashII=e.float();break;case 9:r.lineDashIII=e.float();break;default:e.skipType(7&t);}}return r},e.decodeDelimited=function(e){return e instanceof T||(e=new T(e)),this.decode(e,e.uint32())},e.verify=function(e){if("object"!=typeof e||null===e)return "object expected";if(null!=e.fill&&e.hasOwnProperty("fill")){let t=a.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.verify(e.fill);if(t)return "fill."+t}if(null!=e.stroke&&e.hasOwnProperty("stroke")){let t=a.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.verify(e.stroke);if(t)return "stroke."+t}if(null!=e.strokeWidth&&e.hasOwnProperty("strokeWidth")&&"number"!=typeof e.strokeWidth)return "strokeWidth: number expected";if(null!=e.lineCap&&e.hasOwnProperty("lineCap"))switch(e.lineCap){default:return "lineCap: enum value expected";case 0:case 1:case 2:}if(null!=e.lineJoin&&e.hasOwnProperty("lineJoin"))switch(e.lineJoin){default:return "lineJoin: enum value expected";case 0:case 1:case 2:}return null!=e.miterLimit&&e.hasOwnProperty("miterLimit")&&"number"!=typeof e.miterLimit?"miterLimit: number expected":null!=e.lineDashI&&e.hasOwnProperty("lineDashI")&&"number"!=typeof e.lineDashI?"lineDashI: number expected":null!=e.lineDashII&&e.hasOwnProperty("lineDashII")&&"number"!=typeof e.lineDashII?"lineDashII: number expected":null!=e.lineDashIII&&e.hasOwnProperty("lineDashIII")&&"number"!=typeof e.lineDashIII?"lineDashIII: number expected":null},e.fromObject=function(e){if(e instanceof a.com.opensource.svga.ShapeEntity.ShapeStyle)return e;let t=new a.com.opensource.svga.ShapeEntity.ShapeStyle;if(null!=e.fill){if("object"!=typeof e.fill)throw TypeError(".com.opensource.svga.ShapeEntity.ShapeStyle.fill: object expected");t.fill=a.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.fromObject(e.fill);}if(null!=e.stroke){if("object"!=typeof e.stroke)throw TypeError(".com.opensource.svga.ShapeEntity.ShapeStyle.stroke: object expected");t.stroke=a.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.fromObject(e.stroke);}switch(null!=e.strokeWidth&&(t.strokeWidth=Number(e.strokeWidth)),e.lineCap){default:if("number"==typeof e.lineCap){t.lineCap=e.lineCap;break}break;case"LineCap_BUTT":case 0:t.lineCap=0;break;case"LineCap_ROUND":case 1:t.lineCap=1;break;case"LineCap_SQUARE":case 2:t.lineCap=2;}switch(e.lineJoin){default:if("number"==typeof e.lineJoin){t.lineJoin=e.lineJoin;break}break;case"LineJoin_MITER":case 0:t.lineJoin=0;break;case"LineJoin_ROUND":case 1:t.lineJoin=1;break;case"LineJoin_BEVEL":case 2:t.lineJoin=2;}return null!=e.miterLimit&&(t.miterLimit=Number(e.miterLimit)),null!=e.lineDashI&&(t.lineDashI=Number(e.lineDashI)),null!=e.lineDashII&&(t.lineDashII=Number(e.lineDashII)),null!=e.lineDashIII&&(t.lineDashIII=Number(e.lineDashIII)),t},e.toObject=function(e,t){t||(t={});let n={};return t.defaults&&(n.fill=null,n.stroke=null,n.strokeWidth=0,n.lineCap=t.enums===String?"LineCap_BUTT":0,n.lineJoin=t.enums===String?"LineJoin_MITER":0,n.miterLimit=0,n.lineDashI=0,n.lineDashII=0,n.lineDashIII=0),null!=e.fill&&e.hasOwnProperty("fill")&&(n.fill=a.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.toObject(e.fill,t)),null!=e.stroke&&e.hasOwnProperty("stroke")&&(n.stroke=a.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.toObject(e.stroke,t)),null!=e.strokeWidth&&e.hasOwnProperty("strokeWidth")&&(n.strokeWidth=t.json&&!isFinite(e.strokeWidth)?String(e.strokeWidth):e.strokeWidth),null!=e.lineCap&&e.hasOwnProperty("lineCap")&&(n.lineCap=t.enums===String?void 0===a.com.opensource.svga.ShapeEntity.ShapeStyle.LineCap[e.lineCap]?e.lineCap:a.com.opensource.svga.ShapeEntity.ShapeStyle.LineCap[e.lineCap]:e.lineCap),null!=e.lineJoin&&e.hasOwnProperty("lineJoin")&&(n.lineJoin=t.enums===String?void 0===a.com.opensource.svga.ShapeEntity.ShapeStyle.LineJoin[e.lineJoin]?e.lineJoin:a.com.opensource.svga.ShapeEntity.ShapeStyle.LineJoin[e.lineJoin]:e.lineJoin),null!=e.miterLimit&&e.hasOwnProperty("miterLimit")&&(n.miterLimit=t.json&&!isFinite(e.miterLimit)?String(e.miterLimit):e.miterLimit),null!=e.lineDashI&&e.hasOwnProperty("lineDashI")&&(n.lineDashI=t.json&&!isFinite(e.lineDashI)?String(e.lineDashI):e.lineDashI),null!=e.lineDashII&&e.hasOwnProperty("lineDashII")&&(n.lineDashII=t.json&&!isFinite(e.lineDashII)?String(e.lineDashII):e.lineDashII),null!=e.lineDashIII&&e.hasOwnProperty("lineDashIII")&&(n.lineDashIII=t.json&&!isFinite(e.lineDashIII)?String(e.lineDashIII):e.lineDashIII),n},e.prototype.toJSON=function(){return this.constructor.toObject(this,$protobuf.util.toJSONOptions)},e.getTypeUrl=function(e){return void 0===e&&(e="type.googleapis.com"),e+"/com.opensource.svga.ShapeEntity.ShapeStyle"},e.RGBAColor=function(){function e(e){if(e)for(let t=Object.keys(e),n=0;n<t.length;++n)null!=e[t[n]]&&(this[t[n]]=e[t[n]]);}return e.prototype.r=0,e.prototype.g=0,e.prototype.b=0,e.prototype.a=0,e.create=function(t){return new e(t)},e.encode=function(e,t){return t||(t=N.create()),null!=e.r&&Object.hasOwn(e,"r")&&t.uint32(13).float(e.r),null!=e.g&&Object.hasOwn(e,"g")&&t.uint32(21).float(e.g),null!=e.b&&Object.hasOwn(e,"b")&&t.uint32(29).float(e.b),null!=e.a&&Object.hasOwn(e,"a")&&t.uint32(37).float(e.a),t},e.encodeDelimited=function(e,t){return this.encode(e,t).ldelim()},e.decode=function(e,t){e instanceof T||(e=T.create(e));let n=void 0===t?e.len:e.pos+t,r=new a.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor;for(;e.pos<n;){let t=e.uint32();switch(t>>>3){case 1:r.r=e.float();break;case 2:r.g=e.float();break;case 3:r.b=e.float();break;case 4:r.a=e.float();break;default:e.skipType(7&t);}}return r},e.decodeDelimited=function(e){return e instanceof T||(e=new T(e)),this.decode(e,e.uint32())},e.verify=function(e){return "object"!=typeof e||null===e?"object expected":null!=e.r&&e.hasOwnProperty("r")&&"number"!=typeof e.r?"r: number expected":null!=e.g&&e.hasOwnProperty("g")&&"number"!=typeof e.g?"g: number expected":null!=e.b&&e.hasOwnProperty("b")&&"number"!=typeof e.b?"b: number expected":null!=e.a&&e.hasOwnProperty("a")&&"number"!=typeof e.a?"a: number expected":null},e.fromObject=function(e){if(e instanceof a.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor)return e;let t=new a.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor;return null!=e.r&&(t.r=Number(e.r)),null!=e.g&&(t.g=Number(e.g)),null!=e.b&&(t.b=Number(e.b)),null!=e.a&&(t.a=Number(e.a)),t},e.toObject=function(e,t){t||(t={});let n={};return t.defaults&&(n.r=0,n.g=0,n.b=0,n.a=0),null!=e.r&&e.hasOwnProperty("r")&&(n.r=t.json&&!isFinite(e.r)?String(e.r):e.r),null!=e.g&&e.hasOwnProperty("g")&&(n.g=t.json&&!isFinite(e.g)?String(e.g):e.g),null!=e.b&&e.hasOwnProperty("b")&&(n.b=t.json&&!isFinite(e.b)?String(e.b):e.b),null!=e.a&&e.hasOwnProperty("a")&&(n.a=t.json&&!isFinite(e.a)?String(e.a):e.a),n},e.prototype.toJSON=function(){return this.constructor.toObject(this,$protobuf.util.toJSONOptions)},e.getTypeUrl=function(e){return void 0===e&&(e="type.googleapis.com"),e+"/com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor"},e}(),e.LineCap=function(){const e={},t=Object.create(e);return t[e[0]="LineCap_BUTT"]=0,t[e[1]="LineCap_ROUND"]=1,t[e[2]="LineCap_SQUARE"]=2,t}(),e.LineJoin=function(){const e={},t=Object.create(e);return t[e[0]="LineJoin_MITER"]=0,t[e[1]="LineJoin_ROUND"]=1,t[e[2]="LineJoin_BEVEL"]=2,t}(),e}(),e}(),e.FrameEntity=function(){function e(e){if(this.shapes=[],e)for(let t=Object.keys(e),n=0;n<t.length;++n)null!=e[t[n]]&&(this[t[n]]=e[t[n]]);}return e.prototype.alpha=0,e.prototype.layout=null,e.prototype.transform=null,e.prototype.clipPath="",e.prototype.shapes=x,e.create=function(t){return new e(t)},e.encode=function(e,t){if(t||(t=N.create()),null!=e.alpha&&Object.hasOwn(e,"alpha")&&t.uint32(13).float(e.alpha),null!=e.layout&&Object.hasOwn(e,"layout")&&a.com.opensource.svga.Layout.encode(e.layout,t.uint32(18).fork()).ldelim(),null!=e.transform&&Object.hasOwn(e,"transform")&&a.com.opensource.svga.Transform.encode(e.transform,t.uint32(26).fork()).ldelim(),null!=e.clipPath&&Object.hasOwn(e,"clipPath")&&t.uint32(34).string(e.clipPath),null!=e.shapes&&e.shapes.length)for(let n=0;n<e.shapes.length;++n)a.com.opensource.svga.ShapeEntity.encode(e.shapes[n],t.uint32(42).fork()).ldelim();return t},e.encodeDelimited=function(e,t){return this.encode(e,t).ldelim()},e.decode=function(e,t){e instanceof T||(e=T.create(e));let n=void 0===t?e.len:e.pos+t,r=new a.com.opensource.svga.FrameEntity;for(;e.pos<n;){let t=e.uint32();switch(t>>>3){case 1:r.alpha=e.float();break;case 2:r.layout=a.com.opensource.svga.Layout.decode(e,e.uint32());break;case 3:r.transform=a.com.opensource.svga.Transform.decode(e,e.uint32());break;case 4:r.clipPath=e.string();break;case 5:r.shapes&&r.shapes.length||(r.shapes=[]),r.shapes.push(a.com.opensource.svga.ShapeEntity.decode(e,e.uint32()));break;default:e.skipType(7&t);}}return r},e.decodeDelimited=function(e){return e instanceof T||(e=new T(e)),this.decode(e,e.uint32())},e.verify=function(e){if("object"!=typeof e||null===e)return "object expected";if(null!=e.alpha&&e.hasOwnProperty("alpha")&&"number"!=typeof e.alpha)return "alpha: number expected";if(null!=e.layout&&e.hasOwnProperty("layout")){let t=a.com.opensource.svga.Layout.verify(e.layout);if(t)return "layout."+t}if(null!=e.transform&&e.hasOwnProperty("transform")){let t=a.com.opensource.svga.Transform.verify(e.transform);if(t)return "transform."+t}if(null!=e.clipPath&&e.hasOwnProperty("clipPath")&&!S(e.clipPath))return "clipPath: string expected";if(null!=e.shapes&&e.hasOwnProperty("shapes")){if(!Array.isArray(e.shapes))return "shapes: array expected";for(let t=0;t<e.shapes.length;++t){let n=a.com.opensource.svga.ShapeEntity.verify(e.shapes[t]);if(n)return "shapes."+n}}return null},e.fromObject=function(e){if(e instanceof a.com.opensource.svga.FrameEntity)return e;let t=new a.com.opensource.svga.FrameEntity;if(null!=e.alpha&&(t.alpha=Number(e.alpha)),null!=e.layout){if("object"!=typeof e.layout)throw TypeError(".com.opensource.svga.FrameEntity.layout: object expected");t.layout=a.com.opensource.svga.Layout.fromObject(e.layout);}if(null!=e.transform){if("object"!=typeof e.transform)throw TypeError(".com.opensource.svga.FrameEntity.transform: object expected");t.transform=a.com.opensource.svga.Transform.fromObject(e.transform);}if(null!=e.clipPath&&(t.clipPath=String(e.clipPath)),e.shapes){if(!Array.isArray(e.shapes))throw TypeError(".com.opensource.svga.FrameEntity.shapes: array expected");t.shapes=[];for(let n=0;n<e.shapes.length;++n){if("object"!=typeof e.shapes[n])throw TypeError(".com.opensource.svga.FrameEntity.shapes: object expected");t.shapes[n]=a.com.opensource.svga.ShapeEntity.fromObject(e.shapes[n]);}}return t},e.toObject=function(e,t){t||(t={});let n={};if((t.arrays||t.defaults)&&(n.shapes=[]),t.defaults&&(n.alpha=0,n.layout=null,n.transform=null,n.clipPath=""),null!=e.alpha&&e.hasOwnProperty("alpha")&&(n.alpha=t.json&&!isFinite(e.alpha)?String(e.alpha):e.alpha),null!=e.layout&&e.hasOwnProperty("layout")&&(n.layout=a.com.opensource.svga.Layout.toObject(e.layout,t)),null!=e.transform&&e.hasOwnProperty("transform")&&(n.transform=a.com.opensource.svga.Transform.toObject(e.transform,t)),null!=e.clipPath&&e.hasOwnProperty("clipPath")&&(n.clipPath=e.clipPath),e.shapes&&e.shapes.length){n.shapes=[];for(let r=0;r<e.shapes.length;++r)n.shapes[r]=a.com.opensource.svga.ShapeEntity.toObject(e.shapes[r],t);}return n},e.prototype.toJSON=function(){return this.constructor.toObject(this,$protobuf.util.toJSONOptions)},e.getTypeUrl=function(e){return void 0===e&&(e="type.googleapis.com"),e+"/com.opensource.svga.FrameEntity"},e}(),e.MovieEntity=function(){function e(e){if(this.images={},this.sprites=[],e)for(let t=Object.keys(e),n=0;n<t.length;++n)null!=e[t[n]]&&(this[t[n]]=e[t[n]]);}return e.prototype.version="",e.prototype.params=null,e.prototype.images=E,e.prototype.sprites=x,e.create=function(t){return new e(t)},e.encode=function(e,t){if(t||(t=N.create()),null!=e.version&&Object.hasOwn(e,"version")&&t.uint32(10).string(e.version),null!=e.params&&Object.hasOwn(e,"params")&&a.com.opensource.svga.MovieParams.encode(e.params,t.uint32(18).fork()).ldelim(),null!=e.images&&Object.hasOwn(e,"images"))for(let n=Object.keys(e.images),r=0;r<n.length;++r)t.uint32(26).fork().uint32(10).string(n[r]).uint32(18).bytes(e.images[n[r]]).ldelim();if(null!=e.sprites&&e.sprites.length)for(let n=0;n<e.sprites.length;++n)a.com.opensource.svga.SpriteEntity.encode(e.sprites[n],t.uint32(34).fork()).ldelim();return t},e.encodeDelimited=function(e,t){return this.encode(e,t).ldelim()},e.decode=function(e,t){e instanceof T||(e=T.create(e));let n,r,i=void 0===t?e.len:e.pos+t,o=new a.com.opensource.svga.MovieEntity;for(;e.pos<i;){let t=e.uint32();switch(t>>>3){case 1:o.version=e.string();break;case 2:o.params=a.com.opensource.svga.MovieParams.decode(e,e.uint32());break;case 3:{o.images===E&&(o.images={});let t=e.uint32()+e.pos;for(n="",r=[];e.pos<t;){let t=e.uint32();switch(t>>>3){case 1:n=e.string();break;case 2:r=e.bytes();break;default:e.skipType(7&t);}}o.images[n]=r;break}case 4:o.sprites&&o.sprites.length||(o.sprites=[]),o.sprites.push(a.com.opensource.svga.SpriteEntity.decode(e,e.uint32()));break;default:e.skipType(7&t);}}return o},e.decodeDelimited=function(e){return e instanceof T||(e=new T(e)),this.decode(e,e.uint32())},e.verify=function(e){if("object"!=typeof e||null===e)return "object expected";if(null!=e.version&&e.hasOwnProperty("version")&&!S(e.version))return "version: string expected";if(null!=e.params&&e.hasOwnProperty("params")){let t=a.com.opensource.svga.MovieParams.verify(e.params);if(t)return "params."+t}if(null!=e.images&&e.hasOwnProperty("images")){if(!isObject(e.images))return "images: object expected";let t=Object.keys(e.images);for(let n=0;n<t.length;++n)if(!(e.images[t[n]]&&"number"==typeof e.images[t[n]].length||S(e.images[t[n]])))return "images: buffer{k:string} expected"}if(null!=e.sprites&&e.hasOwnProperty("sprites")){if(!Array.isArray(e.sprites))return "sprites: array expected";for(let t=0;t<e.sprites.length;++t){let n=a.com.opensource.svga.SpriteEntity.verify(e.sprites[t]);if(n)return "sprites."+n}}return null},e.fromObject=function(e){if(e instanceof a.com.opensource.svga.MovieEntity)return e;let t=new a.com.opensource.svga.MovieEntity;if(null!=e.version&&(t.version=String(e.version)),null!=e.params){if("object"!=typeof e.params)throw TypeError(".com.opensource.svga.MovieEntity.params: object expected");t.params=a.com.opensource.svga.MovieParams.fromObject(e.params);}if(e.images){if("object"!=typeof e.images)throw TypeError(".com.opensource.svga.MovieEntity.images: object expected");t.images={};for(let n=Object.keys(e.images),r=0;r<n.length;++r)"string"==typeof e.images[n[r]]?s.decode(e.images[n[r]],t.images[n[r]]=newBuffer(s.length(e.images[n[r]])),0):e.images[n[r]].length>=0&&(t.images[n[r]]=e.images[n[r]]);}if(e.sprites){if(!Array.isArray(e.sprites))throw TypeError(".com.opensource.svga.MovieEntity.sprites: array expected");t.sprites=[];for(let n=0;n<e.sprites.length;++n){if("object"!=typeof e.sprites[n])throw TypeError(".com.opensource.svga.MovieEntity.sprites: object expected");t.sprites[n]=a.com.opensource.svga.SpriteEntity.fromObject(e.sprites[n]);}}return t},e.toObject=function(e,t){t||(t={});let n,r={};if((t.arrays||t.defaults)&&(r.sprites=[]),(t.objects||t.defaults)&&(r.images={}),t.defaults&&(r.version="",r.params=null),null!=e.version&&e.hasOwnProperty("version")&&(r.version=e.version),null!=e.params&&e.hasOwnProperty("params")&&(r.params=a.com.opensource.svga.MovieParams.toObject(e.params,t)),e.images&&(n=Object.keys(e.images)).length){r.images={};for(let i=0;i<n.length;++i)r.images[n[i]]=t.bytes===String?s.encode(e.images[n[i]],0,e.images[n[i]].length):t.bytes===Array?Array.prototype.slice.call(e.images[n[i]]):e.images[n[i]];}if(e.sprites&&e.sprites.length){r.sprites=[];for(let n=0;n<e.sprites.length;++n)r.sprites[n]=a.com.opensource.svga.SpriteEntity.toObject(e.sprites[n],t);}return r},e.prototype.toJSON=function(){return this.constructor.toObject(this,$protobuf.util.toJSONOptions)},e.getTypeUrl=function(e){return void 0===e&&(e="type.googleapis.com"),e+"/com.opensource.svga.MovieEntity"},e}(),e}(),e}(),e})(),F=C.opensource.svga.MovieEntity;
+function getDefaultExportFromCjs (x) {
+	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+}
+
+var base64$1 = {};
+
+var hasRequiredBase64;
+
+function requireBase64 () {
+	if (hasRequiredBase64) return base64$1;
+	hasRequiredBase64 = 1;
+	(function (exports) {
+
+		/**
+		 * A minimal base64 implementation for number arrays.
+		 * @memberof util
+		 * @namespace
+		 */
+		var base64 = exports;
+
+		/**
+		 * Calculates the byte length of a base64 encoded string.
+		 * @param {string} string Base64 encoded string
+		 * @returns {number} Byte length
+		 */
+		base64.length = function length(string) {
+		    var p = string.length;
+		    if (!p)
+		        return 0;
+		    var n = 0;
+		    while (--p % 4 > 1 && string.charAt(p) === "=")
+		        ++n;
+		    return Math.ceil(string.length * 3) / 4 - n;
+		};
+
+		// Base64 encoding table
+		var b64 = new Array(64);
+
+		// Base64 decoding table
+		var s64 = new Array(123);
+
+		// 65..90, 97..122, 48..57, 43, 47
+		for (var i = 0; i < 64;)
+		    s64[b64[i] = i < 26 ? i + 65 : i < 52 ? i + 71 : i < 62 ? i - 4 : i - 59 | 43] = i++;
+
+		/**
+		 * Encodes a buffer to a base64 encoded string.
+		 * @param {Uint8Array} buffer Source buffer
+		 * @param {number} start Source start
+		 * @param {number} end Source end
+		 * @returns {string} Base64 encoded string
+		 */
+		base64.encode = function encode(buffer, start, end) {
+		    var parts = null,
+		        chunk = [];
+		    var i = 0, // output index
+		        j = 0, // goto index
+		        t;     // temporary
+		    while (start < end) {
+		        var b = buffer[start++];
+		        switch (j) {
+		            case 0:
+		                chunk[i++] = b64[b >> 2];
+		                t = (b & 3) << 4;
+		                j = 1;
+		                break;
+		            case 1:
+		                chunk[i++] = b64[t | b >> 4];
+		                t = (b & 15) << 2;
+		                j = 2;
+		                break;
+		            case 2:
+		                chunk[i++] = b64[t | b >> 6];
+		                chunk[i++] = b64[b & 63];
+		                j = 0;
+		                break;
+		        }
+		        if (i > 8191) {
+		            (parts || (parts = [])).push(String.fromCharCode.apply(String, chunk));
+		            i = 0;
+		        }
+		    }
+		    if (j) {
+		        chunk[i++] = b64[t];
+		        chunk[i++] = 61;
+		        if (j === 1)
+		            chunk[i++] = 61;
+		    }
+		    if (parts) {
+		        if (i)
+		            parts.push(String.fromCharCode.apply(String, chunk.slice(0, i)));
+		        return parts.join("");
+		    }
+		    return String.fromCharCode.apply(String, chunk.slice(0, i));
+		};
+
+		var invalidEncoding = "invalid encoding";
+
+		/**
+		 * Decodes a base64 encoded string to a buffer.
+		 * @param {string} string Source string
+		 * @param {Uint8Array} buffer Destination buffer
+		 * @param {number} offset Destination offset
+		 * @returns {number} Number of bytes written
+		 * @throws {Error} If encoding is invalid
+		 */
+		base64.decode = function decode(string, buffer, offset) {
+		    var start = offset;
+		    var j = 0, // goto index
+		        t;     // temporary
+		    for (var i = 0; i < string.length;) {
+		        var c = string.charCodeAt(i++);
+		        if (c === 61 && j > 1)
+		            break;
+		        if ((c = s64[c]) === undefined)
+		            throw Error(invalidEncoding);
+		        switch (j) {
+		            case 0:
+		                t = c;
+		                j = 1;
+		                break;
+		            case 1:
+		                buffer[offset++] = t << 2 | (c & 48) >> 4;
+		                t = c;
+		                j = 2;
+		                break;
+		            case 2:
+		                buffer[offset++] = (t & 15) << 4 | (c & 60) >> 2;
+		                t = c;
+		                j = 3;
+		                break;
+		            case 3:
+		                buffer[offset++] = (t & 3) << 6 | c;
+		                j = 0;
+		                break;
+		        }
+		    }
+		    if (j === 1)
+		        throw Error(invalidEncoding);
+		    return offset - start;
+		};
+
+		/**
+		 * Tests if the specified string appears to be base64 encoded.
+		 * @param {string} string String to test
+		 * @returns {boolean} `true` if probably base64 encoded, otherwise false
+		 */
+		base64.test = function test(string) {
+		    return /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(string);
+		}; 
+	} (base64$1));
+	return base64$1;
+}
+
+var base64Exports = requireBase64();
+var base64 = /*@__PURE__*/getDefaultExportFromCjs(base64Exports);
+
+/**
+ * Named roots.
+ * This is where pbjs stores generated structures (the option `-r, --root` specifies a name).
+ * Can also be used manually to make roots available across modules.
+ * @name roots
+ * @type {Object.<string,Root>}
+ * @example
+ * // pbjs -r myroot -o compiled.js ...
+ *
+ * // in another module:
+ * require("./compiled.js");
+ *
+ * // in any subsequent module:
+ * var root = protobuf.roots["myroot"];
+ */
+var $root = {};
+
+var pool_1;
+var hasRequiredPool;
+
+function requirePool () {
+	if (hasRequiredPool) return pool_1;
+	hasRequiredPool = 1;
+	pool_1 = pool;
+
+	/**
+	 * An allocator as used by {@link util.pool}.
+	 * @typedef PoolAllocator
+	 * @type {function}
+	 * @param {number} size Buffer size
+	 * @returns {Uint8Array} Buffer
+	 */
+
+	/**
+	 * A slicer as used by {@link util.pool}.
+	 * @typedef PoolSlicer
+	 * @type {function}
+	 * @param {number} start Start offset
+	 * @param {number} end End offset
+	 * @returns {Uint8Array} Buffer slice
+	 * @this {Uint8Array}
+	 */
+
+	/**
+	 * A general purpose buffer pool.
+	 * @memberof util
+	 * @function
+	 * @param {PoolAllocator} alloc Allocator
+	 * @param {PoolSlicer} slice Slicer
+	 * @param {number} [size=8192] Slab size
+	 * @returns {PoolAllocator} Pooled allocator
+	 */
+	function pool(alloc, slice, size) {
+	    var SIZE   = size || 8192;
+	    var MAX    = SIZE >>> 1;
+	    var slab   = null;
+	    var offset = SIZE;
+	    return function pool_alloc(size) {
+	        if (size < 1 || size > MAX)
+	            return alloc(size);
+	        if (offset + size > SIZE) {
+	            slab = alloc(SIZE);
+	            offset = 0;
+	        }
+	        var buf = slice.call(slab, offset, offset += size);
+	        if (offset & 7) // align to 32 bit
+	            offset = (offset | 7) + 1;
+	        return buf;
+	    };
+	}
+	return pool_1;
+}
+
+var poolExports = requirePool();
+var pool = /*@__PURE__*/getDefaultExportFromCjs(poolExports);
+
+var float$1;
+var hasRequiredFloat;
+
+function requireFloat () {
+	if (hasRequiredFloat) return float$1;
+	hasRequiredFloat = 1;
+
+	float$1 = factory(factory);
+
+	/**
+	 * Reads / writes floats / doubles from / to buffers.
+	 * @name util.float
+	 * @namespace
+	 */
+
+	/**
+	 * Writes a 32 bit float to a buffer using little endian byte order.
+	 * @name util.float.writeFloatLE
+	 * @function
+	 * @param {number} val Value to write
+	 * @param {Uint8Array} buf Target buffer
+	 * @param {number} pos Target buffer offset
+	 * @returns {undefined}
+	 */
+
+	/**
+	 * Writes a 32 bit float to a buffer using big endian byte order.
+	 * @name util.float.writeFloatBE
+	 * @function
+	 * @param {number} val Value to write
+	 * @param {Uint8Array} buf Target buffer
+	 * @param {number} pos Target buffer offset
+	 * @returns {undefined}
+	 */
+
+	/**
+	 * Reads a 32 bit float from a buffer using little endian byte order.
+	 * @name util.float.readFloatLE
+	 * @function
+	 * @param {Uint8Array} buf Source buffer
+	 * @param {number} pos Source buffer offset
+	 * @returns {number} Value read
+	 */
+
+	/**
+	 * Reads a 32 bit float from a buffer using big endian byte order.
+	 * @name util.float.readFloatBE
+	 * @function
+	 * @param {Uint8Array} buf Source buffer
+	 * @param {number} pos Source buffer offset
+	 * @returns {number} Value read
+	 */
+
+	/**
+	 * Writes a 64 bit double to a buffer using little endian byte order.
+	 * @name util.float.writeDoubleLE
+	 * @function
+	 * @param {number} val Value to write
+	 * @param {Uint8Array} buf Target buffer
+	 * @param {number} pos Target buffer offset
+	 * @returns {undefined}
+	 */
+
+	/**
+	 * Writes a 64 bit double to a buffer using big endian byte order.
+	 * @name util.float.writeDoubleBE
+	 * @function
+	 * @param {number} val Value to write
+	 * @param {Uint8Array} buf Target buffer
+	 * @param {number} pos Target buffer offset
+	 * @returns {undefined}
+	 */
+
+	/**
+	 * Reads a 64 bit double from a buffer using little endian byte order.
+	 * @name util.float.readDoubleLE
+	 * @function
+	 * @param {Uint8Array} buf Source buffer
+	 * @param {number} pos Source buffer offset
+	 * @returns {number} Value read
+	 */
+
+	/**
+	 * Reads a 64 bit double from a buffer using big endian byte order.
+	 * @name util.float.readDoubleBE
+	 * @function
+	 * @param {Uint8Array} buf Source buffer
+	 * @param {number} pos Source buffer offset
+	 * @returns {number} Value read
+	 */
+
+	// Factory function for the purpose of node-based testing in modified global environments
+	function factory(exports) {
+
+	    // float: typed array
+	    if (typeof Float32Array !== "undefined") (function() {
+
+	        var f32 = new Float32Array([ -0 ]),
+	            f8b = new Uint8Array(f32.buffer),
+	            le  = f8b[3] === 128;
+
+	        function writeFloat_f32_cpy(val, buf, pos) {
+	            f32[0] = val;
+	            buf[pos    ] = f8b[0];
+	            buf[pos + 1] = f8b[1];
+	            buf[pos + 2] = f8b[2];
+	            buf[pos + 3] = f8b[3];
+	        }
+
+	        function writeFloat_f32_rev(val, buf, pos) {
+	            f32[0] = val;
+	            buf[pos    ] = f8b[3];
+	            buf[pos + 1] = f8b[2];
+	            buf[pos + 2] = f8b[1];
+	            buf[pos + 3] = f8b[0];
+	        }
+
+	        /* istanbul ignore next */
+	        exports.writeFloatLE = le ? writeFloat_f32_cpy : writeFloat_f32_rev;
+	        /* istanbul ignore next */
+	        exports.writeFloatBE = le ? writeFloat_f32_rev : writeFloat_f32_cpy;
+
+	        function readFloat_f32_cpy(buf, pos) {
+	            f8b[0] = buf[pos    ];
+	            f8b[1] = buf[pos + 1];
+	            f8b[2] = buf[pos + 2];
+	            f8b[3] = buf[pos + 3];
+	            return f32[0];
+	        }
+
+	        function readFloat_f32_rev(buf, pos) {
+	            f8b[3] = buf[pos    ];
+	            f8b[2] = buf[pos + 1];
+	            f8b[1] = buf[pos + 2];
+	            f8b[0] = buf[pos + 3];
+	            return f32[0];
+	        }
+
+	        /* istanbul ignore next */
+	        exports.readFloatLE = le ? readFloat_f32_cpy : readFloat_f32_rev;
+	        /* istanbul ignore next */
+	        exports.readFloatBE = le ? readFloat_f32_rev : readFloat_f32_cpy;
+
+	    // float: ieee754
+	    })(); else (function() {
+
+	        function writeFloat_ieee754(writeUint, val, buf, pos) {
+	            var sign = val < 0 ? 1 : 0;
+	            if (sign)
+	                val = -val;
+	            if (val === 0)
+	                writeUint(1 / val > 0 ? /* positive */ 0 : /* negative 0 */ 2147483648, buf, pos);
+	            else if (isNaN(val))
+	                writeUint(2143289344, buf, pos);
+	            else if (val > 3.4028234663852886e+38) // +-Infinity
+	                writeUint((sign << 31 | 2139095040) >>> 0, buf, pos);
+	            else if (val < 1.1754943508222875e-38) // denormal
+	                writeUint((sign << 31 | Math.round(val / 1.401298464324817e-45)) >>> 0, buf, pos);
+	            else {
+	                var exponent = Math.floor(Math.log(val) / Math.LN2),
+	                    mantissa = Math.round(val * Math.pow(2, -exponent) * 8388608) & 8388607;
+	                writeUint((sign << 31 | exponent + 127 << 23 | mantissa) >>> 0, buf, pos);
+	            }
+	        }
+
+	        exports.writeFloatLE = writeFloat_ieee754.bind(null, writeUintLE);
+	        exports.writeFloatBE = writeFloat_ieee754.bind(null, writeUintBE);
+
+	        function readFloat_ieee754(readUint, buf, pos) {
+	            var uint = readUint(buf, pos),
+	                sign = (uint >> 31) * 2 + 1,
+	                exponent = uint >>> 23 & 255,
+	                mantissa = uint & 8388607;
+	            return exponent === 255
+	                ? mantissa
+	                ? NaN
+	                : sign * Infinity
+	                : exponent === 0 // denormal
+	                ? sign * 1.401298464324817e-45 * mantissa
+	                : sign * Math.pow(2, exponent - 150) * (mantissa + 8388608);
+	        }
+
+	        exports.readFloatLE = readFloat_ieee754.bind(null, readUintLE);
+	        exports.readFloatBE = readFloat_ieee754.bind(null, readUintBE);
+
+	    })();
+
+	    // double: typed array
+	    if (typeof Float64Array !== "undefined") (function() {
+
+	        var f64 = new Float64Array([-0]),
+	            f8b = new Uint8Array(f64.buffer),
+	            le  = f8b[7] === 128;
+
+	        function writeDouble_f64_cpy(val, buf, pos) {
+	            f64[0] = val;
+	            buf[pos    ] = f8b[0];
+	            buf[pos + 1] = f8b[1];
+	            buf[pos + 2] = f8b[2];
+	            buf[pos + 3] = f8b[3];
+	            buf[pos + 4] = f8b[4];
+	            buf[pos + 5] = f8b[5];
+	            buf[pos + 6] = f8b[6];
+	            buf[pos + 7] = f8b[7];
+	        }
+
+	        function writeDouble_f64_rev(val, buf, pos) {
+	            f64[0] = val;
+	            buf[pos    ] = f8b[7];
+	            buf[pos + 1] = f8b[6];
+	            buf[pos + 2] = f8b[5];
+	            buf[pos + 3] = f8b[4];
+	            buf[pos + 4] = f8b[3];
+	            buf[pos + 5] = f8b[2];
+	            buf[pos + 6] = f8b[1];
+	            buf[pos + 7] = f8b[0];
+	        }
+
+	        /* istanbul ignore next */
+	        exports.writeDoubleLE = le ? writeDouble_f64_cpy : writeDouble_f64_rev;
+	        /* istanbul ignore next */
+	        exports.writeDoubleBE = le ? writeDouble_f64_rev : writeDouble_f64_cpy;
+
+	        function readDouble_f64_cpy(buf, pos) {
+	            f8b[0] = buf[pos    ];
+	            f8b[1] = buf[pos + 1];
+	            f8b[2] = buf[pos + 2];
+	            f8b[3] = buf[pos + 3];
+	            f8b[4] = buf[pos + 4];
+	            f8b[5] = buf[pos + 5];
+	            f8b[6] = buf[pos + 6];
+	            f8b[7] = buf[pos + 7];
+	            return f64[0];
+	        }
+
+	        function readDouble_f64_rev(buf, pos) {
+	            f8b[7] = buf[pos    ];
+	            f8b[6] = buf[pos + 1];
+	            f8b[5] = buf[pos + 2];
+	            f8b[4] = buf[pos + 3];
+	            f8b[3] = buf[pos + 4];
+	            f8b[2] = buf[pos + 5];
+	            f8b[1] = buf[pos + 6];
+	            f8b[0] = buf[pos + 7];
+	            return f64[0];
+	        }
+
+	        /* istanbul ignore next */
+	        exports.readDoubleLE = le ? readDouble_f64_cpy : readDouble_f64_rev;
+	        /* istanbul ignore next */
+	        exports.readDoubleBE = le ? readDouble_f64_rev : readDouble_f64_cpy;
+
+	    // double: ieee754
+	    })(); else (function() {
+
+	        function writeDouble_ieee754(writeUint, off0, off1, val, buf, pos) {
+	            var sign = val < 0 ? 1 : 0;
+	            if (sign)
+	                val = -val;
+	            if (val === 0) {
+	                writeUint(0, buf, pos + off0);
+	                writeUint(1 / val > 0 ? /* positive */ 0 : /* negative 0 */ 2147483648, buf, pos + off1);
+	            } else if (isNaN(val)) {
+	                writeUint(0, buf, pos + off0);
+	                writeUint(2146959360, buf, pos + off1);
+	            } else if (val > 1.7976931348623157e+308) { // +-Infinity
+	                writeUint(0, buf, pos + off0);
+	                writeUint((sign << 31 | 2146435072) >>> 0, buf, pos + off1);
+	            } else {
+	                var mantissa;
+	                if (val < 2.2250738585072014e-308) { // denormal
+	                    mantissa = val / 5e-324;
+	                    writeUint(mantissa >>> 0, buf, pos + off0);
+	                    writeUint((sign << 31 | mantissa / 4294967296) >>> 0, buf, pos + off1);
+	                } else {
+	                    var exponent = Math.floor(Math.log(val) / Math.LN2);
+	                    if (exponent === 1024)
+	                        exponent = 1023;
+	                    mantissa = val * Math.pow(2, -exponent);
+	                    writeUint(mantissa * 4503599627370496 >>> 0, buf, pos + off0);
+	                    writeUint((sign << 31 | exponent + 1023 << 20 | mantissa * 1048576 & 1048575) >>> 0, buf, pos + off1);
+	                }
+	            }
+	        }
+
+	        exports.writeDoubleLE = writeDouble_ieee754.bind(null, writeUintLE, 0, 4);
+	        exports.writeDoubleBE = writeDouble_ieee754.bind(null, writeUintBE, 4, 0);
+
+	        function readDouble_ieee754(readUint, off0, off1, buf, pos) {
+	            var lo = readUint(buf, pos + off0),
+	                hi = readUint(buf, pos + off1);
+	            var sign = (hi >> 31) * 2 + 1,
+	                exponent = hi >>> 20 & 2047,
+	                mantissa = 4294967296 * (hi & 1048575) + lo;
+	            return exponent === 2047
+	                ? mantissa
+	                ? NaN
+	                : sign * Infinity
+	                : exponent === 0 // denormal
+	                ? sign * 5e-324 * mantissa
+	                : sign * Math.pow(2, exponent - 1075) * (mantissa + 4503599627370496);
+	        }
+
+	        exports.readDoubleLE = readDouble_ieee754.bind(null, readUintLE, 0, 4);
+	        exports.readDoubleBE = readDouble_ieee754.bind(null, readUintBE, 4, 0);
+
+	    })();
+
+	    return exports;
+	}
+
+	// uint helpers
+
+	function writeUintLE(val, buf, pos) {
+	    buf[pos    ] =  val        & 255;
+	    buf[pos + 1] =  val >>> 8  & 255;
+	    buf[pos + 2] =  val >>> 16 & 255;
+	    buf[pos + 3] =  val >>> 24;
+	}
+
+	function writeUintBE(val, buf, pos) {
+	    buf[pos    ] =  val >>> 24;
+	    buf[pos + 1] =  val >>> 16 & 255;
+	    buf[pos + 2] =  val >>> 8  & 255;
+	    buf[pos + 3] =  val        & 255;
+	}
+
+	function readUintLE(buf, pos) {
+	    return (buf[pos    ]
+	          | buf[pos + 1] << 8
+	          | buf[pos + 2] << 16
+	          | buf[pos + 3] << 24) >>> 0;
+	}
+
+	function readUintBE(buf, pos) {
+	    return (buf[pos    ] << 24
+	          | buf[pos + 1] << 16
+	          | buf[pos + 2] << 8
+	          | buf[pos + 3]) >>> 0;
+	}
+	return float$1;
+}
+
+var floatExports = requireFloat();
+var float = /*@__PURE__*/getDefaultExportFromCjs(floatExports);
+
+var utf8$1 = {};
+
+var hasRequiredUtf8;
+
+function requireUtf8 () {
+	if (hasRequiredUtf8) return utf8$1;
+	hasRequiredUtf8 = 1;
+	(function (exports) {
+
+		/**
+		 * A minimal UTF8 implementation for number arrays.
+		 * @memberof util
+		 * @namespace
+		 */
+		var utf8 = exports;
+
+		/**
+		 * Calculates the UTF8 byte length of a string.
+		 * @param {string} string String
+		 * @returns {number} Byte length
+		 */
+		utf8.length = function utf8_length(string) {
+		    var len = 0,
+		        c = 0;
+		    for (var i = 0; i < string.length; ++i) {
+		        c = string.charCodeAt(i);
+		        if (c < 128)
+		            len += 1;
+		        else if (c < 2048)
+		            len += 2;
+		        else if ((c & 0xFC00) === 0xD800 && (string.charCodeAt(i + 1) & 0xFC00) === 0xDC00) {
+		            ++i;
+		            len += 4;
+		        } else
+		            len += 3;
+		    }
+		    return len;
+		};
+
+		/**
+		 * Reads UTF8 bytes as a string.
+		 * @param {Uint8Array} buffer Source buffer
+		 * @param {number} start Source start
+		 * @param {number} end Source end
+		 * @returns {string} String read
+		 */
+		utf8.read = function utf8_read(buffer, start, end) {
+		    var len = end - start;
+		    if (len < 1)
+		        return "";
+		    var parts = null,
+		        chunk = [],
+		        i = 0, // char offset
+		        t;     // temporary
+		    while (start < end) {
+		        t = buffer[start++];
+		        if (t < 128)
+		            chunk[i++] = t;
+		        else if (t > 191 && t < 224)
+		            chunk[i++] = (t & 31) << 6 | buffer[start++] & 63;
+		        else if (t > 239 && t < 365) {
+		            t = ((t & 7) << 18 | (buffer[start++] & 63) << 12 | (buffer[start++] & 63) << 6 | buffer[start++] & 63) - 0x10000;
+		            chunk[i++] = 0xD800 + (t >> 10);
+		            chunk[i++] = 0xDC00 + (t & 1023);
+		        } else
+		            chunk[i++] = (t & 15) << 12 | (buffer[start++] & 63) << 6 | buffer[start++] & 63;
+		        if (i > 8191) {
+		            (parts || (parts = [])).push(String.fromCharCode.apply(String, chunk));
+		            i = 0;
+		        }
+		    }
+		    if (parts) {
+		        if (i)
+		            parts.push(String.fromCharCode.apply(String, chunk.slice(0, i)));
+		        return parts.join("");
+		    }
+		    return String.fromCharCode.apply(String, chunk.slice(0, i));
+		};
+
+		/**
+		 * Writes a string as UTF8 bytes.
+		 * @param {string} string Source string
+		 * @param {Uint8Array} buffer Destination buffer
+		 * @param {number} offset Destination offset
+		 * @returns {number} Bytes written
+		 */
+		utf8.write = function utf8_write(string, buffer, offset) {
+		    var start = offset,
+		        c1, // character 1
+		        c2; // character 2
+		    for (var i = 0; i < string.length; ++i) {
+		        c1 = string.charCodeAt(i);
+		        if (c1 < 128) {
+		            buffer[offset++] = c1;
+		        } else if (c1 < 2048) {
+		            buffer[offset++] = c1 >> 6       | 192;
+		            buffer[offset++] = c1       & 63 | 128;
+		        } else if ((c1 & 0xFC00) === 0xD800 && ((c2 = string.charCodeAt(i + 1)) & 0xFC00) === 0xDC00) {
+		            c1 = 0x10000 + ((c1 & 0x03FF) << 10) + (c2 & 0x03FF);
+		            ++i;
+		            buffer[offset++] = c1 >> 18      | 240;
+		            buffer[offset++] = c1 >> 12 & 63 | 128;
+		            buffer[offset++] = c1 >> 6  & 63 | 128;
+		            buffer[offset++] = c1       & 63 | 128;
+		        } else {
+		            buffer[offset++] = c1 >> 12      | 224;
+		            buffer[offset++] = c1 >> 6  & 63 | 128;
+		            buffer[offset++] = c1       & 63 | 128;
+		        }
+		    }
+		    return offset - start;
+		}; 
+	} (utf8$1));
+	return utf8$1;
+}
+
+var utf8Exports = requireUtf8();
+var utf8 = /*@__PURE__*/getDefaultExportFromCjs(utf8Exports);
+
+function noop() { }
+function writeByte(val, buf, pos) {
+    buf[pos] = val & 255;
+}
+function writeBytes(val, buf, pos) {
+    // also works for plain array values
+    buf.set(val, pos);
+}
+function writeVarint32(val, buf, pos) {
+    while (val > 127) {
+        buf[pos++] = (val & 127) | 128;
+        val >>>= 7;
+    }
+    buf[pos] = val;
+}
+function writeVarint64(val, buf, pos) {
+    while (val.hi) {
+        buf[pos++] = (val.lo & 127) | 128;
+        val.lo = ((val.lo >>> 7) | (val.hi << 25)) >>> 0;
+        val.hi >>>= 7;
+    }
+    while (val.lo > 127) {
+        buf[pos++] = (val.lo & 127) | 128;
+        val.lo = val.lo >>> 7;
+    }
+    buf[pos++] = val.lo;
+}
+/**
+ * Tests if the specified value is an string.
+ * @function
+ * @param {*} value Value to test
+ * @returns {boolean} `true` if the value is an string
+ */
+function isString(val) {
+    return typeof val === "string" || val instanceof String;
+}
+/**
+ * Tests if the specified value is an integer.
+ * @function
+ * @param {*} value Value to test
+ * @returns {boolean} `true` if the value is an integer
+ */
+function isInteger(value) {
+    return (typeof value === "number" && isFinite(value) && Math.floor(value) === value);
+}
+/**
+ * An immuable empty array.
+ * @memberof util
+ * @type {Array.<*>}
+ * @const
+ */
+const emptyArray = Object.freeze([]);
+/**
+ * An immutable empty object.
+ * @type {Object}
+ * @const
+ */
+const emptyObject = Object.freeze({});
+/**
+ * Builds a getter for a oneof's present field name.
+ * @param {string[]} fieldNames Field names
+ * @returns {OneOfGetter} Unbound getter
+ */
+function getOneOf(fieldNames) {
+    var fieldMap = {};
+    for (var i = 0; i < fieldNames.length; ++i)
+        fieldMap[fieldNames[i]] = 1;
+    /**
+     * @returns {string|undefined} Set field name, if any
+     * @this Object
+     * @ignore
+     */
+    return function oneOfGetter() {
+        // eslint-disable-line consistent-return
+        // @ts-ignore
+        for (var keys = Object.keys(this), i = keys.length - 1; i > -1; --i) {
+            if (fieldMap[keys[i]] === 1 &&
+                // @ts-ignore
+                this[keys[i]] !== undefined &&
+                // @ts-ignore
+                this[keys[i]] !== null) {
+                return keys[i];
+            }
+        }
+    };
+}
+/**
+ * Builds a setter for a oneof's present field name.
+ * @param {string[]} fieldNames Field names
+ * @returns {OneOfSetter} Unbound setter
+ */
+function setOneOf(fieldNames) {
+    /**
+     * @param {string} name Field name
+     * @returns {undefined}
+     * @this Object
+     * @ignore
+     */
+    return function oneOfSetter(name) {
+        for (var i = 0; i < fieldNames.length; ++i) {
+            if (fieldNames[i] !== name) {
+                // @ts-ignore
+                delete this[fieldNames[i]];
+            }
+        }
+    };
+}
+
+class State {
+    /**
+     * Current head.
+     * @type {Writer.Op}
+     */
+    head = null;
+    /**
+     * Current tail.
+     * @type {Writer.Op}
+     */
+    tail = null;
+    /**
+     * Current buffer length.
+     * @type {number}
+     */
+    len;
+    /**
+     * Next state.
+     * @type {State|null}
+     */
+    next = null;
+    /**
+     * Constructs a new writer state instance.
+     * @classdesc Copied writer state.
+     * @memberof Writer
+     * @constructor
+     * @param {Writer} writer Writer to copy state from
+     * @ignore
+     */
+    constructor(writer) {
+        this.head = writer.head;
+        this.tail = writer.tail;
+        this.len = writer.len;
+        this.next = writer.states;
+    }
+}
+
+class Op {
+    /**
+     * Function to call.
+     * @type {function(*, Uint8Array, number)}
+     */
+    fn;
+    /**
+     * Value byte length.
+     * @type {number}
+     */
+    len;
+    /**
+     * Next operation.
+     * @type {Writer.Op|undefined}
+     */
+    next = null;
+    /**
+     * Value to write.
+     * @type {*}
+     */
+    val;
+    /**
+     * Constructs a new writer operation instance.
+     * @classdesc Scheduled writer operation.
+     * @constructor
+     * @param {function(*, Uint8Array, number)} fn Function to call
+     * @param {number} len Value byte length
+     * @param {*} val Value to write
+     * @ignore
+     */
+    constructor(fn, len, val) {
+        this.fn = fn;
+        this.len = len;
+        this.val = val; // type varies
+    }
+}
+
+// import { LongBits } from "../dts";
+class Writer {
+    /**
+     * Creates a new writer.
+     * @function
+     * @returns {BufferWriter|Writer} A {@link BufferWriter} when Buffers are supported, otherwise a {@link Writer}
+     */
+    static create() {
+        return new Writer();
+    }
+    /**
+     * Allocates a buffer of the specified size.
+     * @param {number} size Buffer size
+     * @returns {Uint8Array} Buffer
+     */
+    static alloc(size) {
+        return pool((size) => new Uint8Array(size), Uint8Array.prototype.subarray)(size);
+    }
+    /**
+     * Current length.
+     * @type {number}
+     */
+    len;
+    /**
+     * Operations head.
+     * @type {Object}
+     */
+    head;
+    /**
+     * Operations tail
+     * @type {Object}
+     */
+    tail;
+    /**
+     * Linked forked states.
+     * @type {Object|null}
+     */
+    states;
+    /**
+     * Constructs a new writer instance.
+     * @classdesc Wire format writer using `Uint8Array` if available, otherwise `Array`.
+     * @constructor
+     */
+    constructor() {
+        this.len = 0;
+        this.head = new Op(noop, 0, null);
+        this.tail = this.head;
+        this.states = null;
+        // When a value is written, the writer calculates its byte length and puts it into a linked
+        // list of operations to perform when finish() is called. This both allows us to allocate
+        // buffers of the exact required size and reduces the amount of work we have to do compared
+        // to first calculating over objects and then encoding over objects. In our case, the encoding
+        // part is just a linked list walk calling operations with already prepared values.
+    }
+    /**
+     * Pushes a new operation to the queue.
+     * @param {function(*, Uint8Array, number)} fn Function to call
+     * @param {number} len Value byte length
+     * @param {number} val Value to write
+     * @returns {Writer} `this`
+     * @private
+     */
+    push(fn, len, val) {
+        this.tail = this.tail.next = new Op(fn, len, val);
+        this.len += len;
+        return this;
+    }
+    /**
+     * Writes an unsigned 32 bit value as a varint.
+     * @param {number} value Value to write
+     * @returns {Writer} `this`
+     */
+    uint32(value) {
+        // here, the call to this.push has been inlined and a varint specific Op subclass is used.
+        // uint32 is by far the most frequently used operation and benefits significantly from this.
+        this.len += (this.tail = this.tail.next =
+            new Op(writeVarint32, (value = value >>> 0) < 128
+                ? 1
+                : value < 16384
+                    ? 2
+                    : value < 2097152
+                        ? 3
+                        : value < 268435456
+                            ? 4
+                            : 5, value)).len;
+        return this;
+    }
+    /**
+     * Writes a signed 32 bit value as a varint.
+     * @function
+     * @param {number} value Value to write
+     * @returns {Writer} `this`
+     */
+    int32(value) {
+        return value < 0
+            ? this.push(writeVarint64, value < -2147483648 ? 10 : 5, value)
+            : this.uint32(value);
+    }
+    /**
+     * Writes a 32 bit value as a varint, zig-zag encoded.
+     * @param {number} value Value to write
+     * @returns {Writer} `this`
+     */
+    // sint32(value: number): Writer {
+    //   return this.uint32(((value << 1) ^ (value >> 31)) >>> 0);
+    // }
+    /**
+     * Writes an unsigned 64 bit value as a varint.
+     * @param {Long|number|string} value Value to write
+     * @returns {Writer} `this`
+     * @throws {TypeError} If `value` is a string and no long library is present.
+     */
+    // uint64(value: number | string): Writer {
+    //   const bits = LongBits.from(value);
+    //   return this.push(writeVarint64, bits.length(), bits);
+    // }
+    /**
+     * Writes a signed 64 bit value as a varint.
+     * @function
+     * @param {Long|number|string} value Value to write
+     * @returns {Writer} `this`
+     * @throws {TypeError} If `value` is a string and no long library is present.
+     */
+    // int64(value: number | string): Writer {
+    //   return this.uint64(value);
+    // }
+    /**
+     * Writes a signed 64 bit value as a varint, zig-zag encoded.
+     * @param {Long|number|string} value Value to write
+     * @returns {Writer} `this`
+     * @throws {TypeError} If `value` is a string and no long library is present.
+     */
+    // sint64(value: number | string): Writer {
+    //   const bits = LongBits.from(value).zzEncode();
+    //   return this.push(writeVarint64, bits.length(), bits);
+    // }
+    /**
+     * Writes a boolish value as a varint.
+     * @param {boolean} value Value to write
+     * @returns {Writer} `this`
+     */
+    bool(value) {
+        return this.push(writeByte, 1, value ? 1 : 0);
+    }
+    /**
+     * Writes an unsigned 32 bit value as fixed 32 bits.
+     * @param {number} value Value to write
+     * @returns {Writer} `this`
+     */
+    // fixed32(value: number): Writer {
+    //   return this.push(writeFixed32, 4, value >>> 0);
+    // }
+    /**
+     * Writes a signed 32 bit value as fixed 32 bits.
+     * @function
+     * @param {number} value Value to write
+     * @returns {Writer} `this`
+     */
+    // sfixed32(value: number): Writer {
+    //   return this.fixed32(value);
+    // }
+    /**
+     * Writes an unsigned 64 bit value as fixed 64 bits.
+     * @param {Long|number|string} value Value to write
+     * @returns {Writer} `this`
+     * @throws {TypeError} If `value` is a string and no long library is present.
+     */
+    // fixed64(value: number | string): Writer {
+    //   const bits = LongBits.from(value);
+    //   return this.push(writeFixed32, 4, bits.lo).push(writeFixed32, 4, bits.hi);
+    // }
+    /**
+     * Writes a signed 64 bit value as fixed 64 bits.
+     * @function
+     * @param {Long|number|string} value Value to write
+     * @returns {Writer} `this`
+     * @throws {TypeError} If `value` is a string and no long library is present.
+     */
+    // sfixed64(value: number | string): Writer {
+    //   return this.fixed64(value);
+    // }
+    /**
+     * Writes a float (32 bit).
+     * @function
+     * @param {number} value Value to write
+     * @returns {Writer} `this`
+     */
+    float(value) {
+        return this.push(float.writeFloatLE, 4, value);
+    }
+    /**
+     * Writes a double (64 bit float).
+     * @function
+     * @param {number} value Value to write
+     * @returns {Writer} `this`
+     */
+    double(value) {
+        return this.push(float.writeDoubleLE, 8, value);
+    }
+    /**
+     * Writes a sequence of bytes.
+     * @param {Uint8Array|string} value Buffer or base64 encoded string to write
+     * @returns {Writer} `this`
+     */
+    bytes(value) {
+        let len = value.length;
+        if (!len) {
+            return this.push(writeByte, 1, 0);
+        }
+        if (isString(value)) {
+            var buf = Writer.alloc((len = base64.length(value)));
+            base64.decode(value, buf, 0);
+            value = buf;
+        }
+        return this.uint32(len).push(writeBytes, len, value);
+    }
+    /**
+     * Writes a string.
+     * @param {string} value Value to write
+     * @returns {Writer} `this`
+     */
+    string(value) {
+        const len = utf8.length(value);
+        return len
+            ? this.uint32(len).push(utf8.write, len, value)
+            : this.push(writeByte, 1, 0);
+    }
+    /**
+     * Forks this writer's state by pushing it to a stack.
+     * Calling {@link Writer#reset|reset} or {@link Writer#ldelim|ldelim} resets the writer to the previous state.
+     * @returns {Writer} `this`
+     */
+    fork() {
+        this.states = new State(this);
+        this.head = this.tail = new Op(noop, 0, 0);
+        this.len = 0;
+        return this;
+    }
+    /**
+     * Resets this instance to the last state.
+     * @returns {Writer} `this`
+     */
+    reset() {
+        if (this.states) {
+            this.head = this.states.head;
+            this.tail = this.states.tail;
+            this.len = this.states.len;
+            this.states = this.states.next;
+        }
+        else {
+            this.head = this.tail = new Op(noop, 0, 0);
+            this.len = 0;
+        }
+        return this;
+    }
+    /**
+     * Resets to the last state and appends the fork state's current write length as a varint followed by its operations.
+     * @returns {Writer} `this`
+     */
+    ldelim() {
+        const head = this.head;
+        const tail = this.tail;
+        const len = this.len;
+        this.reset().uint32(len);
+        if (len) {
+            this.tail.next = head.next; // skip noop
+            this.tail = tail;
+            this.len += len;
+        }
+        return this;
+    }
+}
+
+// import { LongBits } from "../dts";
+function indexOutOfRange(reader, writeLength) {
+    return RangeError("index out of range: " +
+        reader.pos +
+        " + " +
+        (writeLength || 1) +
+        " > " +
+        reader.len);
+}
+class Reader {
+    /**
+     * Creates a new reader using the specified buffer.
+     * @function
+     * @param {Uint8Array|Buffer} buffer Buffer to read from
+     * @returns {Reader|BufferReader} A {@link BufferReader} if `buffer` is a Buffer, otherwise a {@link Reader}
+     * @throws {Error} If `buffer` is not a valid buffer
+     */
+    static create(buffer) {
+        if (buffer instanceof Uint8Array) {
+            return new Reader(buffer);
+        }
+        throw Error("illegal buffer");
+    }
+    /**
+     * Read buffer.
+     * @type {Uint8Array}
+     */
+    buf;
+    /**
+     * Read buffer position.
+     * @type {number}
+     */
+    pos;
+    /**
+     * Read buffer length.
+     * @type {number}
+     */
+    len;
+    /**
+     * Constructs a new reader instance using the specified buffer.
+     * @classdesc Wire format reader using `Uint8Array` if available, otherwise `Array`.
+     * @constructor
+     * @param {Uint8Array} buffer Buffer to read from
+     */
+    constructor(buffer) {
+        this.buf = buffer;
+        this.pos = 0;
+        this.len = buffer.length;
+    }
+    slice(buf, begin, end) {
+        return buf.subarray(begin, end);
+    }
+    // private readLongVarint() {
+    //   // tends to deopt with local vars for octet etc.
+    //   const bits = new LongBits(0, 0);
+    //   let i = 0;
+    //   if (this.len - this.pos > 4) {
+    //     // fast route (lo)
+    //     for (let i = 0; i < 4; ++i) {
+    //       // 1st..4th
+    //       bits.lo = (bits.lo | ((this.buf[this.pos] & 127) << (i * 7))) >>> 0;
+    //       if (this.buf[this.pos++] < 128) {
+    //         return bits;
+    //       }
+    //     }
+    //     // 5th
+    //     bits.lo = (bits.lo | ((this.buf[this.pos] & 127) << 28)) >>> 0;
+    //     bits.hi = (bits.hi | ((this.buf[this.pos] & 127) >> 4)) >>> 0;
+    //     if (this.buf[this.pos++] < 128) {
+    //       return bits;
+    //     }
+    //     i = 0;
+    //   } else {
+    //     for (; i < 3; ++i) {
+    //       /* istanbul ignore if */
+    //       if (this.pos >= this.len) {
+    //         throw indexOutOfRange(this);
+    //       }
+    //       // 1st..3th
+    //       bits.lo = (bits.lo | ((this.buf[this.pos] & 127) << (i * 7))) >>> 0;
+    //       if (this.buf[this.pos++] < 128) {
+    //         return bits;
+    //       }
+    //     }
+    //     // 4th
+    //     bits.lo = (bits.lo | ((this.buf[this.pos++] & 127) << (i * 7))) >>> 0;
+    //     return bits;
+    //   }
+    //   if (this.len - this.pos > 4) {
+    //     // fast route (hi)
+    //     for (; i < 5; ++i) {
+    //       // 6th..10th
+    //       bits.hi = (bits.hi | ((this.buf[this.pos] & 127) << (i * 7 + 3))) >>> 0;
+    //       if (this.buf[this.pos++] < 128) {
+    //         return bits;
+    //       }
+    //     }
+    //   } else {
+    //     for (; i < 5; ++i) {
+    //       /* istanbul ignore if */
+    //       if (this.pos >= this.len) {
+    //         throw indexOutOfRange(this);
+    //       }
+    //       // 6th..10th
+    //       bits.hi = (bits.hi | ((this.buf[this.pos] & 127) << (i * 7 + 3))) >>> 0;
+    //       if (this.buf[this.pos++] < 128) {
+    //         return bits;
+    //       }
+    //     }
+    //   }
+    //   /* istanbul ignore next */
+    //   throw Error("invalid varint encoding");
+    // }
+    // private readFixed32_end(buf: Uint8Array, end: number) {
+    //   // note that this uses `end`, not `pos`
+    //   return (
+    //     (buf[end - 4] |
+    //       (buf[end - 3] << 8) |
+    //       (buf[end - 2] << 16) |
+    //       (buf[end - 1] << 24)) >>>
+    //     0
+    //   );
+    // }
+    // private readFixed64(/* this: Reader */) {
+    //   /* istanbul ignore if */
+    //   if (this.pos + 8 > this.len) throw indexOutOfRange(this, 8);
+    //   return new LongBits(
+    //     this.readFixed32_end(this.buf, (this.pos += 4)),
+    //     this.readFixed32_end(this.buf, (this.pos += 4))
+    //   );
+    // }
+    /**
+     * Reads a varint as an unsigned 32 bit value.
+     * @function
+     * @returns {number} Value read
+     */
+    uint32() {
+        let value = 4294967295;
+        value = (this.buf[this.pos] & 127) >>> 0;
+        if (this.buf[this.pos++] < 128) {
+            return value;
+        }
+        value = (value | ((this.buf[this.pos] & 127) << 7)) >>> 0;
+        if (this.buf[this.pos++] < 128) {
+            return value;
+        }
+        value = (value | ((this.buf[this.pos] & 127) << 14)) >>> 0;
+        if (this.buf[this.pos++] < 128) {
+            return value;
+        }
+        value = (value | ((this.buf[this.pos] & 127) << 21)) >>> 0;
+        if (this.buf[this.pos++] < 128) {
+            return value;
+        }
+        value = (value | ((this.buf[this.pos] & 15) << 28)) >>> 0;
+        if (this.buf[this.pos++] < 128) {
+            return value;
+        }
+        if ((this.pos += 5) > this.len) {
+            this.pos = this.len;
+            throw indexOutOfRange(this, 10);
+        }
+        return value;
+    }
+    /**
+     * Reads a varint as a signed 32 bit value.
+     * @returns {number} Value read
+     */
+    int32() {
+        return this.uint32() | 0;
+    }
+    /**
+     * Reads a zig-zag encoded varint as a signed 32 bit value.
+     * @returns {number} Value read
+     */
+    // sint32() {
+    //   const value = this.uint32();
+    //   return ((value >>> 1) ^ -(value & 1)) | 0;
+    // }
+    /**
+     * Reads a varint as an unsigned 64 bit value.
+     * @name Reader#uint64
+     * @function
+     * @returns {Long} Value read
+     */
+    // uint64() {
+    //   return this.readLongVarint().toNumber(true);
+    // }
+    /**
+     * Reads a varint as a signed 64 bit value.
+     * @name Reader#int64
+     * @function
+     * @returns {Long} Value read
+     */
+    // int64() {
+    //   return this.readLongVarint().toNumber(false);
+    // }
+    /**
+     * Reads a zig-zag encoded varint as a signed 64 bit value.
+     * @name Reader#sint64
+     * @function
+     * @returns {Long} Value read
+     */
+    // sint64() {
+    //   return this.readLongVarint().zzDecode().toNumber(false);
+    // }
+    /**
+     * Reads a varint as a boolean.
+     * @returns {boolean} Value read
+     */
+    // bool() {
+    //   return this.uint32() !== 0;
+    // }
+    /**
+     * Reads fixed 32 bits as an unsigned 32 bit integer.
+     * @returns {number} Value read
+     */
+    // fixed32() {
+    //   if (this.pos + 4 > this.len) {
+    //     throw indexOutOfRange(this, 4);
+    //   }
+    //   return this.readFixed32_end(this.buf, (this.pos += 4));
+    // }
+    /**
+     * Reads fixed 32 bits as a signed 32 bit integer.
+     * @returns {number} Value read
+     */
+    // sfixed32() {
+    //   if (this.pos + 4 > this.len) {
+    //     throw indexOutOfRange(this, 4);
+    //   }
+    //   return this.readFixed32_end(this.buf, (this.pos += 4)) | 0;
+    // }
+    /**
+     * Reads fixed 64 bits.
+     * @name Reader#fixed64
+     * @function
+     * @returns {Long} Value read
+     */
+    // fixed64() {
+    //   return this.readFixed64().toNumber(true);
+    // }
+    /**
+     * Reads zig-zag encoded fixed 64 bits.
+     * @name Reader#sfixed64
+     * @function
+     * @returns {Long} Value read
+     */
+    // sfixed64() {
+    //   return this.readFixed64().zzDecode().toNumber(false);
+    // }
+    /**
+     * Reads a float (32 bit) as a number.
+     * @function
+     * @returns {number} Value read
+     */
+    float() {
+        if (this.pos + 4 > this.len) {
+            throw indexOutOfRange(this, 4);
+        }
+        const value = float.readFloatLE(this.buf, this.pos);
+        this.pos += 4;
+        return value;
+    }
+    /**
+     * Reads a double (64 bit float) as a number.
+     * @function
+     * @returns {number} Value read
+     */
+    // double() {
+    //   if (this.pos + 8 > this.len) {
+    //     throw indexOutOfRange(this, 4);
+    //   }
+    //   const value = float.readDoubleLE(this.buf, this.pos);
+    //   this.pos += 8;
+    //   return value;
+    // }
+    /**
+     * Reads a sequence of bytes preceeded by its length as a varint.
+     * @returns {Uint8Array} Value read
+     */
+    bytes() {
+        const length = this.uint32();
+        const start = this.pos;
+        const end = this.pos + length;
+        if (end > this.len) {
+            throw indexOutOfRange(this, length);
+        }
+        this.pos += length;
+        if (start === end) {
+            return new Uint8Array(0);
+        }
+        return this.slice(this.buf, start, end);
+    }
+    /**
+     * Reads a string preceeded by its byte length as a varint.
+     * @returns {string} Value read
+     */
+    string() {
+        const bytes = this.bytes();
+        return utf8.read(bytes, 0, bytes.length);
+    }
+    /**
+     * Skips the specified number of bytes if specified, otherwise skips a varint.
+     * @param {number} [length] Length if known, otherwise a varint is assumed
+     * @returns {Reader} `this`
+     */
+    skip(length) {
+        if (typeof length === "number") {
+            /* istanbul ignore if */
+            if (this.pos + length > this.len) {
+                throw indexOutOfRange(this, length);
+            }
+            this.pos += length;
+        }
+        else {
+            do {
+                /* istanbul ignore if */
+                if (this.pos >= this.len) {
+                    throw indexOutOfRange(this);
+                }
+            } while (this.buf[this.pos++] & 128);
+        }
+        return this;
+    }
+    /**
+     * Skips the next element of the specified wire type.
+     * @param {number} wireType Wire type received
+     * @returns {Reader} `this`
+     */
+    skipType(wireType) {
+        switch (wireType) {
+            case 0:
+                this.skip();
+                break;
+            case 1:
+                this.skip(8);
+                break;
+            case 2:
+                this.skip(this.uint32());
+                break;
+            case 3:
+                while ((wireType = this.uint32() & 7) !== 4) {
+                    this.skipType(wireType);
+                }
+                break;
+            case 5:
+                this.skip(4);
+                break;
+            /* istanbul ignore next */
+            default:
+                throw Error("invalid wire type " + wireType + " at offset " + this.pos);
+        }
+        return this;
+    }
+}
+
+/*eslint-disable block-scoped-var, id-length, no-control-regex, no-magic-numbers, no-prototype-builtins, no-redeclare, no-shadow, no-var, sort-vars*/
+
+const com = $root.com = (() => {
+
+    /**
+     * Namespace com.
+     * @exports com
+     * @namespace
+     */
+    const com = {};
+
+    com.opensource = (function() {
+
+        /**
+         * Namespace opensource.
+         * @memberof com
+         * @namespace
+         */
+        const opensource = {};
+
+        opensource.svga = (function() {
+
+            /**
+             * Namespace svga.
+             * @memberof com.opensource
+             * @namespace
+             */
+            const svga = {};
+
+            svga.MovieParams = (function() {
+
+                /**
+                 * Properties of a MovieParams.
+                 * @memberof com.opensource.svga
+                 * @interface IMovieParams
+                 * @property {number|null} [viewBoxWidth] MovieParams viewBoxWidth
+                 * @property {number|null} [viewBoxHeight] MovieParams viewBoxHeight
+                 * @property {number|null} [fps] MovieParams fps
+                 * @property {number|null} [frames] MovieParams frames
+                 */
+
+                /**
+                 * Constructs a new MovieParams.
+                 * @memberof com.opensource.svga
+                 * @classdesc Represents a MovieParams.
+                 * @implements IMovieParams
+                 * @constructor
+                 * @param {com.opensource.svga.IMovieParams=} [properties] Properties to set
+                 */
+                function MovieParams(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * MovieParams viewBoxWidth.
+                 * @member {number} viewBoxWidth
+                 * @memberof com.opensource.svga.MovieParams
+                 * @instance
+                 */
+                MovieParams.prototype.viewBoxWidth = 0;
+
+                /**
+                 * MovieParams viewBoxHeight.
+                 * @member {number} viewBoxHeight
+                 * @memberof com.opensource.svga.MovieParams
+                 * @instance
+                 */
+                MovieParams.prototype.viewBoxHeight = 0;
+
+                /**
+                 * MovieParams fps.
+                 * @member {number} fps
+                 * @memberof com.opensource.svga.MovieParams
+                 * @instance
+                 */
+                MovieParams.prototype.fps = 0;
+
+                /**
+                 * MovieParams frames.
+                 * @member {number} frames
+                 * @memberof com.opensource.svga.MovieParams
+                 * @instance
+                 */
+                MovieParams.prototype.frames = 0;
+
+                /**
+                 * Creates a new MovieParams instance using the specified properties.
+                 * @function create
+                 * @memberof com.opensource.svga.MovieParams
+                 * @static
+                 * @param {com.opensource.svga.IMovieParams=} [properties] Properties to set
+                 * @returns {com.opensource.svga.MovieParams} MovieParams instance
+                 */
+                MovieParams.create = function create(properties) {
+                    return new MovieParams(properties);
+                };
+
+                /**
+                 * Encodes the specified MovieParams message. Does not implicitly {@link com.opensource.svga.MovieParams.verify|verify} messages.
+                 * @function encode
+                 * @memberof com.opensource.svga.MovieParams
+                 * @static
+                 * @param {com.opensource.svga.IMovieParams} message MovieParams message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                MovieParams.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = Writer.create();
+                    if (message.viewBoxWidth != null && Object.hasOwn(message, "viewBoxWidth"))
+                        writer.uint32(/* id 1, wireType 5 =*/13).float(message.viewBoxWidth);
+                    if (message.viewBoxHeight != null && Object.hasOwn(message, "viewBoxHeight"))
+                        writer.uint32(/* id 2, wireType 5 =*/21).float(message.viewBoxHeight);
+                    if (message.fps != null && Object.hasOwn(message, "fps"))
+                        writer.uint32(/* id 3, wireType 0 =*/24).int32(message.fps);
+                    if (message.frames != null && Object.hasOwn(message, "frames"))
+                        writer.uint32(/* id 4, wireType 0 =*/32).int32(message.frames);
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified MovieParams message, length delimited. Does not implicitly {@link com.opensource.svga.MovieParams.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof com.opensource.svga.MovieParams
+                 * @static
+                 * @param {com.opensource.svga.IMovieParams} message MovieParams message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                MovieParams.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes a MovieParams message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof com.opensource.svga.MovieParams
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {com.opensource.svga.MovieParams} MovieParams
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                MovieParams.decode = function decode(reader, length) {
+                    if (!(reader instanceof Reader))
+                        reader = Reader.create(reader);
+                    let end = length === undefined ? reader.len : reader.pos + length, message = new $root.com.opensource.svga.MovieParams();
+                    while (reader.pos < end) {
+                        let tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1: {
+                                message.viewBoxWidth = reader.float();
+                                break;
+                            }
+                        case 2: {
+                                message.viewBoxHeight = reader.float();
+                                break;
+                            }
+                        case 3: {
+                                message.fps = reader.int32();
+                                break;
+                            }
+                        case 4: {
+                                message.frames = reader.int32();
+                                break;
+                            }
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Decodes a MovieParams message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof com.opensource.svga.MovieParams
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {com.opensource.svga.MovieParams} MovieParams
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                MovieParams.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof Reader))
+                        reader = new Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies a MovieParams message.
+                 * @function verify
+                 * @memberof com.opensource.svga.MovieParams
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                MovieParams.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.viewBoxWidth != null && message.hasOwnProperty("viewBoxWidth"))
+                        if (typeof message.viewBoxWidth !== "number")
+                            return "viewBoxWidth: number expected";
+                    if (message.viewBoxHeight != null && message.hasOwnProperty("viewBoxHeight"))
+                        if (typeof message.viewBoxHeight !== "number")
+                            return "viewBoxHeight: number expected";
+                    if (message.fps != null && message.hasOwnProperty("fps"))
+                        if (!isInteger(message.fps))
+                            return "fps: integer expected";
+                    if (message.frames != null && message.hasOwnProperty("frames"))
+                        if (!isInteger(message.frames))
+                            return "frames: integer expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a MovieParams message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof com.opensource.svga.MovieParams
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {com.opensource.svga.MovieParams} MovieParams
+                 */
+                MovieParams.fromObject = function fromObject(object) {
+                    if (object instanceof $root.com.opensource.svga.MovieParams)
+                        return object;
+                    let message = new $root.com.opensource.svga.MovieParams();
+                    if (object.viewBoxWidth != null)
+                        message.viewBoxWidth = Number(object.viewBoxWidth);
+                    if (object.viewBoxHeight != null)
+                        message.viewBoxHeight = Number(object.viewBoxHeight);
+                    if (object.fps != null)
+                        message.fps = object.fps | 0;
+                    if (object.frames != null)
+                        message.frames = object.frames | 0;
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a MovieParams message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof com.opensource.svga.MovieParams
+                 * @static
+                 * @param {com.opensource.svga.MovieParams} message MovieParams
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                MovieParams.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.viewBoxWidth = 0;
+                        object.viewBoxHeight = 0;
+                        object.fps = 0;
+                        object.frames = 0;
+                    }
+                    if (message.viewBoxWidth != null && message.hasOwnProperty("viewBoxWidth"))
+                        object.viewBoxWidth = options.json && !isFinite(message.viewBoxWidth) ? String(message.viewBoxWidth) : message.viewBoxWidth;
+                    if (message.viewBoxHeight != null && message.hasOwnProperty("viewBoxHeight"))
+                        object.viewBoxHeight = options.json && !isFinite(message.viewBoxHeight) ? String(message.viewBoxHeight) : message.viewBoxHeight;
+                    if (message.fps != null && message.hasOwnProperty("fps"))
+                        object.fps = message.fps;
+                    if (message.frames != null && message.hasOwnProperty("frames"))
+                        object.frames = message.frames;
+                    return object;
+                };
+
+                /**
+                 * Converts this MovieParams to JSON.
+                 * @function toJSON
+                 * @memberof com.opensource.svga.MovieParams
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                MovieParams.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Gets the default type url for MovieParams
+                 * @function getTypeUrl
+                 * @memberof com.opensource.svga.MovieParams
+                 * @static
+                 * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+                 * @returns {string} The default type url
+                 */
+                MovieParams.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+                    if (typeUrlPrefix === undefined) {
+                        typeUrlPrefix = "type.googleapis.com";
+                    }
+                    return typeUrlPrefix + "/com.opensource.svga.MovieParams";
+                };
+
+                return MovieParams;
+            })();
+
+            svga.SpriteEntity = (function() {
+
+                /**
+                 * Properties of a SpriteEntity.
+                 * @memberof com.opensource.svga
+                 * @interface ISpriteEntity
+                 * @property {string|null} [imageKey] SpriteEntity imageKey
+                 * @property {Array.<com.opensource.svga.IFrameEntity>|null} [frames] SpriteEntity frames
+                 * @property {string|null} [matteKey] SpriteEntity matteKey
+                 */
+
+                /**
+                 * Constructs a new SpriteEntity.
+                 * @memberof com.opensource.svga
+                 * @classdesc Represents a SpriteEntity.
+                 * @implements ISpriteEntity
+                 * @constructor
+                 * @param {com.opensource.svga.ISpriteEntity=} [properties] Properties to set
+                 */
+                function SpriteEntity(properties) {
+                    this.frames = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * SpriteEntity imageKey.
+                 * @member {string} imageKey
+                 * @memberof com.opensource.svga.SpriteEntity
+                 * @instance
+                 */
+                SpriteEntity.prototype.imageKey = "";
+
+                /**
+                 * SpriteEntity frames.
+                 * @member {Array.<com.opensource.svga.IFrameEntity>} frames
+                 * @memberof com.opensource.svga.SpriteEntity
+                 * @instance
+                 */
+                SpriteEntity.prototype.frames = emptyArray;
+
+                /**
+                 * SpriteEntity matteKey.
+                 * @member {string} matteKey
+                 * @memberof com.opensource.svga.SpriteEntity
+                 * @instance
+                 */
+                SpriteEntity.prototype.matteKey = "";
+
+                /**
+                 * Creates a new SpriteEntity instance using the specified properties.
+                 * @function create
+                 * @memberof com.opensource.svga.SpriteEntity
+                 * @static
+                 * @param {com.opensource.svga.ISpriteEntity=} [properties] Properties to set
+                 * @returns {com.opensource.svga.SpriteEntity} SpriteEntity instance
+                 */
+                SpriteEntity.create = function create(properties) {
+                    return new SpriteEntity(properties);
+                };
+
+                /**
+                 * Encodes the specified SpriteEntity message. Does not implicitly {@link com.opensource.svga.SpriteEntity.verify|verify} messages.
+                 * @function encode
+                 * @memberof com.opensource.svga.SpriteEntity
+                 * @static
+                 * @param {com.opensource.svga.ISpriteEntity} message SpriteEntity message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                SpriteEntity.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = Writer.create();
+                    if (message.imageKey != null && Object.hasOwn(message, "imageKey"))
+                        writer.uint32(/* id 1, wireType 2 =*/10).string(message.imageKey);
+                    if (message.frames != null && message.frames.length)
+                        for (let i = 0; i < message.frames.length; ++i)
+                            $root.com.opensource.svga.FrameEntity.encode(message.frames[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                    if (message.matteKey != null && Object.hasOwn(message, "matteKey"))
+                        writer.uint32(/* id 3, wireType 2 =*/26).string(message.matteKey);
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified SpriteEntity message, length delimited. Does not implicitly {@link com.opensource.svga.SpriteEntity.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof com.opensource.svga.SpriteEntity
+                 * @static
+                 * @param {com.opensource.svga.ISpriteEntity} message SpriteEntity message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                SpriteEntity.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes a SpriteEntity message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof com.opensource.svga.SpriteEntity
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {com.opensource.svga.SpriteEntity} SpriteEntity
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                SpriteEntity.decode = function decode(reader, length) {
+                    if (!(reader instanceof Reader))
+                        reader = Reader.create(reader);
+                    let end = length === undefined ? reader.len : reader.pos + length, message = new $root.com.opensource.svga.SpriteEntity();
+                    while (reader.pos < end) {
+                        let tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1: {
+                                message.imageKey = reader.string();
+                                break;
+                            }
+                        case 2: {
+                                if (!(message.frames && message.frames.length))
+                                    message.frames = [];
+                                message.frames.push($root.com.opensource.svga.FrameEntity.decode(reader, reader.uint32()));
+                                break;
+                            }
+                        case 3: {
+                                message.matteKey = reader.string();
+                                break;
+                            }
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Decodes a SpriteEntity message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof com.opensource.svga.SpriteEntity
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {com.opensource.svga.SpriteEntity} SpriteEntity
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                SpriteEntity.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof Reader))
+                        reader = new Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies a SpriteEntity message.
+                 * @function verify
+                 * @memberof com.opensource.svga.SpriteEntity
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                SpriteEntity.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.imageKey != null && message.hasOwnProperty("imageKey"))
+                        if (!isString(message.imageKey))
+                            return "imageKey: string expected";
+                    if (message.frames != null && message.hasOwnProperty("frames")) {
+                        if (!Array.isArray(message.frames))
+                            return "frames: array expected";
+                        for (let i = 0; i < message.frames.length; ++i) {
+                            let error = $root.com.opensource.svga.FrameEntity.verify(message.frames[i]);
+                            if (error)
+                                return "frames." + error;
+                        }
+                    }
+                    if (message.matteKey != null && message.hasOwnProperty("matteKey"))
+                        if (!isString(message.matteKey))
+                            return "matteKey: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a SpriteEntity message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof com.opensource.svga.SpriteEntity
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {com.opensource.svga.SpriteEntity} SpriteEntity
+                 */
+                SpriteEntity.fromObject = function fromObject(object) {
+                    if (object instanceof $root.com.opensource.svga.SpriteEntity)
+                        return object;
+                    let message = new $root.com.opensource.svga.SpriteEntity();
+                    if (object.imageKey != null)
+                        message.imageKey = String(object.imageKey);
+                    if (object.frames) {
+                        if (!Array.isArray(object.frames))
+                            throw TypeError(".com.opensource.svga.SpriteEntity.frames: array expected");
+                        message.frames = [];
+                        for (let i = 0; i < object.frames.length; ++i) {
+                            if (typeof object.frames[i] !== "object")
+                                throw TypeError(".com.opensource.svga.SpriteEntity.frames: object expected");
+                            message.frames[i] = $root.com.opensource.svga.FrameEntity.fromObject(object.frames[i]);
+                        }
+                    }
+                    if (object.matteKey != null)
+                        message.matteKey = String(object.matteKey);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a SpriteEntity message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof com.opensource.svga.SpriteEntity
+                 * @static
+                 * @param {com.opensource.svga.SpriteEntity} message SpriteEntity
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                SpriteEntity.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.frames = [];
+                    if (options.defaults) {
+                        object.imageKey = "";
+                        object.matteKey = "";
+                    }
+                    if (message.imageKey != null && message.hasOwnProperty("imageKey"))
+                        object.imageKey = message.imageKey;
+                    if (message.frames && message.frames.length) {
+                        object.frames = [];
+                        for (let j = 0; j < message.frames.length; ++j)
+                            object.frames[j] = $root.com.opensource.svga.FrameEntity.toObject(message.frames[j], options);
+                    }
+                    if (message.matteKey != null && message.hasOwnProperty("matteKey"))
+                        object.matteKey = message.matteKey;
+                    return object;
+                };
+
+                /**
+                 * Converts this SpriteEntity to JSON.
+                 * @function toJSON
+                 * @memberof com.opensource.svga.SpriteEntity
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                SpriteEntity.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Gets the default type url for SpriteEntity
+                 * @function getTypeUrl
+                 * @memberof com.opensource.svga.SpriteEntity
+                 * @static
+                 * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+                 * @returns {string} The default type url
+                 */
+                SpriteEntity.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+                    if (typeUrlPrefix === undefined) {
+                        typeUrlPrefix = "type.googleapis.com";
+                    }
+                    return typeUrlPrefix + "/com.opensource.svga.SpriteEntity";
+                };
+
+                return SpriteEntity;
+            })();
+
+            svga.Layout = (function() {
+
+                /**
+                 * Properties of a Layout.
+                 * @memberof com.opensource.svga
+                 * @interface ILayout
+                 * @property {number|null} [x] Layout x
+                 * @property {number|null} [y] Layout y
+                 * @property {number|null} [width] Layout width
+                 * @property {number|null} [height] Layout height
+                 */
+
+                /**
+                 * Constructs a new Layout.
+                 * @memberof com.opensource.svga
+                 * @classdesc Represents a Layout.
+                 * @implements ILayout
+                 * @constructor
+                 * @param {com.opensource.svga.ILayout=} [properties] Properties to set
+                 */
+                function Layout(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Layout x.
+                 * @member {number} x
+                 * @memberof com.opensource.svga.Layout
+                 * @instance
+                 */
+                Layout.prototype.x = 0;
+
+                /**
+                 * Layout y.
+                 * @member {number} y
+                 * @memberof com.opensource.svga.Layout
+                 * @instance
+                 */
+                Layout.prototype.y = 0;
+
+                /**
+                 * Layout width.
+                 * @member {number} width
+                 * @memberof com.opensource.svga.Layout
+                 * @instance
+                 */
+                Layout.prototype.width = 0;
+
+                /**
+                 * Layout height.
+                 * @member {number} height
+                 * @memberof com.opensource.svga.Layout
+                 * @instance
+                 */
+                Layout.prototype.height = 0;
+
+                /**
+                 * Creates a new Layout instance using the specified properties.
+                 * @function create
+                 * @memberof com.opensource.svga.Layout
+                 * @static
+                 * @param {com.opensource.svga.ILayout=} [properties] Properties to set
+                 * @returns {com.opensource.svga.Layout} Layout instance
+                 */
+                Layout.create = function create(properties) {
+                    return new Layout(properties);
+                };
+
+                /**
+                 * Encodes the specified Layout message. Does not implicitly {@link com.opensource.svga.Layout.verify|verify} messages.
+                 * @function encode
+                 * @memberof com.opensource.svga.Layout
+                 * @static
+                 * @param {com.opensource.svga.ILayout} message Layout message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Layout.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = Writer.create();
+                    if (message.x != null && Object.hasOwn(message, "x"))
+                        writer.uint32(/* id 1, wireType 5 =*/13).float(message.x);
+                    if (message.y != null && Object.hasOwn(message, "y"))
+                        writer.uint32(/* id 2, wireType 5 =*/21).float(message.y);
+                    if (message.width != null && Object.hasOwn(message, "width"))
+                        writer.uint32(/* id 3, wireType 5 =*/29).float(message.width);
+                    if (message.height != null && Object.hasOwn(message, "height"))
+                        writer.uint32(/* id 4, wireType 5 =*/37).float(message.height);
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified Layout message, length delimited. Does not implicitly {@link com.opensource.svga.Layout.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof com.opensource.svga.Layout
+                 * @static
+                 * @param {com.opensource.svga.ILayout} message Layout message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Layout.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes a Layout message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof com.opensource.svga.Layout
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {com.opensource.svga.Layout} Layout
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Layout.decode = function decode(reader, length) {
+                    if (!(reader instanceof Reader))
+                        reader = Reader.create(reader);
+                    let end = length === undefined ? reader.len : reader.pos + length, message = new $root.com.opensource.svga.Layout();
+                    while (reader.pos < end) {
+                        let tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1: {
+                                message.x = reader.float();
+                                break;
+                            }
+                        case 2: {
+                                message.y = reader.float();
+                                break;
+                            }
+                        case 3: {
+                                message.width = reader.float();
+                                break;
+                            }
+                        case 4: {
+                                message.height = reader.float();
+                                break;
+                            }
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Decodes a Layout message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof com.opensource.svga.Layout
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {com.opensource.svga.Layout} Layout
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Layout.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof Reader))
+                        reader = new Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies a Layout message.
+                 * @function verify
+                 * @memberof com.opensource.svga.Layout
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Layout.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.x != null && message.hasOwnProperty("x"))
+                        if (typeof message.x !== "number")
+                            return "x: number expected";
+                    if (message.y != null && message.hasOwnProperty("y"))
+                        if (typeof message.y !== "number")
+                            return "y: number expected";
+                    if (message.width != null && message.hasOwnProperty("width"))
+                        if (typeof message.width !== "number")
+                            return "width: number expected";
+                    if (message.height != null && message.hasOwnProperty("height"))
+                        if (typeof message.height !== "number")
+                            return "height: number expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a Layout message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof com.opensource.svga.Layout
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {com.opensource.svga.Layout} Layout
+                 */
+                Layout.fromObject = function fromObject(object) {
+                    if (object instanceof $root.com.opensource.svga.Layout)
+                        return object;
+                    let message = new $root.com.opensource.svga.Layout();
+                    if (object.x != null)
+                        message.x = Number(object.x);
+                    if (object.y != null)
+                        message.y = Number(object.y);
+                    if (object.width != null)
+                        message.width = Number(object.width);
+                    if (object.height != null)
+                        message.height = Number(object.height);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Layout message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof com.opensource.svga.Layout
+                 * @static
+                 * @param {com.opensource.svga.Layout} message Layout
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Layout.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.x = 0;
+                        object.y = 0;
+                        object.width = 0;
+                        object.height = 0;
+                    }
+                    if (message.x != null && message.hasOwnProperty("x"))
+                        object.x = options.json && !isFinite(message.x) ? String(message.x) : message.x;
+                    if (message.y != null && message.hasOwnProperty("y"))
+                        object.y = options.json && !isFinite(message.y) ? String(message.y) : message.y;
+                    if (message.width != null && message.hasOwnProperty("width"))
+                        object.width = options.json && !isFinite(message.width) ? String(message.width) : message.width;
+                    if (message.height != null && message.hasOwnProperty("height"))
+                        object.height = options.json && !isFinite(message.height) ? String(message.height) : message.height;
+                    return object;
+                };
+
+                /**
+                 * Converts this Layout to JSON.
+                 * @function toJSON
+                 * @memberof com.opensource.svga.Layout
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Layout.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Gets the default type url for Layout
+                 * @function getTypeUrl
+                 * @memberof com.opensource.svga.Layout
+                 * @static
+                 * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+                 * @returns {string} The default type url
+                 */
+                Layout.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+                    if (typeUrlPrefix === undefined) {
+                        typeUrlPrefix = "type.googleapis.com";
+                    }
+                    return typeUrlPrefix + "/com.opensource.svga.Layout";
+                };
+
+                return Layout;
+            })();
+
+            svga.Transform = (function() {
+
+                /**
+                 * Properties of a Transform.
+                 * @memberof com.opensource.svga
+                 * @interface ITransform
+                 * @property {number|null} [a] Transform a
+                 * @property {number|null} [b] Transform b
+                 * @property {number|null} [c] Transform c
+                 * @property {number|null} [d] Transform d
+                 * @property {number|null} [tx] Transform tx
+                 * @property {number|null} [ty] Transform ty
+                 */
+
+                /**
+                 * Constructs a new Transform.
+                 * @memberof com.opensource.svga
+                 * @classdesc Represents a Transform.
+                 * @implements ITransform
+                 * @constructor
+                 * @param {com.opensource.svga.ITransform=} [properties] Properties to set
+                 */
+                function Transform(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Transform a.
+                 * @member {number} a
+                 * @memberof com.opensource.svga.Transform
+                 * @instance
+                 */
+                Transform.prototype.a = 0;
+
+                /**
+                 * Transform b.
+                 * @member {number} b
+                 * @memberof com.opensource.svga.Transform
+                 * @instance
+                 */
+                Transform.prototype.b = 0;
+
+                /**
+                 * Transform c.
+                 * @member {number} c
+                 * @memberof com.opensource.svga.Transform
+                 * @instance
+                 */
+                Transform.prototype.c = 0;
+
+                /**
+                 * Transform d.
+                 * @member {number} d
+                 * @memberof com.opensource.svga.Transform
+                 * @instance
+                 */
+                Transform.prototype.d = 0;
+
+                /**
+                 * Transform tx.
+                 * @member {number} tx
+                 * @memberof com.opensource.svga.Transform
+                 * @instance
+                 */
+                Transform.prototype.tx = 0;
+
+                /**
+                 * Transform ty.
+                 * @member {number} ty
+                 * @memberof com.opensource.svga.Transform
+                 * @instance
+                 */
+                Transform.prototype.ty = 0;
+
+                /**
+                 * Creates a new Transform instance using the specified properties.
+                 * @function create
+                 * @memberof com.opensource.svga.Transform
+                 * @static
+                 * @param {com.opensource.svga.ITransform=} [properties] Properties to set
+                 * @returns {com.opensource.svga.Transform} Transform instance
+                 */
+                Transform.create = function create(properties) {
+                    return new Transform(properties);
+                };
+
+                /**
+                 * Encodes the specified Transform message. Does not implicitly {@link com.opensource.svga.Transform.verify|verify} messages.
+                 * @function encode
+                 * @memberof com.opensource.svga.Transform
+                 * @static
+                 * @param {com.opensource.svga.ITransform} message Transform message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Transform.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = Writer.create();
+                    if (message.a != null && Object.hasOwn(message, "a"))
+                        writer.uint32(/* id 1, wireType 5 =*/13).float(message.a);
+                    if (message.b != null && Object.hasOwn(message, "b"))
+                        writer.uint32(/* id 2, wireType 5 =*/21).float(message.b);
+                    if (message.c != null && Object.hasOwn(message, "c"))
+                        writer.uint32(/* id 3, wireType 5 =*/29).float(message.c);
+                    if (message.d != null && Object.hasOwn(message, "d"))
+                        writer.uint32(/* id 4, wireType 5 =*/37).float(message.d);
+                    if (message.tx != null && Object.hasOwn(message, "tx"))
+                        writer.uint32(/* id 5, wireType 5 =*/45).float(message.tx);
+                    if (message.ty != null && Object.hasOwn(message, "ty"))
+                        writer.uint32(/* id 6, wireType 5 =*/53).float(message.ty);
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified Transform message, length delimited. Does not implicitly {@link com.opensource.svga.Transform.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof com.opensource.svga.Transform
+                 * @static
+                 * @param {com.opensource.svga.ITransform} message Transform message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                Transform.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes a Transform message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof com.opensource.svga.Transform
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {com.opensource.svga.Transform} Transform
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Transform.decode = function decode(reader, length) {
+                    if (!(reader instanceof Reader))
+                        reader = Reader.create(reader);
+                    let end = length === undefined ? reader.len : reader.pos + length, message = new $root.com.opensource.svga.Transform();
+                    while (reader.pos < end) {
+                        let tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1: {
+                                message.a = reader.float();
+                                break;
+                            }
+                        case 2: {
+                                message.b = reader.float();
+                                break;
+                            }
+                        case 3: {
+                                message.c = reader.float();
+                                break;
+                            }
+                        case 4: {
+                                message.d = reader.float();
+                                break;
+                            }
+                        case 5: {
+                                message.tx = reader.float();
+                                break;
+                            }
+                        case 6: {
+                                message.ty = reader.float();
+                                break;
+                            }
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Decodes a Transform message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof com.opensource.svga.Transform
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {com.opensource.svga.Transform} Transform
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                Transform.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof Reader))
+                        reader = new Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies a Transform message.
+                 * @function verify
+                 * @memberof com.opensource.svga.Transform
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Transform.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.a != null && message.hasOwnProperty("a"))
+                        if (typeof message.a !== "number")
+                            return "a: number expected";
+                    if (message.b != null && message.hasOwnProperty("b"))
+                        if (typeof message.b !== "number")
+                            return "b: number expected";
+                    if (message.c != null && message.hasOwnProperty("c"))
+                        if (typeof message.c !== "number")
+                            return "c: number expected";
+                    if (message.d != null && message.hasOwnProperty("d"))
+                        if (typeof message.d !== "number")
+                            return "d: number expected";
+                    if (message.tx != null && message.hasOwnProperty("tx"))
+                        if (typeof message.tx !== "number")
+                            return "tx: number expected";
+                    if (message.ty != null && message.hasOwnProperty("ty"))
+                        if (typeof message.ty !== "number")
+                            return "ty: number expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a Transform message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof com.opensource.svga.Transform
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {com.opensource.svga.Transform} Transform
+                 */
+                Transform.fromObject = function fromObject(object) {
+                    if (object instanceof $root.com.opensource.svga.Transform)
+                        return object;
+                    let message = new $root.com.opensource.svga.Transform();
+                    if (object.a != null)
+                        message.a = Number(object.a);
+                    if (object.b != null)
+                        message.b = Number(object.b);
+                    if (object.c != null)
+                        message.c = Number(object.c);
+                    if (object.d != null)
+                        message.d = Number(object.d);
+                    if (object.tx != null)
+                        message.tx = Number(object.tx);
+                    if (object.ty != null)
+                        message.ty = Number(object.ty);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Transform message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof com.opensource.svga.Transform
+                 * @static
+                 * @param {com.opensource.svga.Transform} message Transform
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Transform.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.a = 0;
+                        object.b = 0;
+                        object.c = 0;
+                        object.d = 0;
+                        object.tx = 0;
+                        object.ty = 0;
+                    }
+                    if (message.a != null && message.hasOwnProperty("a"))
+                        object.a = options.json && !isFinite(message.a) ? String(message.a) : message.a;
+                    if (message.b != null && message.hasOwnProperty("b"))
+                        object.b = options.json && !isFinite(message.b) ? String(message.b) : message.b;
+                    if (message.c != null && message.hasOwnProperty("c"))
+                        object.c = options.json && !isFinite(message.c) ? String(message.c) : message.c;
+                    if (message.d != null && message.hasOwnProperty("d"))
+                        object.d = options.json && !isFinite(message.d) ? String(message.d) : message.d;
+                    if (message.tx != null && message.hasOwnProperty("tx"))
+                        object.tx = options.json && !isFinite(message.tx) ? String(message.tx) : message.tx;
+                    if (message.ty != null && message.hasOwnProperty("ty"))
+                        object.ty = options.json && !isFinite(message.ty) ? String(message.ty) : message.ty;
+                    return object;
+                };
+
+                /**
+                 * Converts this Transform to JSON.
+                 * @function toJSON
+                 * @memberof com.opensource.svga.Transform
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Transform.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Gets the default type url for Transform
+                 * @function getTypeUrl
+                 * @memberof com.opensource.svga.Transform
+                 * @static
+                 * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+                 * @returns {string} The default type url
+                 */
+                Transform.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+                    if (typeUrlPrefix === undefined) {
+                        typeUrlPrefix = "type.googleapis.com";
+                    }
+                    return typeUrlPrefix + "/com.opensource.svga.Transform";
+                };
+
+                return Transform;
+            })();
+
+            svga.ShapeEntity = (function() {
+
+                /**
+                 * Properties of a ShapeEntity.
+                 * @memberof com.opensource.svga
+                 * @interface IShapeEntity
+                 * @property {com.opensource.svga.ShapeEntity.ShapeType|null} [type] ShapeEntity type
+                 * @property {com.opensource.svga.ShapeEntity.IShapeArgs|null} [shape] ShapeEntity shape
+                 * @property {com.opensource.svga.ShapeEntity.IRectArgs|null} [rect] ShapeEntity rect
+                 * @property {com.opensource.svga.ShapeEntity.IEllipseArgs|null} [ellipse] ShapeEntity ellipse
+                 * @property {com.opensource.svga.ShapeEntity.IShapeStyle|null} [styles] ShapeEntity styles
+                 * @property {com.opensource.svga.ITransform|null} [transform] ShapeEntity transform
+                 */
+
+                /**
+                 * Constructs a new ShapeEntity.
+                 * @memberof com.opensource.svga
+                 * @classdesc Represents a ShapeEntity.
+                 * @implements IShapeEntity
+                 * @constructor
+                 * @param {com.opensource.svga.IShapeEntity=} [properties] Properties to set
+                 */
+                function ShapeEntity(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ShapeEntity type.
+                 * @member {com.opensource.svga.ShapeEntity.ShapeType} type
+                 * @memberof com.opensource.svga.ShapeEntity
+                 * @instance
+                 */
+                ShapeEntity.prototype.type = 0;
+
+                /**
+                 * ShapeEntity shape.
+                 * @member {com.opensource.svga.ShapeEntity.IShapeArgs|null|undefined} shape
+                 * @memberof com.opensource.svga.ShapeEntity
+                 * @instance
+                 */
+                ShapeEntity.prototype.shape = null;
+
+                /**
+                 * ShapeEntity rect.
+                 * @member {com.opensource.svga.ShapeEntity.IRectArgs|null|undefined} rect
+                 * @memberof com.opensource.svga.ShapeEntity
+                 * @instance
+                 */
+                ShapeEntity.prototype.rect = null;
+
+                /**
+                 * ShapeEntity ellipse.
+                 * @member {com.opensource.svga.ShapeEntity.IEllipseArgs|null|undefined} ellipse
+                 * @memberof com.opensource.svga.ShapeEntity
+                 * @instance
+                 */
+                ShapeEntity.prototype.ellipse = null;
+
+                /**
+                 * ShapeEntity styles.
+                 * @member {com.opensource.svga.ShapeEntity.IShapeStyle|null|undefined} styles
+                 * @memberof com.opensource.svga.ShapeEntity
+                 * @instance
+                 */
+                ShapeEntity.prototype.styles = null;
+
+                /**
+                 * ShapeEntity transform.
+                 * @member {com.opensource.svga.ITransform|null|undefined} transform
+                 * @memberof com.opensource.svga.ShapeEntity
+                 * @instance
+                 */
+                ShapeEntity.prototype.transform = null;
+
+                // OneOf field names bound to virtual getters and setters
+                let $oneOfFields;
+
+                /**
+                 * ShapeEntity args.
+                 * @member {"shape"|"rect"|"ellipse"|undefined} args
+                 * @memberof com.opensource.svga.ShapeEntity
+                 * @instance
+                 */
+                Object.defineProperty(ShapeEntity.prototype, "args", {
+                    get: getOneOf($oneOfFields = ["shape", "rect", "ellipse"]),
+                    set: setOneOf($oneOfFields)
+                });
+
+                /**
+                 * Creates a new ShapeEntity instance using the specified properties.
+                 * @function create
+                 * @memberof com.opensource.svga.ShapeEntity
+                 * @static
+                 * @param {com.opensource.svga.IShapeEntity=} [properties] Properties to set
+                 * @returns {com.opensource.svga.ShapeEntity} ShapeEntity instance
+                 */
+                ShapeEntity.create = function create(properties) {
+                    return new ShapeEntity(properties);
+                };
+
+                /**
+                 * Encodes the specified ShapeEntity message. Does not implicitly {@link com.opensource.svga.ShapeEntity.verify|verify} messages.
+                 * @function encode
+                 * @memberof com.opensource.svga.ShapeEntity
+                 * @static
+                 * @param {com.opensource.svga.IShapeEntity} message ShapeEntity message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                ShapeEntity.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = Writer.create();
+                    if (message.type != null && Object.hasOwn(message, "type"))
+                        writer.uint32(/* id 1, wireType 0 =*/8).int32(message.type);
+                    if (message.shape != null && Object.hasOwn(message, "shape"))
+                        $root.com.opensource.svga.ShapeEntity.ShapeArgs.encode(message.shape, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                    if (message.rect != null && Object.hasOwn(message, "rect"))
+                        $root.com.opensource.svga.ShapeEntity.RectArgs.encode(message.rect, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                    if (message.ellipse != null && Object.hasOwn(message, "ellipse"))
+                        $root.com.opensource.svga.ShapeEntity.EllipseArgs.encode(message.ellipse, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                    if (message.styles != null && Object.hasOwn(message, "styles"))
+                        $root.com.opensource.svga.ShapeEntity.ShapeStyle.encode(message.styles, writer.uint32(/* id 10, wireType 2 =*/82).fork()).ldelim();
+                    if (message.transform != null && Object.hasOwn(message, "transform"))
+                        $root.com.opensource.svga.Transform.encode(message.transform, writer.uint32(/* id 11, wireType 2 =*/90).fork()).ldelim();
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified ShapeEntity message, length delimited. Does not implicitly {@link com.opensource.svga.ShapeEntity.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof com.opensource.svga.ShapeEntity
+                 * @static
+                 * @param {com.opensource.svga.IShapeEntity} message ShapeEntity message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                ShapeEntity.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes a ShapeEntity message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof com.opensource.svga.ShapeEntity
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {com.opensource.svga.ShapeEntity} ShapeEntity
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                ShapeEntity.decode = function decode(reader, length) {
+                    if (!(reader instanceof Reader))
+                        reader = Reader.create(reader);
+                    let end = length === undefined ? reader.len : reader.pos + length, message = new $root.com.opensource.svga.ShapeEntity();
+                    while (reader.pos < end) {
+                        let tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1: {
+                                message.type = reader.int32();
+                                break;
+                            }
+                        case 2: {
+                                message.shape = $root.com.opensource.svga.ShapeEntity.ShapeArgs.decode(reader, reader.uint32());
+                                break;
+                            }
+                        case 3: {
+                                message.rect = $root.com.opensource.svga.ShapeEntity.RectArgs.decode(reader, reader.uint32());
+                                break;
+                            }
+                        case 4: {
+                                message.ellipse = $root.com.opensource.svga.ShapeEntity.EllipseArgs.decode(reader, reader.uint32());
+                                break;
+                            }
+                        case 10: {
+                                message.styles = $root.com.opensource.svga.ShapeEntity.ShapeStyle.decode(reader, reader.uint32());
+                                break;
+                            }
+                        case 11: {
+                                message.transform = $root.com.opensource.svga.Transform.decode(reader, reader.uint32());
+                                break;
+                            }
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Decodes a ShapeEntity message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof com.opensource.svga.ShapeEntity
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {com.opensource.svga.ShapeEntity} ShapeEntity
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                ShapeEntity.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof Reader))
+                        reader = new Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies a ShapeEntity message.
+                 * @function verify
+                 * @memberof com.opensource.svga.ShapeEntity
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ShapeEntity.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    let properties = {};
+                    if (message.type != null && message.hasOwnProperty("type"))
+                        switch (message.type) {
+                        default:
+                            return "type: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            break;
+                        }
+                    if (message.shape != null && message.hasOwnProperty("shape")) {
+                        properties.args = 1;
+                        {
+                            let error = $root.com.opensource.svga.ShapeEntity.ShapeArgs.verify(message.shape);
+                            if (error)
+                                return "shape." + error;
+                        }
+                    }
+                    if (message.rect != null && message.hasOwnProperty("rect")) {
+                        if (properties.args === 1)
+                            return "args: multiple values";
+                        properties.args = 1;
+                        {
+                            let error = $root.com.opensource.svga.ShapeEntity.RectArgs.verify(message.rect);
+                            if (error)
+                                return "rect." + error;
+                        }
+                    }
+                    if (message.ellipse != null && message.hasOwnProperty("ellipse")) {
+                        if (properties.args === 1)
+                            return "args: multiple values";
+                        properties.args = 1;
+                        {
+                            let error = $root.com.opensource.svga.ShapeEntity.EllipseArgs.verify(message.ellipse);
+                            if (error)
+                                return "ellipse." + error;
+                        }
+                    }
+                    if (message.styles != null && message.hasOwnProperty("styles")) {
+                        let error = $root.com.opensource.svga.ShapeEntity.ShapeStyle.verify(message.styles);
+                        if (error)
+                            return "styles." + error;
+                    }
+                    if (message.transform != null && message.hasOwnProperty("transform")) {
+                        let error = $root.com.opensource.svga.Transform.verify(message.transform);
+                        if (error)
+                            return "transform." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ShapeEntity message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof com.opensource.svga.ShapeEntity
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {com.opensource.svga.ShapeEntity} ShapeEntity
+                 */
+                ShapeEntity.fromObject = function fromObject(object) {
+                    if (object instanceof $root.com.opensource.svga.ShapeEntity)
+                        return object;
+                    let message = new $root.com.opensource.svga.ShapeEntity();
+                    switch (object.type) {
+                    default:
+                        if (typeof object.type === "number") {
+                            message.type = object.type;
+                            break;
+                        }
+                        break;
+                    case "SHAPE":
+                    case 0:
+                        message.type = 0;
+                        break;
+                    case "RECT":
+                    case 1:
+                        message.type = 1;
+                        break;
+                    case "ELLIPSE":
+                    case 2:
+                        message.type = 2;
+                        break;
+                    case "KEEP":
+                    case 3:
+                        message.type = 3;
+                        break;
+                    }
+                    if (object.shape != null) {
+                        if (typeof object.shape !== "object")
+                            throw TypeError(".com.opensource.svga.ShapeEntity.shape: object expected");
+                        message.shape = $root.com.opensource.svga.ShapeEntity.ShapeArgs.fromObject(object.shape);
+                    }
+                    if (object.rect != null) {
+                        if (typeof object.rect !== "object")
+                            throw TypeError(".com.opensource.svga.ShapeEntity.rect: object expected");
+                        message.rect = $root.com.opensource.svga.ShapeEntity.RectArgs.fromObject(object.rect);
+                    }
+                    if (object.ellipse != null) {
+                        if (typeof object.ellipse !== "object")
+                            throw TypeError(".com.opensource.svga.ShapeEntity.ellipse: object expected");
+                        message.ellipse = $root.com.opensource.svga.ShapeEntity.EllipseArgs.fromObject(object.ellipse);
+                    }
+                    if (object.styles != null) {
+                        if (typeof object.styles !== "object")
+                            throw TypeError(".com.opensource.svga.ShapeEntity.styles: object expected");
+                        message.styles = $root.com.opensource.svga.ShapeEntity.ShapeStyle.fromObject(object.styles);
+                    }
+                    if (object.transform != null) {
+                        if (typeof object.transform !== "object")
+                            throw TypeError(".com.opensource.svga.ShapeEntity.transform: object expected");
+                        message.transform = $root.com.opensource.svga.Transform.fromObject(object.transform);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ShapeEntity message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof com.opensource.svga.ShapeEntity
+                 * @static
+                 * @param {com.opensource.svga.ShapeEntity} message ShapeEntity
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ShapeEntity.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.type = options.enums === String ? "SHAPE" : 0;
+                        object.styles = null;
+                        object.transform = null;
+                    }
+                    if (message.type != null && message.hasOwnProperty("type"))
+                        object.type = options.enums === String ? $root.com.opensource.svga.ShapeEntity.ShapeType[message.type] === undefined ? message.type : $root.com.opensource.svga.ShapeEntity.ShapeType[message.type] : message.type;
+                    if (message.shape != null && message.hasOwnProperty("shape")) {
+                        object.shape = $root.com.opensource.svga.ShapeEntity.ShapeArgs.toObject(message.shape, options);
+                        if (options.oneofs)
+                            object.args = "shape";
+                    }
+                    if (message.rect != null && message.hasOwnProperty("rect")) {
+                        object.rect = $root.com.opensource.svga.ShapeEntity.RectArgs.toObject(message.rect, options);
+                        if (options.oneofs)
+                            object.args = "rect";
+                    }
+                    if (message.ellipse != null && message.hasOwnProperty("ellipse")) {
+                        object.ellipse = $root.com.opensource.svga.ShapeEntity.EllipseArgs.toObject(message.ellipse, options);
+                        if (options.oneofs)
+                            object.args = "ellipse";
+                    }
+                    if (message.styles != null && message.hasOwnProperty("styles"))
+                        object.styles = $root.com.opensource.svga.ShapeEntity.ShapeStyle.toObject(message.styles, options);
+                    if (message.transform != null && message.hasOwnProperty("transform"))
+                        object.transform = $root.com.opensource.svga.Transform.toObject(message.transform, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this ShapeEntity to JSON.
+                 * @function toJSON
+                 * @memberof com.opensource.svga.ShapeEntity
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ShapeEntity.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Gets the default type url for ShapeEntity
+                 * @function getTypeUrl
+                 * @memberof com.opensource.svga.ShapeEntity
+                 * @static
+                 * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+                 * @returns {string} The default type url
+                 */
+                ShapeEntity.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+                    if (typeUrlPrefix === undefined) {
+                        typeUrlPrefix = "type.googleapis.com";
+                    }
+                    return typeUrlPrefix + "/com.opensource.svga.ShapeEntity";
+                };
+
+                /**
+                 * ShapeType enum.
+                 * @name com.opensource.svga.ShapeEntity.ShapeType
+                 * @enum {number}
+                 * @property {number} SHAPE=0 SHAPE value
+                 * @property {number} RECT=1 RECT value
+                 * @property {number} ELLIPSE=2 ELLIPSE value
+                 * @property {number} KEEP=3 KEEP value
+                 */
+                ShapeEntity.ShapeType = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "SHAPE"] = 0;
+                    values[valuesById[1] = "RECT"] = 1;
+                    values[valuesById[2] = "ELLIPSE"] = 2;
+                    values[valuesById[3] = "KEEP"] = 3;
+                    return values;
+                })();
+
+                ShapeEntity.ShapeArgs = (function() {
+
+                    /**
+                     * Properties of a ShapeArgs.
+                     * @memberof com.opensource.svga.ShapeEntity
+                     * @interface IShapeArgs
+                     * @property {string|null} [d] ShapeArgs d
+                     */
+
+                    /**
+                     * Constructs a new ShapeArgs.
+                     * @memberof com.opensource.svga.ShapeEntity
+                     * @classdesc Represents a ShapeArgs.
+                     * @implements IShapeArgs
+                     * @constructor
+                     * @param {com.opensource.svga.ShapeEntity.IShapeArgs=} [properties] Properties to set
+                     */
+                    function ShapeArgs(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ShapeArgs d.
+                     * @member {string} d
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeArgs
+                     * @instance
+                     */
+                    ShapeArgs.prototype.d = "";
+
+                    /**
+                     * Creates a new ShapeArgs instance using the specified properties.
+                     * @function create
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeArgs
+                     * @static
+                     * @param {com.opensource.svga.ShapeEntity.IShapeArgs=} [properties] Properties to set
+                     * @returns {com.opensource.svga.ShapeEntity.ShapeArgs} ShapeArgs instance
+                     */
+                    ShapeArgs.create = function create(properties) {
+                        return new ShapeArgs(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ShapeArgs message. Does not implicitly {@link com.opensource.svga.ShapeEntity.ShapeArgs.verify|verify} messages.
+                     * @function encode
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeArgs
+                     * @static
+                     * @param {com.opensource.svga.ShapeEntity.IShapeArgs} message ShapeArgs message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ShapeArgs.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = Writer.create();
+                        if (message.d != null && Object.hasOwn(message, "d"))
+                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.d);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ShapeArgs message, length delimited. Does not implicitly {@link com.opensource.svga.ShapeEntity.ShapeArgs.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeArgs
+                     * @static
+                     * @param {com.opensource.svga.ShapeEntity.IShapeArgs} message ShapeArgs message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ShapeArgs.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ShapeArgs message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeArgs
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {com.opensource.svga.ShapeEntity.ShapeArgs} ShapeArgs
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ShapeArgs.decode = function decode(reader, length) {
+                        if (!(reader instanceof Reader))
+                            reader = Reader.create(reader);
+                        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.com.opensource.svga.ShapeEntity.ShapeArgs();
+                        while (reader.pos < end) {
+                            let tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1: {
+                                    message.d = reader.string();
+                                    break;
+                                }
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ShapeArgs message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeArgs
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {com.opensource.svga.ShapeEntity.ShapeArgs} ShapeArgs
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ShapeArgs.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof Reader))
+                            reader = new Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ShapeArgs message.
+                     * @function verify
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeArgs
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ShapeArgs.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.d != null && message.hasOwnProperty("d"))
+                            if (!isString(message.d))
+                                return "d: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ShapeArgs message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeArgs
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {com.opensource.svga.ShapeEntity.ShapeArgs} ShapeArgs
+                     */
+                    ShapeArgs.fromObject = function fromObject(object) {
+                        if (object instanceof $root.com.opensource.svga.ShapeEntity.ShapeArgs)
+                            return object;
+                        let message = new $root.com.opensource.svga.ShapeEntity.ShapeArgs();
+                        if (object.d != null)
+                            message.d = String(object.d);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ShapeArgs message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeArgs
+                     * @static
+                     * @param {com.opensource.svga.ShapeEntity.ShapeArgs} message ShapeArgs
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ShapeArgs.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            object.d = "";
+                        if (message.d != null && message.hasOwnProperty("d"))
+                            object.d = message.d;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ShapeArgs to JSON.
+                     * @function toJSON
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeArgs
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ShapeArgs.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    /**
+                     * Gets the default type url for ShapeArgs
+                     * @function getTypeUrl
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeArgs
+                     * @static
+                     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+                     * @returns {string} The default type url
+                     */
+                    ShapeArgs.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+                        if (typeUrlPrefix === undefined) {
+                            typeUrlPrefix = "type.googleapis.com";
+                        }
+                        return typeUrlPrefix + "/com.opensource.svga.ShapeEntity.ShapeArgs";
+                    };
+
+                    return ShapeArgs;
+                })();
+
+                ShapeEntity.RectArgs = (function() {
+
+                    /**
+                     * Properties of a RectArgs.
+                     * @memberof com.opensource.svga.ShapeEntity
+                     * @interface IRectArgs
+                     * @property {number|null} [x] RectArgs x
+                     * @property {number|null} [y] RectArgs y
+                     * @property {number|null} [width] RectArgs width
+                     * @property {number|null} [height] RectArgs height
+                     * @property {number|null} [cornerRadius] RectArgs cornerRadius
+                     */
+
+                    /**
+                     * Constructs a new RectArgs.
+                     * @memberof com.opensource.svga.ShapeEntity
+                     * @classdesc Represents a RectArgs.
+                     * @implements IRectArgs
+                     * @constructor
+                     * @param {com.opensource.svga.ShapeEntity.IRectArgs=} [properties] Properties to set
+                     */
+                    function RectArgs(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * RectArgs x.
+                     * @member {number} x
+                     * @memberof com.opensource.svga.ShapeEntity.RectArgs
+                     * @instance
+                     */
+                    RectArgs.prototype.x = 0;
+
+                    /**
+                     * RectArgs y.
+                     * @member {number} y
+                     * @memberof com.opensource.svga.ShapeEntity.RectArgs
+                     * @instance
+                     */
+                    RectArgs.prototype.y = 0;
+
+                    /**
+                     * RectArgs width.
+                     * @member {number} width
+                     * @memberof com.opensource.svga.ShapeEntity.RectArgs
+                     * @instance
+                     */
+                    RectArgs.prototype.width = 0;
+
+                    /**
+                     * RectArgs height.
+                     * @member {number} height
+                     * @memberof com.opensource.svga.ShapeEntity.RectArgs
+                     * @instance
+                     */
+                    RectArgs.prototype.height = 0;
+
+                    /**
+                     * RectArgs cornerRadius.
+                     * @member {number} cornerRadius
+                     * @memberof com.opensource.svga.ShapeEntity.RectArgs
+                     * @instance
+                     */
+                    RectArgs.prototype.cornerRadius = 0;
+
+                    /**
+                     * Creates a new RectArgs instance using the specified properties.
+                     * @function create
+                     * @memberof com.opensource.svga.ShapeEntity.RectArgs
+                     * @static
+                     * @param {com.opensource.svga.ShapeEntity.IRectArgs=} [properties] Properties to set
+                     * @returns {com.opensource.svga.ShapeEntity.RectArgs} RectArgs instance
+                     */
+                    RectArgs.create = function create(properties) {
+                        return new RectArgs(properties);
+                    };
+
+                    /**
+                     * Encodes the specified RectArgs message. Does not implicitly {@link com.opensource.svga.ShapeEntity.RectArgs.verify|verify} messages.
+                     * @function encode
+                     * @memberof com.opensource.svga.ShapeEntity.RectArgs
+                     * @static
+                     * @param {com.opensource.svga.ShapeEntity.IRectArgs} message RectArgs message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    RectArgs.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = Writer.create();
+                        if (message.x != null && Object.hasOwn(message, "x"))
+                            writer.uint32(/* id 1, wireType 5 =*/13).float(message.x);
+                        if (message.y != null && Object.hasOwn(message, "y"))
+                            writer.uint32(/* id 2, wireType 5 =*/21).float(message.y);
+                        if (message.width != null && Object.hasOwn(message, "width"))
+                            writer.uint32(/* id 3, wireType 5 =*/29).float(message.width);
+                        if (message.height != null && Object.hasOwn(message, "height"))
+                            writer.uint32(/* id 4, wireType 5 =*/37).float(message.height);
+                        if (message.cornerRadius != null && Object.hasOwn(message, "cornerRadius"))
+                            writer.uint32(/* id 5, wireType 5 =*/45).float(message.cornerRadius);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified RectArgs message, length delimited. Does not implicitly {@link com.opensource.svga.ShapeEntity.RectArgs.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof com.opensource.svga.ShapeEntity.RectArgs
+                     * @static
+                     * @param {com.opensource.svga.ShapeEntity.IRectArgs} message RectArgs message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    RectArgs.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a RectArgs message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof com.opensource.svga.ShapeEntity.RectArgs
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {com.opensource.svga.ShapeEntity.RectArgs} RectArgs
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    RectArgs.decode = function decode(reader, length) {
+                        if (!(reader instanceof Reader))
+                            reader = Reader.create(reader);
+                        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.com.opensource.svga.ShapeEntity.RectArgs();
+                        while (reader.pos < end) {
+                            let tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1: {
+                                    message.x = reader.float();
+                                    break;
+                                }
+                            case 2: {
+                                    message.y = reader.float();
+                                    break;
+                                }
+                            case 3: {
+                                    message.width = reader.float();
+                                    break;
+                                }
+                            case 4: {
+                                    message.height = reader.float();
+                                    break;
+                                }
+                            case 5: {
+                                    message.cornerRadius = reader.float();
+                                    break;
+                                }
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a RectArgs message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof com.opensource.svga.ShapeEntity.RectArgs
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {com.opensource.svga.ShapeEntity.RectArgs} RectArgs
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    RectArgs.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof Reader))
+                            reader = new Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a RectArgs message.
+                     * @function verify
+                     * @memberof com.opensource.svga.ShapeEntity.RectArgs
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    RectArgs.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.x != null && message.hasOwnProperty("x"))
+                            if (typeof message.x !== "number")
+                                return "x: number expected";
+                        if (message.y != null && message.hasOwnProperty("y"))
+                            if (typeof message.y !== "number")
+                                return "y: number expected";
+                        if (message.width != null && message.hasOwnProperty("width"))
+                            if (typeof message.width !== "number")
+                                return "width: number expected";
+                        if (message.height != null && message.hasOwnProperty("height"))
+                            if (typeof message.height !== "number")
+                                return "height: number expected";
+                        if (message.cornerRadius != null && message.hasOwnProperty("cornerRadius"))
+                            if (typeof message.cornerRadius !== "number")
+                                return "cornerRadius: number expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a RectArgs message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof com.opensource.svga.ShapeEntity.RectArgs
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {com.opensource.svga.ShapeEntity.RectArgs} RectArgs
+                     */
+                    RectArgs.fromObject = function fromObject(object) {
+                        if (object instanceof $root.com.opensource.svga.ShapeEntity.RectArgs)
+                            return object;
+                        let message = new $root.com.opensource.svga.ShapeEntity.RectArgs();
+                        if (object.x != null)
+                            message.x = Number(object.x);
+                        if (object.y != null)
+                            message.y = Number(object.y);
+                        if (object.width != null)
+                            message.width = Number(object.width);
+                        if (object.height != null)
+                            message.height = Number(object.height);
+                        if (object.cornerRadius != null)
+                            message.cornerRadius = Number(object.cornerRadius);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a RectArgs message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof com.opensource.svga.ShapeEntity.RectArgs
+                     * @static
+                     * @param {com.opensource.svga.ShapeEntity.RectArgs} message RectArgs
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    RectArgs.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.x = 0;
+                            object.y = 0;
+                            object.width = 0;
+                            object.height = 0;
+                            object.cornerRadius = 0;
+                        }
+                        if (message.x != null && message.hasOwnProperty("x"))
+                            object.x = options.json && !isFinite(message.x) ? String(message.x) : message.x;
+                        if (message.y != null && message.hasOwnProperty("y"))
+                            object.y = options.json && !isFinite(message.y) ? String(message.y) : message.y;
+                        if (message.width != null && message.hasOwnProperty("width"))
+                            object.width = options.json && !isFinite(message.width) ? String(message.width) : message.width;
+                        if (message.height != null && message.hasOwnProperty("height"))
+                            object.height = options.json && !isFinite(message.height) ? String(message.height) : message.height;
+                        if (message.cornerRadius != null && message.hasOwnProperty("cornerRadius"))
+                            object.cornerRadius = options.json && !isFinite(message.cornerRadius) ? String(message.cornerRadius) : message.cornerRadius;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this RectArgs to JSON.
+                     * @function toJSON
+                     * @memberof com.opensource.svga.ShapeEntity.RectArgs
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    RectArgs.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    /**
+                     * Gets the default type url for RectArgs
+                     * @function getTypeUrl
+                     * @memberof com.opensource.svga.ShapeEntity.RectArgs
+                     * @static
+                     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+                     * @returns {string} The default type url
+                     */
+                    RectArgs.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+                        if (typeUrlPrefix === undefined) {
+                            typeUrlPrefix = "type.googleapis.com";
+                        }
+                        return typeUrlPrefix + "/com.opensource.svga.ShapeEntity.RectArgs";
+                    };
+
+                    return RectArgs;
+                })();
+
+                ShapeEntity.EllipseArgs = (function() {
+
+                    /**
+                     * Properties of an EllipseArgs.
+                     * @memberof com.opensource.svga.ShapeEntity
+                     * @interface IEllipseArgs
+                     * @property {number|null} [x] EllipseArgs x
+                     * @property {number|null} [y] EllipseArgs y
+                     * @property {number|null} [radiusX] EllipseArgs radiusX
+                     * @property {number|null} [radiusY] EllipseArgs radiusY
+                     */
+
+                    /**
+                     * Constructs a new EllipseArgs.
+                     * @memberof com.opensource.svga.ShapeEntity
+                     * @classdesc Represents an EllipseArgs.
+                     * @implements IEllipseArgs
+                     * @constructor
+                     * @param {com.opensource.svga.ShapeEntity.IEllipseArgs=} [properties] Properties to set
+                     */
+                    function EllipseArgs(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * EllipseArgs x.
+                     * @member {number} x
+                     * @memberof com.opensource.svga.ShapeEntity.EllipseArgs
+                     * @instance
+                     */
+                    EllipseArgs.prototype.x = 0;
+
+                    /**
+                     * EllipseArgs y.
+                     * @member {number} y
+                     * @memberof com.opensource.svga.ShapeEntity.EllipseArgs
+                     * @instance
+                     */
+                    EllipseArgs.prototype.y = 0;
+
+                    /**
+                     * EllipseArgs radiusX.
+                     * @member {number} radiusX
+                     * @memberof com.opensource.svga.ShapeEntity.EllipseArgs
+                     * @instance
+                     */
+                    EllipseArgs.prototype.radiusX = 0;
+
+                    /**
+                     * EllipseArgs radiusY.
+                     * @member {number} radiusY
+                     * @memberof com.opensource.svga.ShapeEntity.EllipseArgs
+                     * @instance
+                     */
+                    EllipseArgs.prototype.radiusY = 0;
+
+                    /**
+                     * Creates a new EllipseArgs instance using the specified properties.
+                     * @function create
+                     * @memberof com.opensource.svga.ShapeEntity.EllipseArgs
+                     * @static
+                     * @param {com.opensource.svga.ShapeEntity.IEllipseArgs=} [properties] Properties to set
+                     * @returns {com.opensource.svga.ShapeEntity.EllipseArgs} EllipseArgs instance
+                     */
+                    EllipseArgs.create = function create(properties) {
+                        return new EllipseArgs(properties);
+                    };
+
+                    /**
+                     * Encodes the specified EllipseArgs message. Does not implicitly {@link com.opensource.svga.ShapeEntity.EllipseArgs.verify|verify} messages.
+                     * @function encode
+                     * @memberof com.opensource.svga.ShapeEntity.EllipseArgs
+                     * @static
+                     * @param {com.opensource.svga.ShapeEntity.IEllipseArgs} message EllipseArgs message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    EllipseArgs.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = Writer.create();
+                        if (message.x != null && Object.hasOwn(message, "x"))
+                            writer.uint32(/* id 1, wireType 5 =*/13).float(message.x);
+                        if (message.y != null && Object.hasOwn(message, "y"))
+                            writer.uint32(/* id 2, wireType 5 =*/21).float(message.y);
+                        if (message.radiusX != null && Object.hasOwn(message, "radiusX"))
+                            writer.uint32(/* id 3, wireType 5 =*/29).float(message.radiusX);
+                        if (message.radiusY != null && Object.hasOwn(message, "radiusY"))
+                            writer.uint32(/* id 4, wireType 5 =*/37).float(message.radiusY);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified EllipseArgs message, length delimited. Does not implicitly {@link com.opensource.svga.ShapeEntity.EllipseArgs.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof com.opensource.svga.ShapeEntity.EllipseArgs
+                     * @static
+                     * @param {com.opensource.svga.ShapeEntity.IEllipseArgs} message EllipseArgs message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    EllipseArgs.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes an EllipseArgs message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof com.opensource.svga.ShapeEntity.EllipseArgs
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {com.opensource.svga.ShapeEntity.EllipseArgs} EllipseArgs
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    EllipseArgs.decode = function decode(reader, length) {
+                        if (!(reader instanceof Reader))
+                            reader = Reader.create(reader);
+                        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.com.opensource.svga.ShapeEntity.EllipseArgs();
+                        while (reader.pos < end) {
+                            let tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1: {
+                                    message.x = reader.float();
+                                    break;
+                                }
+                            case 2: {
+                                    message.y = reader.float();
+                                    break;
+                                }
+                            case 3: {
+                                    message.radiusX = reader.float();
+                                    break;
+                                }
+                            case 4: {
+                                    message.radiusY = reader.float();
+                                    break;
+                                }
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes an EllipseArgs message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof com.opensource.svga.ShapeEntity.EllipseArgs
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {com.opensource.svga.ShapeEntity.EllipseArgs} EllipseArgs
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    EllipseArgs.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof Reader))
+                            reader = new Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies an EllipseArgs message.
+                     * @function verify
+                     * @memberof com.opensource.svga.ShapeEntity.EllipseArgs
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    EllipseArgs.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.x != null && message.hasOwnProperty("x"))
+                            if (typeof message.x !== "number")
+                                return "x: number expected";
+                        if (message.y != null && message.hasOwnProperty("y"))
+                            if (typeof message.y !== "number")
+                                return "y: number expected";
+                        if (message.radiusX != null && message.hasOwnProperty("radiusX"))
+                            if (typeof message.radiusX !== "number")
+                                return "radiusX: number expected";
+                        if (message.radiusY != null && message.hasOwnProperty("radiusY"))
+                            if (typeof message.radiusY !== "number")
+                                return "radiusY: number expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an EllipseArgs message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof com.opensource.svga.ShapeEntity.EllipseArgs
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {com.opensource.svga.ShapeEntity.EllipseArgs} EllipseArgs
+                     */
+                    EllipseArgs.fromObject = function fromObject(object) {
+                        if (object instanceof $root.com.opensource.svga.ShapeEntity.EllipseArgs)
+                            return object;
+                        let message = new $root.com.opensource.svga.ShapeEntity.EllipseArgs();
+                        if (object.x != null)
+                            message.x = Number(object.x);
+                        if (object.y != null)
+                            message.y = Number(object.y);
+                        if (object.radiusX != null)
+                            message.radiusX = Number(object.radiusX);
+                        if (object.radiusY != null)
+                            message.radiusY = Number(object.radiusY);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an EllipseArgs message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof com.opensource.svga.ShapeEntity.EllipseArgs
+                     * @static
+                     * @param {com.opensource.svga.ShapeEntity.EllipseArgs} message EllipseArgs
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    EllipseArgs.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.x = 0;
+                            object.y = 0;
+                            object.radiusX = 0;
+                            object.radiusY = 0;
+                        }
+                        if (message.x != null && message.hasOwnProperty("x"))
+                            object.x = options.json && !isFinite(message.x) ? String(message.x) : message.x;
+                        if (message.y != null && message.hasOwnProperty("y"))
+                            object.y = options.json && !isFinite(message.y) ? String(message.y) : message.y;
+                        if (message.radiusX != null && message.hasOwnProperty("radiusX"))
+                            object.radiusX = options.json && !isFinite(message.radiusX) ? String(message.radiusX) : message.radiusX;
+                        if (message.radiusY != null && message.hasOwnProperty("radiusY"))
+                            object.radiusY = options.json && !isFinite(message.radiusY) ? String(message.radiusY) : message.radiusY;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this EllipseArgs to JSON.
+                     * @function toJSON
+                     * @memberof com.opensource.svga.ShapeEntity.EllipseArgs
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    EllipseArgs.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    /**
+                     * Gets the default type url for EllipseArgs
+                     * @function getTypeUrl
+                     * @memberof com.opensource.svga.ShapeEntity.EllipseArgs
+                     * @static
+                     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+                     * @returns {string} The default type url
+                     */
+                    EllipseArgs.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+                        if (typeUrlPrefix === undefined) {
+                            typeUrlPrefix = "type.googleapis.com";
+                        }
+                        return typeUrlPrefix + "/com.opensource.svga.ShapeEntity.EllipseArgs";
+                    };
+
+                    return EllipseArgs;
+                })();
+
+                ShapeEntity.ShapeStyle = (function() {
+
+                    /**
+                     * Properties of a ShapeStyle.
+                     * @memberof com.opensource.svga.ShapeEntity
+                     * @interface IShapeStyle
+                     * @property {com.opensource.svga.ShapeEntity.ShapeStyle.IRGBAColor|null} [fill] ShapeStyle fill
+                     * @property {com.opensource.svga.ShapeEntity.ShapeStyle.IRGBAColor|null} [stroke] ShapeStyle stroke
+                     * @property {number|null} [strokeWidth] ShapeStyle strokeWidth
+                     * @property {com.opensource.svga.ShapeEntity.ShapeStyle.LineCap|null} [lineCap] ShapeStyle lineCap
+                     * @property {com.opensource.svga.ShapeEntity.ShapeStyle.LineJoin|null} [lineJoin] ShapeStyle lineJoin
+                     * @property {number|null} [miterLimit] ShapeStyle miterLimit
+                     * @property {number|null} [lineDashI] ShapeStyle lineDashI
+                     * @property {number|null} [lineDashII] ShapeStyle lineDashII
+                     * @property {number|null} [lineDashIII] ShapeStyle lineDashIII
+                     */
+
+                    /**
+                     * Constructs a new ShapeStyle.
+                     * @memberof com.opensource.svga.ShapeEntity
+                     * @classdesc Represents a ShapeStyle.
+                     * @implements IShapeStyle
+                     * @constructor
+                     * @param {com.opensource.svga.ShapeEntity.IShapeStyle=} [properties] Properties to set
+                     */
+                    function ShapeStyle(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ShapeStyle fill.
+                     * @member {com.opensource.svga.ShapeEntity.ShapeStyle.IRGBAColor|null|undefined} fill
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @instance
+                     */
+                    ShapeStyle.prototype.fill = null;
+
+                    /**
+                     * ShapeStyle stroke.
+                     * @member {com.opensource.svga.ShapeEntity.ShapeStyle.IRGBAColor|null|undefined} stroke
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @instance
+                     */
+                    ShapeStyle.prototype.stroke = null;
+
+                    /**
+                     * ShapeStyle strokeWidth.
+                     * @member {number} strokeWidth
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @instance
+                     */
+                    ShapeStyle.prototype.strokeWidth = 0;
+
+                    /**
+                     * ShapeStyle lineCap.
+                     * @member {com.opensource.svga.ShapeEntity.ShapeStyle.LineCap} lineCap
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @instance
+                     */
+                    ShapeStyle.prototype.lineCap = 0;
+
+                    /**
+                     * ShapeStyle lineJoin.
+                     * @member {com.opensource.svga.ShapeEntity.ShapeStyle.LineJoin} lineJoin
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @instance
+                     */
+                    ShapeStyle.prototype.lineJoin = 0;
+
+                    /**
+                     * ShapeStyle miterLimit.
+                     * @member {number} miterLimit
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @instance
+                     */
+                    ShapeStyle.prototype.miterLimit = 0;
+
+                    /**
+                     * ShapeStyle lineDashI.
+                     * @member {number} lineDashI
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @instance
+                     */
+                    ShapeStyle.prototype.lineDashI = 0;
+
+                    /**
+                     * ShapeStyle lineDashII.
+                     * @member {number} lineDashII
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @instance
+                     */
+                    ShapeStyle.prototype.lineDashII = 0;
+
+                    /**
+                     * ShapeStyle lineDashIII.
+                     * @member {number} lineDashIII
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @instance
+                     */
+                    ShapeStyle.prototype.lineDashIII = 0;
+
+                    /**
+                     * Creates a new ShapeStyle instance using the specified properties.
+                     * @function create
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @static
+                     * @param {com.opensource.svga.ShapeEntity.IShapeStyle=} [properties] Properties to set
+                     * @returns {com.opensource.svga.ShapeEntity.ShapeStyle} ShapeStyle instance
+                     */
+                    ShapeStyle.create = function create(properties) {
+                        return new ShapeStyle(properties);
+                    };
+
+                    /**
+                     * Encodes the specified ShapeStyle message. Does not implicitly {@link com.opensource.svga.ShapeEntity.ShapeStyle.verify|verify} messages.
+                     * @function encode
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @static
+                     * @param {com.opensource.svga.ShapeEntity.IShapeStyle} message ShapeStyle message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ShapeStyle.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = Writer.create();
+                        if (message.fill != null && Object.hasOwn(message, "fill"))
+                            $root.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.encode(message.fill, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        if (message.stroke != null && Object.hasOwn(message, "stroke"))
+                            $root.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.encode(message.stroke, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                        if (message.strokeWidth != null && Object.hasOwn(message, "strokeWidth"))
+                            writer.uint32(/* id 3, wireType 5 =*/29).float(message.strokeWidth);
+                        if (message.lineCap != null && Object.hasOwn(message, "lineCap"))
+                            writer.uint32(/* id 4, wireType 0 =*/32).int32(message.lineCap);
+                        if (message.lineJoin != null && Object.hasOwn(message, "lineJoin"))
+                            writer.uint32(/* id 5, wireType 0 =*/40).int32(message.lineJoin);
+                        if (message.miterLimit != null && Object.hasOwn(message, "miterLimit"))
+                            writer.uint32(/* id 6, wireType 5 =*/53).float(message.miterLimit);
+                        if (message.lineDashI != null && Object.hasOwn(message, "lineDashI"))
+                            writer.uint32(/* id 7, wireType 5 =*/61).float(message.lineDashI);
+                        if (message.lineDashII != null && Object.hasOwn(message, "lineDashII"))
+                            writer.uint32(/* id 8, wireType 5 =*/69).float(message.lineDashII);
+                        if (message.lineDashIII != null && Object.hasOwn(message, "lineDashIII"))
+                            writer.uint32(/* id 9, wireType 5 =*/77).float(message.lineDashIII);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified ShapeStyle message, length delimited. Does not implicitly {@link com.opensource.svga.ShapeEntity.ShapeStyle.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @static
+                     * @param {com.opensource.svga.ShapeEntity.IShapeStyle} message ShapeStyle message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    ShapeStyle.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a ShapeStyle message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {com.opensource.svga.ShapeEntity.ShapeStyle} ShapeStyle
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ShapeStyle.decode = function decode(reader, length) {
+                        if (!(reader instanceof Reader))
+                            reader = Reader.create(reader);
+                        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.com.opensource.svga.ShapeEntity.ShapeStyle();
+                        while (reader.pos < end) {
+                            let tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1: {
+                                    message.fill = $root.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.decode(reader, reader.uint32());
+                                    break;
+                                }
+                            case 2: {
+                                    message.stroke = $root.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.decode(reader, reader.uint32());
+                                    break;
+                                }
+                            case 3: {
+                                    message.strokeWidth = reader.float();
+                                    break;
+                                }
+                            case 4: {
+                                    message.lineCap = reader.int32();
+                                    break;
+                                }
+                            case 5: {
+                                    message.lineJoin = reader.int32();
+                                    break;
+                                }
+                            case 6: {
+                                    message.miterLimit = reader.float();
+                                    break;
+                                }
+                            case 7: {
+                                    message.lineDashI = reader.float();
+                                    break;
+                                }
+                            case 8: {
+                                    message.lineDashII = reader.float();
+                                    break;
+                                }
+                            case 9: {
+                                    message.lineDashIII = reader.float();
+                                    break;
+                                }
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a ShapeStyle message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {com.opensource.svga.ShapeEntity.ShapeStyle} ShapeStyle
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    ShapeStyle.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof Reader))
+                            reader = new Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a ShapeStyle message.
+                     * @function verify
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ShapeStyle.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.fill != null && message.hasOwnProperty("fill")) {
+                            let error = $root.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.verify(message.fill);
+                            if (error)
+                                return "fill." + error;
+                        }
+                        if (message.stroke != null && message.hasOwnProperty("stroke")) {
+                            let error = $root.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.verify(message.stroke);
+                            if (error)
+                                return "stroke." + error;
+                        }
+                        if (message.strokeWidth != null && message.hasOwnProperty("strokeWidth"))
+                            if (typeof message.strokeWidth !== "number")
+                                return "strokeWidth: number expected";
+                        if (message.lineCap != null && message.hasOwnProperty("lineCap"))
+                            switch (message.lineCap) {
+                            default:
+                                return "lineCap: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                                break;
+                            }
+                        if (message.lineJoin != null && message.hasOwnProperty("lineJoin"))
+                            switch (message.lineJoin) {
+                            default:
+                                return "lineJoin: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                                break;
+                            }
+                        if (message.miterLimit != null && message.hasOwnProperty("miterLimit"))
+                            if (typeof message.miterLimit !== "number")
+                                return "miterLimit: number expected";
+                        if (message.lineDashI != null && message.hasOwnProperty("lineDashI"))
+                            if (typeof message.lineDashI !== "number")
+                                return "lineDashI: number expected";
+                        if (message.lineDashII != null && message.hasOwnProperty("lineDashII"))
+                            if (typeof message.lineDashII !== "number")
+                                return "lineDashII: number expected";
+                        if (message.lineDashIII != null && message.hasOwnProperty("lineDashIII"))
+                            if (typeof message.lineDashIII !== "number")
+                                return "lineDashIII: number expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ShapeStyle message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {com.opensource.svga.ShapeEntity.ShapeStyle} ShapeStyle
+                     */
+                    ShapeStyle.fromObject = function fromObject(object) {
+                        if (object instanceof $root.com.opensource.svga.ShapeEntity.ShapeStyle)
+                            return object;
+                        let message = new $root.com.opensource.svga.ShapeEntity.ShapeStyle();
+                        if (object.fill != null) {
+                            if (typeof object.fill !== "object")
+                                throw TypeError(".com.opensource.svga.ShapeEntity.ShapeStyle.fill: object expected");
+                            message.fill = $root.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.fromObject(object.fill);
+                        }
+                        if (object.stroke != null) {
+                            if (typeof object.stroke !== "object")
+                                throw TypeError(".com.opensource.svga.ShapeEntity.ShapeStyle.stroke: object expected");
+                            message.stroke = $root.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.fromObject(object.stroke);
+                        }
+                        if (object.strokeWidth != null)
+                            message.strokeWidth = Number(object.strokeWidth);
+                        switch (object.lineCap) {
+                        default:
+                            if (typeof object.lineCap === "number") {
+                                message.lineCap = object.lineCap;
+                                break;
+                            }
+                            break;
+                        case "LineCap_BUTT":
+                        case 0:
+                            message.lineCap = 0;
+                            break;
+                        case "LineCap_ROUND":
+                        case 1:
+                            message.lineCap = 1;
+                            break;
+                        case "LineCap_SQUARE":
+                        case 2:
+                            message.lineCap = 2;
+                            break;
+                        }
+                        switch (object.lineJoin) {
+                        default:
+                            if (typeof object.lineJoin === "number") {
+                                message.lineJoin = object.lineJoin;
+                                break;
+                            }
+                            break;
+                        case "LineJoin_MITER":
+                        case 0:
+                            message.lineJoin = 0;
+                            break;
+                        case "LineJoin_ROUND":
+                        case 1:
+                            message.lineJoin = 1;
+                            break;
+                        case "LineJoin_BEVEL":
+                        case 2:
+                            message.lineJoin = 2;
+                            break;
+                        }
+                        if (object.miterLimit != null)
+                            message.miterLimit = Number(object.miterLimit);
+                        if (object.lineDashI != null)
+                            message.lineDashI = Number(object.lineDashI);
+                        if (object.lineDashII != null)
+                            message.lineDashII = Number(object.lineDashII);
+                        if (object.lineDashIII != null)
+                            message.lineDashIII = Number(object.lineDashIII);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ShapeStyle message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @static
+                     * @param {com.opensource.svga.ShapeEntity.ShapeStyle} message ShapeStyle
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ShapeStyle.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.fill = null;
+                            object.stroke = null;
+                            object.strokeWidth = 0;
+                            object.lineCap = options.enums === String ? "LineCap_BUTT" : 0;
+                            object.lineJoin = options.enums === String ? "LineJoin_MITER" : 0;
+                            object.miterLimit = 0;
+                            object.lineDashI = 0;
+                            object.lineDashII = 0;
+                            object.lineDashIII = 0;
+                        }
+                        if (message.fill != null && message.hasOwnProperty("fill"))
+                            object.fill = $root.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.toObject(message.fill, options);
+                        if (message.stroke != null && message.hasOwnProperty("stroke"))
+                            object.stroke = $root.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.toObject(message.stroke, options);
+                        if (message.strokeWidth != null && message.hasOwnProperty("strokeWidth"))
+                            object.strokeWidth = options.json && !isFinite(message.strokeWidth) ? String(message.strokeWidth) : message.strokeWidth;
+                        if (message.lineCap != null && message.hasOwnProperty("lineCap"))
+                            object.lineCap = options.enums === String ? $root.com.opensource.svga.ShapeEntity.ShapeStyle.LineCap[message.lineCap] === undefined ? message.lineCap : $root.com.opensource.svga.ShapeEntity.ShapeStyle.LineCap[message.lineCap] : message.lineCap;
+                        if (message.lineJoin != null && message.hasOwnProperty("lineJoin"))
+                            object.lineJoin = options.enums === String ? $root.com.opensource.svga.ShapeEntity.ShapeStyle.LineJoin[message.lineJoin] === undefined ? message.lineJoin : $root.com.opensource.svga.ShapeEntity.ShapeStyle.LineJoin[message.lineJoin] : message.lineJoin;
+                        if (message.miterLimit != null && message.hasOwnProperty("miterLimit"))
+                            object.miterLimit = options.json && !isFinite(message.miterLimit) ? String(message.miterLimit) : message.miterLimit;
+                        if (message.lineDashI != null && message.hasOwnProperty("lineDashI"))
+                            object.lineDashI = options.json && !isFinite(message.lineDashI) ? String(message.lineDashI) : message.lineDashI;
+                        if (message.lineDashII != null && message.hasOwnProperty("lineDashII"))
+                            object.lineDashII = options.json && !isFinite(message.lineDashII) ? String(message.lineDashII) : message.lineDashII;
+                        if (message.lineDashIII != null && message.hasOwnProperty("lineDashIII"))
+                            object.lineDashIII = options.json && !isFinite(message.lineDashIII) ? String(message.lineDashIII) : message.lineDashIII;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ShapeStyle to JSON.
+                     * @function toJSON
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ShapeStyle.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    /**
+                     * Gets the default type url for ShapeStyle
+                     * @function getTypeUrl
+                     * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                     * @static
+                     * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+                     * @returns {string} The default type url
+                     */
+                    ShapeStyle.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+                        if (typeUrlPrefix === undefined) {
+                            typeUrlPrefix = "type.googleapis.com";
+                        }
+                        return typeUrlPrefix + "/com.opensource.svga.ShapeEntity.ShapeStyle";
+                    };
+
+                    ShapeStyle.RGBAColor = (function() {
+
+                        /**
+                         * Properties of a RGBAColor.
+                         * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                         * @interface IRGBAColor
+                         * @property {number|null} [r] RGBAColor r
+                         * @property {number|null} [g] RGBAColor g
+                         * @property {number|null} [b] RGBAColor b
+                         * @property {number|null} [a] RGBAColor a
+                         */
+
+                        /**
+                         * Constructs a new RGBAColor.
+                         * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+                         * @classdesc Represents a RGBAColor.
+                         * @implements IRGBAColor
+                         * @constructor
+                         * @param {com.opensource.svga.ShapeEntity.ShapeStyle.IRGBAColor=} [properties] Properties to set
+                         */
+                        function RGBAColor(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * RGBAColor r.
+                         * @member {number} r
+                         * @memberof com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor
+                         * @instance
+                         */
+                        RGBAColor.prototype.r = 0;
+
+                        /**
+                         * RGBAColor g.
+                         * @member {number} g
+                         * @memberof com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor
+                         * @instance
+                         */
+                        RGBAColor.prototype.g = 0;
+
+                        /**
+                         * RGBAColor b.
+                         * @member {number} b
+                         * @memberof com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor
+                         * @instance
+                         */
+                        RGBAColor.prototype.b = 0;
+
+                        /**
+                         * RGBAColor a.
+                         * @member {number} a
+                         * @memberof com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor
+                         * @instance
+                         */
+                        RGBAColor.prototype.a = 0;
+
+                        /**
+                         * Creates a new RGBAColor instance using the specified properties.
+                         * @function create
+                         * @memberof com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor
+                         * @static
+                         * @param {com.opensource.svga.ShapeEntity.ShapeStyle.IRGBAColor=} [properties] Properties to set
+                         * @returns {com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor} RGBAColor instance
+                         */
+                        RGBAColor.create = function create(properties) {
+                            return new RGBAColor(properties);
+                        };
+
+                        /**
+                         * Encodes the specified RGBAColor message. Does not implicitly {@link com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.verify|verify} messages.
+                         * @function encode
+                         * @memberof com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor
+                         * @static
+                         * @param {com.opensource.svga.ShapeEntity.ShapeStyle.IRGBAColor} message RGBAColor message or plain object to encode
+                         * @param {$protobuf.Writer} [writer] Writer to encode to
+                         * @returns {$protobuf.Writer} Writer
+                         */
+                        RGBAColor.encode = function encode(message, writer) {
+                            if (!writer)
+                                writer = Writer.create();
+                            if (message.r != null && Object.hasOwn(message, "r"))
+                                writer.uint32(/* id 1, wireType 5 =*/13).float(message.r);
+                            if (message.g != null && Object.hasOwn(message, "g"))
+                                writer.uint32(/* id 2, wireType 5 =*/21).float(message.g);
+                            if (message.b != null && Object.hasOwn(message, "b"))
+                                writer.uint32(/* id 3, wireType 5 =*/29).float(message.b);
+                            if (message.a != null && Object.hasOwn(message, "a"))
+                                writer.uint32(/* id 4, wireType 5 =*/37).float(message.a);
+                            return writer;
+                        };
+
+                        /**
+                         * Encodes the specified RGBAColor message, length delimited. Does not implicitly {@link com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.verify|verify} messages.
+                         * @function encodeDelimited
+                         * @memberof com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor
+                         * @static
+                         * @param {com.opensource.svga.ShapeEntity.ShapeStyle.IRGBAColor} message RGBAColor message or plain object to encode
+                         * @param {$protobuf.Writer} [writer] Writer to encode to
+                         * @returns {$protobuf.Writer} Writer
+                         */
+                        RGBAColor.encodeDelimited = function encodeDelimited(message, writer) {
+                            return this.encode(message, writer).ldelim();
+                        };
+
+                        /**
+                         * Decodes a RGBAColor message from the specified reader or buffer.
+                         * @function decode
+                         * @memberof com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor
+                         * @static
+                         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                         * @param {number} [length] Message length if known beforehand
+                         * @returns {com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor} RGBAColor
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        RGBAColor.decode = function decode(reader, length) {
+                            if (!(reader instanceof Reader))
+                                reader = Reader.create(reader);
+                            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor();
+                            while (reader.pos < end) {
+                                let tag = reader.uint32();
+                                switch (tag >>> 3) {
+                                case 1: {
+                                        message.r = reader.float();
+                                        break;
+                                    }
+                                case 2: {
+                                        message.g = reader.float();
+                                        break;
+                                    }
+                                case 3: {
+                                        message.b = reader.float();
+                                        break;
+                                    }
+                                case 4: {
+                                        message.a = reader.float();
+                                        break;
+                                    }
+                                default:
+                                    reader.skipType(tag & 7);
+                                    break;
+                                }
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Decodes a RGBAColor message from the specified reader or buffer, length delimited.
+                         * @function decodeDelimited
+                         * @memberof com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor
+                         * @static
+                         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                         * @returns {com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor} RGBAColor
+                         * @throws {Error} If the payload is not a reader or valid buffer
+                         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                         */
+                        RGBAColor.decodeDelimited = function decodeDelimited(reader) {
+                            if (!(reader instanceof Reader))
+                                reader = new Reader(reader);
+                            return this.decode(reader, reader.uint32());
+                        };
+
+                        /**
+                         * Verifies a RGBAColor message.
+                         * @function verify
+                         * @memberof com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        RGBAColor.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.r != null && message.hasOwnProperty("r"))
+                                if (typeof message.r !== "number")
+                                    return "r: number expected";
+                            if (message.g != null && message.hasOwnProperty("g"))
+                                if (typeof message.g !== "number")
+                                    return "g: number expected";
+                            if (message.b != null && message.hasOwnProperty("b"))
+                                if (typeof message.b !== "number")
+                                    return "b: number expected";
+                            if (message.a != null && message.hasOwnProperty("a"))
+                                if (typeof message.a !== "number")
+                                    return "a: number expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a RGBAColor message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor} RGBAColor
+                         */
+                        RGBAColor.fromObject = function fromObject(object) {
+                            if (object instanceof $root.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor)
+                                return object;
+                            let message = new $root.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor();
+                            if (object.r != null)
+                                message.r = Number(object.r);
+                            if (object.g != null)
+                                message.g = Number(object.g);
+                            if (object.b != null)
+                                message.b = Number(object.b);
+                            if (object.a != null)
+                                message.a = Number(object.a);
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a RGBAColor message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor
+                         * @static
+                         * @param {com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor} message RGBAColor
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        RGBAColor.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.r = 0;
+                                object.g = 0;
+                                object.b = 0;
+                                object.a = 0;
+                            }
+                            if (message.r != null && message.hasOwnProperty("r"))
+                                object.r = options.json && !isFinite(message.r) ? String(message.r) : message.r;
+                            if (message.g != null && message.hasOwnProperty("g"))
+                                object.g = options.json && !isFinite(message.g) ? String(message.g) : message.g;
+                            if (message.b != null && message.hasOwnProperty("b"))
+                                object.b = options.json && !isFinite(message.b) ? String(message.b) : message.b;
+                            if (message.a != null && message.hasOwnProperty("a"))
+                                object.a = options.json && !isFinite(message.a) ? String(message.a) : message.a;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this RGBAColor to JSON.
+                         * @function toJSON
+                         * @memberof com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        RGBAColor.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        /**
+                         * Gets the default type url for RGBAColor
+                         * @function getTypeUrl
+                         * @memberof com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor
+                         * @static
+                         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+                         * @returns {string} The default type url
+                         */
+                        RGBAColor.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+                            if (typeUrlPrefix === undefined) {
+                                typeUrlPrefix = "type.googleapis.com";
+                            }
+                            return typeUrlPrefix + "/com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor";
+                        };
+
+                        return RGBAColor;
+                    })();
+
+                    /**
+                     * LineCap enum.
+                     * @name com.opensource.svga.ShapeEntity.ShapeStyle.LineCap
+                     * @enum {number}
+                     * @property {number} LineCap_BUTT=0 LineCap_BUTT value
+                     * @property {number} LineCap_ROUND=1 LineCap_ROUND value
+                     * @property {number} LineCap_SQUARE=2 LineCap_SQUARE value
+                     */
+                    ShapeStyle.LineCap = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "LineCap_BUTT"] = 0;
+                        values[valuesById[1] = "LineCap_ROUND"] = 1;
+                        values[valuesById[2] = "LineCap_SQUARE"] = 2;
+                        return values;
+                    })();
+
+                    /**
+                     * LineJoin enum.
+                     * @name com.opensource.svga.ShapeEntity.ShapeStyle.LineJoin
+                     * @enum {number}
+                     * @property {number} LineJoin_MITER=0 LineJoin_MITER value
+                     * @property {number} LineJoin_ROUND=1 LineJoin_ROUND value
+                     * @property {number} LineJoin_BEVEL=2 LineJoin_BEVEL value
+                     */
+                    ShapeStyle.LineJoin = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "LineJoin_MITER"] = 0;
+                        values[valuesById[1] = "LineJoin_ROUND"] = 1;
+                        values[valuesById[2] = "LineJoin_BEVEL"] = 2;
+                        return values;
+                    })();
+
+                    return ShapeStyle;
+                })();
+
+                return ShapeEntity;
+            })();
+
+            svga.FrameEntity = (function() {
+
+                /**
+                 * Properties of a FrameEntity.
+                 * @memberof com.opensource.svga
+                 * @interface IFrameEntity
+                 * @property {number|null} [alpha] FrameEntity alpha
+                 * @property {com.opensource.svga.ILayout|null} [layout] FrameEntity layout
+                 * @property {com.opensource.svga.ITransform|null} [transform] FrameEntity transform
+                 * @property {string|null} [clipPath] FrameEntity clipPath
+                 * @property {Array.<com.opensource.svga.IShapeEntity>|null} [shapes] FrameEntity shapes
+                 */
+
+                /**
+                 * Constructs a new FrameEntity.
+                 * @memberof com.opensource.svga
+                 * @classdesc Represents a FrameEntity.
+                 * @implements IFrameEntity
+                 * @constructor
+                 * @param {com.opensource.svga.IFrameEntity=} [properties] Properties to set
+                 */
+                function FrameEntity(properties) {
+                    this.shapes = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * FrameEntity alpha.
+                 * @member {number} alpha
+                 * @memberof com.opensource.svga.FrameEntity
+                 * @instance
+                 */
+                FrameEntity.prototype.alpha = 0;
+
+                /**
+                 * FrameEntity layout.
+                 * @member {com.opensource.svga.ILayout|null|undefined} layout
+                 * @memberof com.opensource.svga.FrameEntity
+                 * @instance
+                 */
+                FrameEntity.prototype.layout = null;
+
+                /**
+                 * FrameEntity transform.
+                 * @member {com.opensource.svga.ITransform|null|undefined} transform
+                 * @memberof com.opensource.svga.FrameEntity
+                 * @instance
+                 */
+                FrameEntity.prototype.transform = null;
+
+                /**
+                 * FrameEntity clipPath.
+                 * @member {string} clipPath
+                 * @memberof com.opensource.svga.FrameEntity
+                 * @instance
+                 */
+                FrameEntity.prototype.clipPath = "";
+
+                /**
+                 * FrameEntity shapes.
+                 * @member {Array.<com.opensource.svga.IShapeEntity>} shapes
+                 * @memberof com.opensource.svga.FrameEntity
+                 * @instance
+                 */
+                FrameEntity.prototype.shapes = emptyArray;
+
+                /**
+                 * Creates a new FrameEntity instance using the specified properties.
+                 * @function create
+                 * @memberof com.opensource.svga.FrameEntity
+                 * @static
+                 * @param {com.opensource.svga.IFrameEntity=} [properties] Properties to set
+                 * @returns {com.opensource.svga.FrameEntity} FrameEntity instance
+                 */
+                FrameEntity.create = function create(properties) {
+                    return new FrameEntity(properties);
+                };
+
+                /**
+                 * Encodes the specified FrameEntity message. Does not implicitly {@link com.opensource.svga.FrameEntity.verify|verify} messages.
+                 * @function encode
+                 * @memberof com.opensource.svga.FrameEntity
+                 * @static
+                 * @param {com.opensource.svga.IFrameEntity} message FrameEntity message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                FrameEntity.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = Writer.create();
+                    if (message.alpha != null && Object.hasOwn(message, "alpha"))
+                        writer.uint32(/* id 1, wireType 5 =*/13).float(message.alpha);
+                    if (message.layout != null && Object.hasOwn(message, "layout"))
+                        $root.com.opensource.svga.Layout.encode(message.layout, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                    if (message.transform != null && Object.hasOwn(message, "transform"))
+                        $root.com.opensource.svga.Transform.encode(message.transform, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                    if (message.clipPath != null && Object.hasOwn(message, "clipPath"))
+                        writer.uint32(/* id 4, wireType 2 =*/34).string(message.clipPath);
+                    if (message.shapes != null && message.shapes.length)
+                        for (let i = 0; i < message.shapes.length; ++i)
+                            $root.com.opensource.svga.ShapeEntity.encode(message.shapes[i], writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified FrameEntity message, length delimited. Does not implicitly {@link com.opensource.svga.FrameEntity.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof com.opensource.svga.FrameEntity
+                 * @static
+                 * @param {com.opensource.svga.IFrameEntity} message FrameEntity message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                FrameEntity.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes a FrameEntity message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof com.opensource.svga.FrameEntity
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {com.opensource.svga.FrameEntity} FrameEntity
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                FrameEntity.decode = function decode(reader, length) {
+                    if (!(reader instanceof Reader))
+                        reader = Reader.create(reader);
+                    let end = length === undefined ? reader.len : reader.pos + length, message = new $root.com.opensource.svga.FrameEntity();
+                    while (reader.pos < end) {
+                        let tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1: {
+                                message.alpha = reader.float();
+                                break;
+                            }
+                        case 2: {
+                                message.layout = $root.com.opensource.svga.Layout.decode(reader, reader.uint32());
+                                break;
+                            }
+                        case 3: {
+                                message.transform = $root.com.opensource.svga.Transform.decode(reader, reader.uint32());
+                                break;
+                            }
+                        case 4: {
+                                message.clipPath = reader.string();
+                                break;
+                            }
+                        case 5: {
+                                if (!(message.shapes && message.shapes.length))
+                                    message.shapes = [];
+                                message.shapes.push($root.com.opensource.svga.ShapeEntity.decode(reader, reader.uint32()));
+                                break;
+                            }
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Decodes a FrameEntity message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof com.opensource.svga.FrameEntity
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {com.opensource.svga.FrameEntity} FrameEntity
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                FrameEntity.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof Reader))
+                        reader = new Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies a FrameEntity message.
+                 * @function verify
+                 * @memberof com.opensource.svga.FrameEntity
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                FrameEntity.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.alpha != null && message.hasOwnProperty("alpha"))
+                        if (typeof message.alpha !== "number")
+                            return "alpha: number expected";
+                    if (message.layout != null && message.hasOwnProperty("layout")) {
+                        let error = $root.com.opensource.svga.Layout.verify(message.layout);
+                        if (error)
+                            return "layout." + error;
+                    }
+                    if (message.transform != null && message.hasOwnProperty("transform")) {
+                        let error = $root.com.opensource.svga.Transform.verify(message.transform);
+                        if (error)
+                            return "transform." + error;
+                    }
+                    if (message.clipPath != null && message.hasOwnProperty("clipPath"))
+                        if (!isString(message.clipPath))
+                            return "clipPath: string expected";
+                    if (message.shapes != null && message.hasOwnProperty("shapes")) {
+                        if (!Array.isArray(message.shapes))
+                            return "shapes: array expected";
+                        for (let i = 0; i < message.shapes.length; ++i) {
+                            let error = $root.com.opensource.svga.ShapeEntity.verify(message.shapes[i]);
+                            if (error)
+                                return "shapes." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a FrameEntity message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof com.opensource.svga.FrameEntity
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {com.opensource.svga.FrameEntity} FrameEntity
+                 */
+                FrameEntity.fromObject = function fromObject(object) {
+                    if (object instanceof $root.com.opensource.svga.FrameEntity)
+                        return object;
+                    let message = new $root.com.opensource.svga.FrameEntity();
+                    if (object.alpha != null)
+                        message.alpha = Number(object.alpha);
+                    if (object.layout != null) {
+                        if (typeof object.layout !== "object")
+                            throw TypeError(".com.opensource.svga.FrameEntity.layout: object expected");
+                        message.layout = $root.com.opensource.svga.Layout.fromObject(object.layout);
+                    }
+                    if (object.transform != null) {
+                        if (typeof object.transform !== "object")
+                            throw TypeError(".com.opensource.svga.FrameEntity.transform: object expected");
+                        message.transform = $root.com.opensource.svga.Transform.fromObject(object.transform);
+                    }
+                    if (object.clipPath != null)
+                        message.clipPath = String(object.clipPath);
+                    if (object.shapes) {
+                        if (!Array.isArray(object.shapes))
+                            throw TypeError(".com.opensource.svga.FrameEntity.shapes: array expected");
+                        message.shapes = [];
+                        for (let i = 0; i < object.shapes.length; ++i) {
+                            if (typeof object.shapes[i] !== "object")
+                                throw TypeError(".com.opensource.svga.FrameEntity.shapes: object expected");
+                            message.shapes[i] = $root.com.opensource.svga.ShapeEntity.fromObject(object.shapes[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a FrameEntity message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof com.opensource.svga.FrameEntity
+                 * @static
+                 * @param {com.opensource.svga.FrameEntity} message FrameEntity
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                FrameEntity.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.shapes = [];
+                    if (options.defaults) {
+                        object.alpha = 0;
+                        object.layout = null;
+                        object.transform = null;
+                        object.clipPath = "";
+                    }
+                    if (message.alpha != null && message.hasOwnProperty("alpha"))
+                        object.alpha = options.json && !isFinite(message.alpha) ? String(message.alpha) : message.alpha;
+                    if (message.layout != null && message.hasOwnProperty("layout"))
+                        object.layout = $root.com.opensource.svga.Layout.toObject(message.layout, options);
+                    if (message.transform != null && message.hasOwnProperty("transform"))
+                        object.transform = $root.com.opensource.svga.Transform.toObject(message.transform, options);
+                    if (message.clipPath != null && message.hasOwnProperty("clipPath"))
+                        object.clipPath = message.clipPath;
+                    if (message.shapes && message.shapes.length) {
+                        object.shapes = [];
+                        for (let j = 0; j < message.shapes.length; ++j)
+                            object.shapes[j] = $root.com.opensource.svga.ShapeEntity.toObject(message.shapes[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this FrameEntity to JSON.
+                 * @function toJSON
+                 * @memberof com.opensource.svga.FrameEntity
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                FrameEntity.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Gets the default type url for FrameEntity
+                 * @function getTypeUrl
+                 * @memberof com.opensource.svga.FrameEntity
+                 * @static
+                 * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+                 * @returns {string} The default type url
+                 */
+                FrameEntity.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+                    if (typeUrlPrefix === undefined) {
+                        typeUrlPrefix = "type.googleapis.com";
+                    }
+                    return typeUrlPrefix + "/com.opensource.svga.FrameEntity";
+                };
+
+                return FrameEntity;
+            })();
+
+            svga.MovieEntity = (function() {
+
+                /**
+                 * Properties of a MovieEntity.
+                 * @memberof com.opensource.svga
+                 * @interface IMovieEntity
+                 * @property {string|null} [version] MovieEntity version
+                 * @property {com.opensource.svga.IMovieParams|null} [params] MovieEntity params
+                 * @property {Object.<string,Uint8Array>|null} [images] MovieEntity images
+                 * @property {Array.<com.opensource.svga.ISpriteEntity>|null} [sprites] MovieEntity sprites
+                 */
+
+                /**
+                 * Constructs a new MovieEntity.
+                 * @memberof com.opensource.svga
+                 * @classdesc Represents a MovieEntity.
+                 * @implements IMovieEntity
+                 * @constructor
+                 * @param {com.opensource.svga.IMovieEntity=} [properties] Properties to set
+                 */
+                function MovieEntity(properties) {
+                    this.images = {};
+                    this.sprites = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * MovieEntity version.
+                 * @member {string} version
+                 * @memberof com.opensource.svga.MovieEntity
+                 * @instance
+                 */
+                MovieEntity.prototype.version = "";
+
+                /**
+                 * MovieEntity params.
+                 * @member {com.opensource.svga.IMovieParams|null|undefined} params
+                 * @memberof com.opensource.svga.MovieEntity
+                 * @instance
+                 */
+                MovieEntity.prototype.params = null;
+
+                /**
+                 * MovieEntity images.
+                 * @member {Object.<string,Uint8Array>} images
+                 * @memberof com.opensource.svga.MovieEntity
+                 * @instance
+                 */
+                MovieEntity.prototype.images = emptyObject;
+
+                /**
+                 * MovieEntity sprites.
+                 * @member {Array.<com.opensource.svga.ISpriteEntity>} sprites
+                 * @memberof com.opensource.svga.MovieEntity
+                 * @instance
+                 */
+                MovieEntity.prototype.sprites = emptyArray;
+
+                /**
+                 * Creates a new MovieEntity instance using the specified properties.
+                 * @function create
+                 * @memberof com.opensource.svga.MovieEntity
+                 * @static
+                 * @param {com.opensource.svga.IMovieEntity=} [properties] Properties to set
+                 * @returns {com.opensource.svga.MovieEntity} MovieEntity instance
+                 */
+                MovieEntity.create = function create(properties) {
+                    return new MovieEntity(properties);
+                };
+
+                /**
+                 * Encodes the specified MovieEntity message. Does not implicitly {@link com.opensource.svga.MovieEntity.verify|verify} messages.
+                 * @function encode
+                 * @memberof com.opensource.svga.MovieEntity
+                 * @static
+                 * @param {com.opensource.svga.IMovieEntity} message MovieEntity message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                MovieEntity.encode = function encode(message, writer) {
+                    if (!writer)
+                        writer = Writer.create();
+                    if (message.version != null && Object.hasOwn(message, "version"))
+                        writer.uint32(/* id 1, wireType 2 =*/10).string(message.version);
+                    if (message.params != null && Object.hasOwn(message, "params"))
+                        $root.com.opensource.svga.MovieParams.encode(message.params, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                    if (message.images != null && Object.hasOwn(message, "images"))
+                        for (let keys = Object.keys(message.images), i = 0; i < keys.length; ++i)
+                            writer.uint32(/* id 3, wireType 2 =*/26).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 2 =*/18).bytes(message.images[keys[i]]).ldelim();
+                    if (message.sprites != null && message.sprites.length)
+                        for (let i = 0; i < message.sprites.length; ++i)
+                            $root.com.opensource.svga.SpriteEntity.encode(message.sprites[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                    return writer;
+                };
+
+                /**
+                 * Encodes the specified MovieEntity message, length delimited. Does not implicitly {@link com.opensource.svga.MovieEntity.verify|verify} messages.
+                 * @function encodeDelimited
+                 * @memberof com.opensource.svga.MovieEntity
+                 * @static
+                 * @param {com.opensource.svga.IMovieEntity} message MovieEntity message or plain object to encode
+                 * @param {$protobuf.Writer} [writer] Writer to encode to
+                 * @returns {$protobuf.Writer} Writer
+                 */
+                MovieEntity.encodeDelimited = function encodeDelimited(message, writer) {
+                    return this.encode(message, writer).ldelim();
+                };
+
+                /**
+                 * Decodes a MovieEntity message from the specified reader or buffer.
+                 * @function decode
+                 * @memberof com.opensource.svga.MovieEntity
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @param {number} [length] Message length if known beforehand
+                 * @returns {com.opensource.svga.MovieEntity} MovieEntity
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                MovieEntity.decode = function decode(reader, length) {
+                    if (!(reader instanceof Reader))
+                        reader = Reader.create(reader);
+                    let end = length === undefined ? reader.len : reader.pos + length, message = new $root.com.opensource.svga.MovieEntity(), key, value;
+                    while (reader.pos < end) {
+                        let tag = reader.uint32();
+                        switch (tag >>> 3) {
+                        case 1: {
+                                message.version = reader.string();
+                                break;
+                            }
+                        case 2: {
+                                message.params = $root.com.opensource.svga.MovieParams.decode(reader, reader.uint32());
+                                break;
+                            }
+                        case 3: {
+                                if (message.images === emptyObject)
+                                    message.images = {};
+                                let end2 = reader.uint32() + reader.pos;
+                                key = "";
+                                value = [];
+                                while (reader.pos < end2) {
+                                    let tag2 = reader.uint32();
+                                    switch (tag2 >>> 3) {
+                                    case 1:
+                                        key = reader.string();
+                                        break;
+                                    case 2:
+                                        value = reader.bytes();
+                                        break;
+                                    default:
+                                        reader.skipType(tag2 & 7);
+                                        break;
+                                    }
+                                }
+                                message.images[key] = value;
+                                break;
+                            }
+                        case 4: {
+                                if (!(message.sprites && message.sprites.length))
+                                    message.sprites = [];
+                                message.sprites.push($root.com.opensource.svga.SpriteEntity.decode(reader, reader.uint32()));
+                                break;
+                            }
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Decodes a MovieEntity message from the specified reader or buffer, length delimited.
+                 * @function decodeDelimited
+                 * @memberof com.opensource.svga.MovieEntity
+                 * @static
+                 * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                 * @returns {com.opensource.svga.MovieEntity} MovieEntity
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                 */
+                MovieEntity.decodeDelimited = function decodeDelimited(reader) {
+                    if (!(reader instanceof Reader))
+                        reader = new Reader(reader);
+                    return this.decode(reader, reader.uint32());
+                };
+
+                /**
+                 * Verifies a MovieEntity message.
+                 * @function verify
+                 * @memberof com.opensource.svga.MovieEntity
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                MovieEntity.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.version != null && message.hasOwnProperty("version"))
+                        if (!isString(message.version))
+                            return "version: string expected";
+                    if (message.params != null && message.hasOwnProperty("params")) {
+                        let error = $root.com.opensource.svga.MovieParams.verify(message.params);
+                        if (error)
+                            return "params." + error;
+                    }
+                    if (message.images != null && message.hasOwnProperty("images")) {
+                        if (!isObject(message.images))
+                            return "images: object expected";
+                        let key = Object.keys(message.images);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!(message.images[key[i]] && typeof message.images[key[i]].length === "number" || isString(message.images[key[i]])))
+                                return "images: buffer{k:string} expected";
+                    }
+                    if (message.sprites != null && message.hasOwnProperty("sprites")) {
+                        if (!Array.isArray(message.sprites))
+                            return "sprites: array expected";
+                        for (let i = 0; i < message.sprites.length; ++i) {
+                            let error = $root.com.opensource.svga.SpriteEntity.verify(message.sprites[i]);
+                            if (error)
+                                return "sprites." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a MovieEntity message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof com.opensource.svga.MovieEntity
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {com.opensource.svga.MovieEntity} MovieEntity
+                 */
+                MovieEntity.fromObject = function fromObject(object) {
+                    if (object instanceof $root.com.opensource.svga.MovieEntity)
+                        return object;
+                    let message = new $root.com.opensource.svga.MovieEntity();
+                    if (object.version != null)
+                        message.version = String(object.version);
+                    if (object.params != null) {
+                        if (typeof object.params !== "object")
+                            throw TypeError(".com.opensource.svga.MovieEntity.params: object expected");
+                        message.params = $root.com.opensource.svga.MovieParams.fromObject(object.params);
+                    }
+                    if (object.images) {
+                        if (typeof object.images !== "object")
+                            throw TypeError(".com.opensource.svga.MovieEntity.images: object expected");
+                        message.images = {};
+                        for (let keys = Object.keys(object.images), i = 0; i < keys.length; ++i)
+                            if (typeof object.images[keys[i]] === "string")
+                                base64.decode(object.images[keys[i]], message.images[keys[i]] = newBuffer(base64.length(object.images[keys[i]])), 0);
+                            else if (object.images[keys[i]].length >= 0)
+                                message.images[keys[i]] = object.images[keys[i]];
+                    }
+                    if (object.sprites) {
+                        if (!Array.isArray(object.sprites))
+                            throw TypeError(".com.opensource.svga.MovieEntity.sprites: array expected");
+                        message.sprites = [];
+                        for (let i = 0; i < object.sprites.length; ++i) {
+                            if (typeof object.sprites[i] !== "object")
+                                throw TypeError(".com.opensource.svga.MovieEntity.sprites: object expected");
+                            message.sprites[i] = $root.com.opensource.svga.SpriteEntity.fromObject(object.sprites[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a MovieEntity message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof com.opensource.svga.MovieEntity
+                 * @static
+                 * @param {com.opensource.svga.MovieEntity} message MovieEntity
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                MovieEntity.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.sprites = [];
+                    if (options.objects || options.defaults)
+                        object.images = {};
+                    if (options.defaults) {
+                        object.version = "";
+                        object.params = null;
+                    }
+                    if (message.version != null && message.hasOwnProperty("version"))
+                        object.version = message.version;
+                    if (message.params != null && message.hasOwnProperty("params"))
+                        object.params = $root.com.opensource.svga.MovieParams.toObject(message.params, options);
+                    let keys2;
+                    if (message.images && (keys2 = Object.keys(message.images)).length) {
+                        object.images = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.images[keys2[j]] = options.bytes === String ? base64.encode(message.images[keys2[j]], 0, message.images[keys2[j]].length) : options.bytes === Array ? Array.prototype.slice.call(message.images[keys2[j]]) : message.images[keys2[j]];
+                    }
+                    if (message.sprites && message.sprites.length) {
+                        object.sprites = [];
+                        for (let j = 0; j < message.sprites.length; ++j)
+                            object.sprites[j] = $root.com.opensource.svga.SpriteEntity.toObject(message.sprites[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this MovieEntity to JSON.
+                 * @function toJSON
+                 * @memberof com.opensource.svga.MovieEntity
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                MovieEntity.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Gets the default type url for MovieEntity
+                 * @function getTypeUrl
+                 * @memberof com.opensource.svga.MovieEntity
+                 * @static
+                 * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+                 * @returns {string} The default type url
+                 */
+                MovieEntity.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+                    if (typeUrlPrefix === undefined) {
+                        typeUrlPrefix = "type.googleapis.com";
+                    }
+                    return typeUrlPrefix + "/com.opensource.svga.MovieEntity";
+                };
+
+                return MovieEntity;
+            })();
+
+            return svga;
+        })();
+
+        return opensource;
+    })();
+
+    return com;
+})();
+
+const MovieEntity = com.opensource.svga.MovieEntity;
 
 const SupportedPlatform = {
     ALIPAY: 'alipay',
@@ -701,8 +6001,8 @@ class Parser {
             throw new Error('this parser only support version@2 of SVGA.');
         }
         const inflateData = unzlibSync(u8a);
-        const movieData = F.decode(inflateData);
-        return new VideoEntity(movieData);
+        const movieData = MovieEntity.decode(inflateData);
+        return new VideoEntity(movieData, movieData.images);
     }
     /**
      * 通过 url 下载并解析 SVGA 文件
@@ -1488,7 +6788,6 @@ class Player {
             ofsCanvas.height = height;
         }
         const imageData = render(ofsCanvas, this.bitmapsCache, this.videoEntity.dynamicElements, this.videoEntity.replaceElements, this.videoEntity, this.currentFrame);
-        console.log('drawFrame', width, height, imageData);
         context.putImageData(imageData, 0, 0, 0, 0, ofsCanvas.width, ofsCanvas.height);
     }
 }

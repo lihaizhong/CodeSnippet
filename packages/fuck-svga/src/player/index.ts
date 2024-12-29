@@ -1,4 +1,5 @@
 import {
+  createImageSource,
   createOffscreenCanvas,
   getCanvas,
   loadImage,
@@ -152,11 +153,11 @@ export class Player {
     let imageArr: any[] = [];
     for (let key in images) {
       const image = images[key];
-      if (typeof image === "string") {
-        const p = loadImage(this.ofsCanvas, image);
+      const p = loadImage(this.ofsCanvas, image).then((img) => {
+        this.bitmapsCache[key] = img
+      });
 
-        imageArr.push(p);
-      }
+      imageArr.push(p);
     }
 
     return Promise.all(imageArr) as unknown as Promise<void>;

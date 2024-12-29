@@ -7,13 +7,13 @@ import {
   noop,
   writeByte,
   writeBytes,
-  writeFixed32,
+  // writeFixed32,
   writeVarint32,
   writeVarint64,
 } from "../utils";
 import State from "./State";
 import Op from "./Op";
-import { LongBits } from "../dts";
+// import { LongBits } from "../dts";
 
 export default class Writer {
   /**
@@ -138,9 +138,9 @@ export default class Writer {
    * @param {number} value Value to write
    * @returns {Writer} `this`
    */
-  sint32(value: number): Writer {
-    return this.uint32(((value << 1) ^ (value >> 31)) >>> 0);
-  }
+  // sint32(value: number): Writer {
+  //   return this.uint32(((value << 1) ^ (value >> 31)) >>> 0);
+  // }
 
   /**
    * Writes an unsigned 64 bit value as a varint.
@@ -148,11 +148,11 @@ export default class Writer {
    * @returns {Writer} `this`
    * @throws {TypeError} If `value` is a string and no long library is present.
    */
-  uint64(value: number | string): Writer {
-    const bits = LongBits.from(value);
+  // uint64(value: number | string): Writer {
+  //   const bits = LongBits.from(value);
 
-    return this.push(writeVarint64, bits.length(), bits);
-  }
+  //   return this.push(writeVarint64, bits.length(), bits);
+  // }
 
   /**
    * Writes a signed 64 bit value as a varint.
@@ -161,9 +161,9 @@ export default class Writer {
    * @returns {Writer} `this`
    * @throws {TypeError} If `value` is a string and no long library is present.
    */
-  int64(value: number | string): Writer {
-    return this.uint64(value);
-  }
+  // int64(value: number | string): Writer {
+  //   return this.uint64(value);
+  // }
 
   /**
    * Writes a signed 64 bit value as a varint, zig-zag encoded.
@@ -171,11 +171,11 @@ export default class Writer {
    * @returns {Writer} `this`
    * @throws {TypeError} If `value` is a string and no long library is present.
    */
-  sint64(value: number | string): Writer {
-    const bits = LongBits.from(value).zzEncode();
+  // sint64(value: number | string): Writer {
+  //   const bits = LongBits.from(value).zzEncode();
 
-    return this.push(writeVarint64, bits.length(), bits);
-  }
+  //   return this.push(writeVarint64, bits.length(), bits);
+  // }
 
   /**
    * Writes a boolish value as a varint.
@@ -191,9 +191,9 @@ export default class Writer {
    * @param {number} value Value to write
    * @returns {Writer} `this`
    */
-  fixed32(value: number): Writer {
-    return this.push(writeFixed32, 4, value >>> 0);
-  }
+  // fixed32(value: number): Writer {
+  //   return this.push(writeFixed32, 4, value >>> 0);
+  // }
 
   /**
    * Writes a signed 32 bit value as fixed 32 bits.
@@ -201,9 +201,9 @@ export default class Writer {
    * @param {number} value Value to write
    * @returns {Writer} `this`
    */
-  sfixed32(value: number): Writer {
-    return this.fixed32(value);
-  }
+  // sfixed32(value: number): Writer {
+  //   return this.fixed32(value);
+  // }
 
   /**
    * Writes an unsigned 64 bit value as fixed 64 bits.
@@ -211,11 +211,11 @@ export default class Writer {
    * @returns {Writer} `this`
    * @throws {TypeError} If `value` is a string and no long library is present.
    */
-  fixed64(value: number | string): Writer {
-    const bits = LongBits.from(value);
+  // fixed64(value: number | string): Writer {
+  //   const bits = LongBits.from(value);
 
-    return this.push(writeFixed32, 4, bits.lo).push(writeFixed32, 4, bits.hi);
-  }
+  //   return this.push(writeFixed32, 4, bits.lo).push(writeFixed32, 4, bits.hi);
+  // }
 
   /**
    * Writes a signed 64 bit value as fixed 64 bits.
@@ -224,9 +224,9 @@ export default class Writer {
    * @returns {Writer} `this`
    * @throws {TypeError} If `value` is a string and no long library is present.
    */
-  sfixed64(value: number | string): Writer {
-    return this.fixed64(value);
-  }
+  // sfixed64(value: number | string): Writer {
+  //   return this.fixed64(value);
+  // }
 
   /**
    * Writes a float (32 bit).
@@ -337,17 +337,17 @@ export default class Writer {
    * Finishes the write operation.
    * @returns {Uint8Array} Finished buffer
    */
-  finish() {
-    const buf = Writer.alloc(this.len);
-    let head = this.head.next; // skip noop
-    let pos = 0;
+  // finish() {
+  //   const buf = Writer.alloc(this.len);
+  //   let head = this.head.next; // skip noop
+  //   let pos = 0;
 
-    while (head) {
-      head.fn(head.val, buf, pos);
-      pos += head.len;
-      head = head.next;
-    }
+  //   while (head) {
+  //     head.fn(head.val, buf, pos);
+  //     pos += head.len;
+  //     head = head.next;
+  //   }
 
-    return buf;
-  }
+  //   return buf;
+  // }
 }

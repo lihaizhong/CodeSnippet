@@ -19,7 +19,7 @@ export class Parser {
     const inflateData = unzlibSync(u8a)
     const movieData = MovieEntity.decode(inflateData)
 
-    return new VideoEntity(movieData)
+    return new VideoEntity(movieData, movieData.images)
   }
 
   /**
