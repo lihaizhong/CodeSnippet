@@ -142,13 +142,38 @@ export const emptyArray = Object.freeze([]);
 export const emptyObject = Object.freeze({});
 
 /**
+ * Default conversion options used for {@link Message#toJSON} implementations.
+ *
+ * These options are close to proto3's JSON mapping with the exception that internal types like Any are handled just like messages. More precisely:
+ *
+ * - Longs become strings
+ * - Enums become string keys
+ * - Bytes become base64 encoded strings
+ * - (Sub-)Messages become plain objects
+ * - Maps become plain objects with all string keys
+ * - Repeated fields become arrays
+ * - NaN and Infinity for float and double fields become strings
+ *
+ * @type {IConversionOptions}
+ * @see https://developers.google.com/protocol-buffers/docs/proto3?hl=en#json
+ */
+export const toJSONOptions = {
+  longs: String,
+  enums: String,
+  bytes: String,
+  json: true
+}
+
+/**
  * Builds a getter for a oneof's present field name.
  * @param {string[]} fieldNames Field names
  * @returns {OneOfGetter} Unbound getter
  */
 export function getOneOf(fieldNames: string[]) {
-  var fieldMap: Record<string, number> = {};
-  for (var i = 0; i < fieldNames.length; ++i) fieldMap[fieldNames[i]] = 1;
+  const fieldMap: Record<string, number> = {};
+  for (let i = 0; i < fieldNames.length; ++i) {
+    fieldMap[fieldNames[i]] = 1;
+  }
 
   /**
    * @returns {string|undefined} Set field name, if any
@@ -158,7 +183,8 @@ export function getOneOf(fieldNames: string[]) {
   return function oneOfGetter() {
     // eslint-disable-line consistent-return
     // @ts-ignore
-    for (var keys = Object.keys(this), i = keys.length - 1; i > -1; --i) {
+    const keys = Object.keys(this);
+    for (let i = keys.length - 1; i > -1; --i) {
       if (
         fieldMap[keys[i]] === 1 &&
         // @ts-ignore
@@ -185,7 +211,7 @@ export function setOneOf(fieldNames: string[]) {
    * @ignore
    */
   return function oneOfSetter(name: string) {
-    for (var i = 0; i < fieldNames.length; ++i) {
+    for (let i = 0; i < fieldNames.length; ++i) {
       if (fieldNames[i] !== name) {
         // @ts-ignore
         delete this[fieldNames[i]];

@@ -79,14 +79,30 @@ function drawSprite (
       context.clip()
     }
     if (replaceElement !== undefined) {
-      context.drawImage(replaceElement, 0, 0, frame.layout.width, frame.layout.height)
+      context.drawImage(
+        replaceElement as unknown as CanvasImageSource,
+        0,
+        0,
+        frame.layout.width,
+        frame.layout.height
+      )
     } else {
-      context.drawImage(bitmap, 0, 0, frame.layout.width, frame.layout.height)
+      context.drawImage(
+        bitmap as unknown as CanvasImageSource,
+        0,
+        0,
+        frame.layout.width,
+        frame.layout.height
+      )
     }
   }
 
   if (dynamicElement !== undefined) {
-    context.drawImage(dynamicElement, (frame.layout.width - dynamicElement.width) / 2, (frame.layout.height - dynamicElement.height) / 2)
+    context.drawImage(
+      dynamicElement as unknown as CanvasImageSource,
+      (frame.layout.width - dynamicElement.width) / 2,
+      (frame.layout.height - dynamicElement.height) / 2
+    )
   }
 
   frame.shapes.forEach(shape => drawShape(context, shape))

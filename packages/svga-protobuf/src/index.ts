@@ -1,5 +1,7 @@
-import { com } from "./compiled"
+import Root from "./protos"
 
-const MovieEntity: any = com.opensource.svga.MovieEntity
+export * as base64 from "@protobufjs/base64"
+
+const { MovieEntity } = Root.com.opensource.svga
 
 export { MovieEntity }

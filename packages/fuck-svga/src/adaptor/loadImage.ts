@@ -1,5 +1,4 @@
-import type { PlatformCanvas, PlatformOffscreenCanvas } from '../types'
-import { uint8ArrayToString } from '../utils'
+import type { PlatformCanvas, PlatformImage, PlatformOffscreenCanvas } from '../types'
 import { getBridge } from './bridge'
 import { platform, SupportedPlatform, throwUnsupportedPlatform } from './platform'
 
@@ -10,10 +9,22 @@ import { platform, SupportedPlatform, throwUnsupportedPlatform } from './platfor
  */
 function toBase64(data: Uint8Array): string {
   const ab = createArrayBuffer(data)
+  let b: string
 
-  return "data:image/png;base64," + (getBridge() as WechatMiniprogram.Wx).arrayBufferToBase64(ab)
+  if (platform === SupportedPlatform.H5) {
+    b = btoa(String.fromCharCode(...new Uint8Array(ab)))
+  } else {
+    b = (getBridge() as WechatMiniprogram.Wx).arrayBufferToBase64(ab)
+  }
+
+  return `data:image/png;base64,${b}`
 }
 
+/**
+ * 将Uint8Array转ArrayBuffer
+ * @param data 二进制数据
+ * @returns 
+ */
 function toBitmap(data: Uint8Array): Promise<ImageBitmap> {
   const ab = createArrayBuffer(data)
 
@@ -42,7 +53,7 @@ function createImage(
 /**
  * Uint8Array转换成ArrayBuffer
  * @param data 
- * @returns 
+ * @returns
  */
 function createArrayBuffer(data: Uint8Array): ArrayBuffer {
   return data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength) as ArrayBuffer
@@ -53,7 +64,7 @@ function createArrayBuffer(data: Uint8Array): ArrayBuffer {
  * @param data 
  * @returns 
  */
- function createImageSource(data: Uint8Array | string): string {
+function genImageSource(data: Uint8Array | string): string {
   if (typeof data === "string") {
     return data
   }
@@ -70,18 +81,18 @@ function createArrayBuffer(data: Uint8Array): ArrayBuffer {
 export function loadImage(
   canvas: PlatformCanvas | PlatformOffscreenCanvas,
   data: Uint8Array | string
-): Promise<WechatMiniprogram.Image | HTMLImageElement | ImageBitmap> {
+): Promise<PlatformImage | ImageBitmap> {
   if (platform === SupportedPlatform.H5) {
     return toBitmap(data as Uint8Array)
   }
 
   return new Promise((resolve, reject) => {
-    let img = createImage(canvas)
+    const img = createImage(canvas)
 
     if (img) {
       img.onload = () => resolve(img)
       img.onerror = (error: Error) => reject(new Error(`[SVGA LOADING FAILURE]: ${error.message}`))
-      img.src = createImageSource(data)
+      img.src = genImageSource(data as Uint8Array | string)
     } else {
       reject(throwUnsupportedPlatform())
     }

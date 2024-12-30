@@ -1,5 +1,4 @@
 import {
-  createImageSource,
   createOffscreenCanvas,
   getCanvas,
   loadImage,

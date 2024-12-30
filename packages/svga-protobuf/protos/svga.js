@@ -1,9 +1,11 @@
 /*eslint-disable block-scoped-var, id-length, no-control-regex, no-magic-numbers, no-prototype-builtins, no-redeclare, no-shadow, no-var, sort-vars*/
-import base64 from '@protobufjs/base64'
-import $root from './utils/roots'
-import $Writer from './serialization/Writer'
-import $Reader from './serialization/Reader'
-import { emptyArray, emptyObject, isInteger, isString, getOneOf, setOneOf } from './utils'
+import * as $protobuf from "protobufjs/minimal";
+
+// Common aliases
+const $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.util;
+
+// Exported root namespace
+const $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
 
 export const com = $root.com = (() => {
 
@@ -115,13 +117,13 @@ export const com = $root.com = (() => {
                 MovieParams.encode = function encode(message, writer) {
                     if (!writer)
                         writer = $Writer.create();
-                    if (message.viewBoxWidth != null && Object.hasOwn(message, "viewBoxWidth"))
+                    if (message.viewBoxWidth != null && Object.hasOwnProperty.call(message, "viewBoxWidth"))
                         writer.uint32(/* id 1, wireType 5 =*/13).float(message.viewBoxWidth);
-                    if (message.viewBoxHeight != null && Object.hasOwn(message, "viewBoxHeight"))
+                    if (message.viewBoxHeight != null && Object.hasOwnProperty.call(message, "viewBoxHeight"))
                         writer.uint32(/* id 2, wireType 5 =*/21).float(message.viewBoxHeight);
-                    if (message.fps != null && Object.hasOwn(message, "fps"))
+                    if (message.fps != null && Object.hasOwnProperty.call(message, "fps"))
                         writer.uint32(/* id 3, wireType 0 =*/24).int32(message.fps);
-                    if (message.frames != null && Object.hasOwn(message, "frames"))
+                    if (message.frames != null && Object.hasOwnProperty.call(message, "frames"))
                         writer.uint32(/* id 4, wireType 0 =*/32).int32(message.frames);
                     return writer;
                 };
@@ -215,10 +217,10 @@ export const com = $root.com = (() => {
                         if (typeof message.viewBoxHeight !== "number")
                             return "viewBoxHeight: number expected";
                     if (message.fps != null && message.hasOwnProperty("fps"))
-                        if (!isInteger(message.fps))
+                        if (!$util.isInteger(message.fps))
                             return "fps: integer expected";
                     if (message.frames != null && message.hasOwnProperty("frames"))
-                        if (!isInteger(message.frames))
+                        if (!$util.isInteger(message.frames))
                             return "frames: integer expected";
                     return null;
                 };
@@ -346,7 +348,7 @@ export const com = $root.com = (() => {
                  * @memberof com.opensource.svga.SpriteEntity
                  * @instance
                  */
-                SpriteEntity.prototype.frames = emptyArray;
+                SpriteEntity.prototype.frames = $util.emptyArray;
 
                 /**
                  * SpriteEntity matteKey.
@@ -380,12 +382,12 @@ export const com = $root.com = (() => {
                 SpriteEntity.encode = function encode(message, writer) {
                     if (!writer)
                         writer = $Writer.create();
-                    if (message.imageKey != null && Object.hasOwn(message, "imageKey"))
+                    if (message.imageKey != null && Object.hasOwnProperty.call(message, "imageKey"))
                         writer.uint32(/* id 1, wireType 2 =*/10).string(message.imageKey);
                     if (message.frames != null && message.frames.length)
                         for (let i = 0; i < message.frames.length; ++i)
                             $root.com.opensource.svga.FrameEntity.encode(message.frames[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-                    if (message.matteKey != null && Object.hasOwn(message, "matteKey"))
+                    if (message.matteKey != null && Object.hasOwnProperty.call(message, "matteKey"))
                         writer.uint32(/* id 3, wireType 2 =*/26).string(message.matteKey);
                     return writer;
                 };
@@ -471,7 +473,7 @@ export const com = $root.com = (() => {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.imageKey != null && message.hasOwnProperty("imageKey"))
-                        if (!isString(message.imageKey))
+                        if (!$util.isString(message.imageKey))
                             return "imageKey: string expected";
                     if (message.frames != null && message.hasOwnProperty("frames")) {
                         if (!Array.isArray(message.frames))
@@ -483,7 +485,7 @@ export const com = $root.com = (() => {
                         }
                     }
                     if (message.matteKey != null && message.hasOwnProperty("matteKey"))
-                        if (!isString(message.matteKey))
+                        if (!$util.isString(message.matteKey))
                             return "matteKey: string expected";
                     return null;
                 };
@@ -660,13 +662,13 @@ export const com = $root.com = (() => {
                 Layout.encode = function encode(message, writer) {
                     if (!writer)
                         writer = $Writer.create();
-                    if (message.x != null && Object.hasOwn(message, "x"))
+                    if (message.x != null && Object.hasOwnProperty.call(message, "x"))
                         writer.uint32(/* id 1, wireType 5 =*/13).float(message.x);
-                    if (message.y != null && Object.hasOwn(message, "y"))
+                    if (message.y != null && Object.hasOwnProperty.call(message, "y"))
                         writer.uint32(/* id 2, wireType 5 =*/21).float(message.y);
-                    if (message.width != null && Object.hasOwn(message, "width"))
+                    if (message.width != null && Object.hasOwnProperty.call(message, "width"))
                         writer.uint32(/* id 3, wireType 5 =*/29).float(message.width);
-                    if (message.height != null && Object.hasOwn(message, "height"))
+                    if (message.height != null && Object.hasOwnProperty.call(message, "height"))
                         writer.uint32(/* id 4, wireType 5 =*/37).float(message.height);
                     return writer;
                 };
@@ -951,17 +953,17 @@ export const com = $root.com = (() => {
                 Transform.encode = function encode(message, writer) {
                     if (!writer)
                         writer = $Writer.create();
-                    if (message.a != null && Object.hasOwn(message, "a"))
+                    if (message.a != null && Object.hasOwnProperty.call(message, "a"))
                         writer.uint32(/* id 1, wireType 5 =*/13).float(message.a);
-                    if (message.b != null && Object.hasOwn(message, "b"))
+                    if (message.b != null && Object.hasOwnProperty.call(message, "b"))
                         writer.uint32(/* id 2, wireType 5 =*/21).float(message.b);
-                    if (message.c != null && Object.hasOwn(message, "c"))
+                    if (message.c != null && Object.hasOwnProperty.call(message, "c"))
                         writer.uint32(/* id 3, wireType 5 =*/29).float(message.c);
-                    if (message.d != null && Object.hasOwn(message, "d"))
+                    if (message.d != null && Object.hasOwnProperty.call(message, "d"))
                         writer.uint32(/* id 4, wireType 5 =*/37).float(message.d);
-                    if (message.tx != null && Object.hasOwn(message, "tx"))
+                    if (message.tx != null && Object.hasOwnProperty.call(message, "tx"))
                         writer.uint32(/* id 5, wireType 5 =*/45).float(message.tx);
-                    if (message.ty != null && Object.hasOwn(message, "ty"))
+                    if (message.ty != null && Object.hasOwnProperty.call(message, "ty"))
                         writer.uint32(/* id 6, wireType 5 =*/53).float(message.ty);
                     return writer;
                 };
@@ -1256,8 +1258,8 @@ export const com = $root.com = (() => {
                  * @instance
                  */
                 Object.defineProperty(ShapeEntity.prototype, "args", {
-                    get: getOneOf($oneOfFields = ["shape", "rect", "ellipse"]),
-                    set: setOneOf($oneOfFields)
+                    get: $util.oneOfGetter($oneOfFields = ["shape", "rect", "ellipse"]),
+                    set: $util.oneOfSetter($oneOfFields)
                 });
 
                 /**
@@ -1284,17 +1286,17 @@ export const com = $root.com = (() => {
                 ShapeEntity.encode = function encode(message, writer) {
                     if (!writer)
                         writer = $Writer.create();
-                    if (message.type != null && Object.hasOwn(message, "type"))
+                    if (message.type != null && Object.hasOwnProperty.call(message, "type"))
                         writer.uint32(/* id 1, wireType 0 =*/8).int32(message.type);
-                    if (message.shape != null && Object.hasOwn(message, "shape"))
+                    if (message.shape != null && Object.hasOwnProperty.call(message, "shape"))
                         $root.com.opensource.svga.ShapeEntity.ShapeArgs.encode(message.shape, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-                    if (message.rect != null && Object.hasOwn(message, "rect"))
+                    if (message.rect != null && Object.hasOwnProperty.call(message, "rect"))
                         $root.com.opensource.svga.ShapeEntity.RectArgs.encode(message.rect, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-                    if (message.ellipse != null && Object.hasOwn(message, "ellipse"))
+                    if (message.ellipse != null && Object.hasOwnProperty.call(message, "ellipse"))
                         $root.com.opensource.svga.ShapeEntity.EllipseArgs.encode(message.ellipse, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-                    if (message.styles != null && Object.hasOwn(message, "styles"))
+                    if (message.styles != null && Object.hasOwnProperty.call(message, "styles"))
                         $root.com.opensource.svga.ShapeEntity.ShapeStyle.encode(message.styles, writer.uint32(/* id 10, wireType 2 =*/82).fork()).ldelim();
-                    if (message.transform != null && Object.hasOwn(message, "transform"))
+                    if (message.transform != null && Object.hasOwnProperty.call(message, "transform"))
                         $root.com.opensource.svga.Transform.encode(message.transform, writer.uint32(/* id 11, wireType 2 =*/90).fork()).ldelim();
                     return writer;
                 };
@@ -1647,7 +1649,7 @@ export const com = $root.com = (() => {
                     ShapeArgs.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
-                        if (message.d != null && Object.hasOwn(message, "d"))
+                        if (message.d != null && Object.hasOwnProperty.call(message, "d"))
                             writer.uint32(/* id 1, wireType 2 =*/10).string(message.d);
                         return writer;
                     };
@@ -1723,7 +1725,7 @@ export const com = $root.com = (() => {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.d != null && message.hasOwnProperty("d"))
-                            if (!isString(message.d))
+                            if (!$util.isString(message.d))
                                 return "d: string expected";
                         return null;
                     };
@@ -1886,15 +1888,15 @@ export const com = $root.com = (() => {
                     RectArgs.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
-                        if (message.x != null && Object.hasOwn(message, "x"))
+                        if (message.x != null && Object.hasOwnProperty.call(message, "x"))
                             writer.uint32(/* id 1, wireType 5 =*/13).float(message.x);
-                        if (message.y != null && Object.hasOwn(message, "y"))
+                        if (message.y != null && Object.hasOwnProperty.call(message, "y"))
                             writer.uint32(/* id 2, wireType 5 =*/21).float(message.y);
-                        if (message.width != null && Object.hasOwn(message, "width"))
+                        if (message.width != null && Object.hasOwnProperty.call(message, "width"))
                             writer.uint32(/* id 3, wireType 5 =*/29).float(message.width);
-                        if (message.height != null && Object.hasOwn(message, "height"))
+                        if (message.height != null && Object.hasOwnProperty.call(message, "height"))
                             writer.uint32(/* id 4, wireType 5 =*/37).float(message.height);
-                        if (message.cornerRadius != null && Object.hasOwn(message, "cornerRadius"))
+                        if (message.cornerRadius != null && Object.hasOwnProperty.call(message, "cornerRadius"))
                             writer.uint32(/* id 5, wireType 5 =*/45).float(message.cornerRadius);
                         return writer;
                     };
@@ -2173,13 +2175,13 @@ export const com = $root.com = (() => {
                     EllipseArgs.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
-                        if (message.x != null && Object.hasOwn(message, "x"))
+                        if (message.x != null && Object.hasOwnProperty.call(message, "x"))
                             writer.uint32(/* id 1, wireType 5 =*/13).float(message.x);
-                        if (message.y != null && Object.hasOwn(message, "y"))
+                        if (message.y != null && Object.hasOwnProperty.call(message, "y"))
                             writer.uint32(/* id 2, wireType 5 =*/21).float(message.y);
-                        if (message.radiusX != null && Object.hasOwn(message, "radiusX"))
+                        if (message.radiusX != null && Object.hasOwnProperty.call(message, "radiusX"))
                             writer.uint32(/* id 3, wireType 5 =*/29).float(message.radiusX);
-                        if (message.radiusY != null && Object.hasOwn(message, "radiusY"))
+                        if (message.radiusY != null && Object.hasOwnProperty.call(message, "radiusY"))
                             writer.uint32(/* id 4, wireType 5 =*/37).float(message.radiusY);
                         return writer;
                     };
@@ -2491,23 +2493,23 @@ export const com = $root.com = (() => {
                     ShapeStyle.encode = function encode(message, writer) {
                         if (!writer)
                             writer = $Writer.create();
-                        if (message.fill != null && Object.hasOwn(message, "fill"))
+                        if (message.fill != null && Object.hasOwnProperty.call(message, "fill"))
                             $root.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.encode(message.fill, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-                        if (message.stroke != null && Object.hasOwn(message, "stroke"))
+                        if (message.stroke != null && Object.hasOwnProperty.call(message, "stroke"))
                             $root.com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.encode(message.stroke, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-                        if (message.strokeWidth != null && Object.hasOwn(message, "strokeWidth"))
+                        if (message.strokeWidth != null && Object.hasOwnProperty.call(message, "strokeWidth"))
                             writer.uint32(/* id 3, wireType 5 =*/29).float(message.strokeWidth);
-                        if (message.lineCap != null && Object.hasOwn(message, "lineCap"))
+                        if (message.lineCap != null && Object.hasOwnProperty.call(message, "lineCap"))
                             writer.uint32(/* id 4, wireType 0 =*/32).int32(message.lineCap);
-                        if (message.lineJoin != null && Object.hasOwn(message, "lineJoin"))
+                        if (message.lineJoin != null && Object.hasOwnProperty.call(message, "lineJoin"))
                             writer.uint32(/* id 5, wireType 0 =*/40).int32(message.lineJoin);
-                        if (message.miterLimit != null && Object.hasOwn(message, "miterLimit"))
+                        if (message.miterLimit != null && Object.hasOwnProperty.call(message, "miterLimit"))
                             writer.uint32(/* id 6, wireType 5 =*/53).float(message.miterLimit);
-                        if (message.lineDashI != null && Object.hasOwn(message, "lineDashI"))
+                        if (message.lineDashI != null && Object.hasOwnProperty.call(message, "lineDashI"))
                             writer.uint32(/* id 7, wireType 5 =*/61).float(message.lineDashI);
-                        if (message.lineDashII != null && Object.hasOwn(message, "lineDashII"))
+                        if (message.lineDashII != null && Object.hasOwnProperty.call(message, "lineDashII"))
                             writer.uint32(/* id 8, wireType 5 =*/69).float(message.lineDashII);
-                        if (message.lineDashIII != null && Object.hasOwn(message, "lineDashIII"))
+                        if (message.lineDashIII != null && Object.hasOwnProperty.call(message, "lineDashIII"))
                             writer.uint32(/* id 9, wireType 5 =*/77).float(message.lineDashIII);
                         return writer;
                     };
@@ -2889,13 +2891,13 @@ export const com = $root.com = (() => {
                         RGBAColor.encode = function encode(message, writer) {
                             if (!writer)
                                 writer = $Writer.create();
-                            if (message.r != null && Object.hasOwn(message, "r"))
+                            if (message.r != null && Object.hasOwnProperty.call(message, "r"))
                                 writer.uint32(/* id 1, wireType 5 =*/13).float(message.r);
-                            if (message.g != null && Object.hasOwn(message, "g"))
+                            if (message.g != null && Object.hasOwnProperty.call(message, "g"))
                                 writer.uint32(/* id 2, wireType 5 =*/21).float(message.g);
-                            if (message.b != null && Object.hasOwn(message, "b"))
+                            if (message.b != null && Object.hasOwnProperty.call(message, "b"))
                                 writer.uint32(/* id 3, wireType 5 =*/29).float(message.b);
-                            if (message.a != null && Object.hasOwn(message, "a"))
+                            if (message.a != null && Object.hasOwnProperty.call(message, "a"))
                                 writer.uint32(/* id 4, wireType 5 =*/37).float(message.a);
                             return writer;
                         };
@@ -3184,7 +3186,7 @@ export const com = $root.com = (() => {
                  * @memberof com.opensource.svga.FrameEntity
                  * @instance
                  */
-                FrameEntity.prototype.shapes = emptyArray;
+                FrameEntity.prototype.shapes = $util.emptyArray;
 
                 /**
                  * Creates a new FrameEntity instance using the specified properties.
@@ -3210,13 +3212,13 @@ export const com = $root.com = (() => {
                 FrameEntity.encode = function encode(message, writer) {
                     if (!writer)
                         writer = $Writer.create();
-                    if (message.alpha != null && Object.hasOwn(message, "alpha"))
+                    if (message.alpha != null && Object.hasOwnProperty.call(message, "alpha"))
                         writer.uint32(/* id 1, wireType 5 =*/13).float(message.alpha);
-                    if (message.layout != null && Object.hasOwn(message, "layout"))
+                    if (message.layout != null && Object.hasOwnProperty.call(message, "layout"))
                         $root.com.opensource.svga.Layout.encode(message.layout, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-                    if (message.transform != null && Object.hasOwn(message, "transform"))
+                    if (message.transform != null && Object.hasOwnProperty.call(message, "transform"))
                         $root.com.opensource.svga.Transform.encode(message.transform, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-                    if (message.clipPath != null && Object.hasOwn(message, "clipPath"))
+                    if (message.clipPath != null && Object.hasOwnProperty.call(message, "clipPath"))
                         writer.uint32(/* id 4, wireType 2 =*/34).string(message.clipPath);
                     if (message.shapes != null && message.shapes.length)
                         for (let i = 0; i < message.shapes.length; ++i)
@@ -3326,7 +3328,7 @@ export const com = $root.com = (() => {
                             return "transform." + error;
                     }
                     if (message.clipPath != null && message.hasOwnProperty("clipPath"))
-                        if (!isString(message.clipPath))
+                        if (!$util.isString(message.clipPath))
                             return "clipPath: string expected";
                     if (message.shapes != null && message.hasOwnProperty("shapes")) {
                         if (!Array.isArray(message.shapes))
@@ -3496,7 +3498,7 @@ export const com = $root.com = (() => {
                  * @memberof com.opensource.svga.MovieEntity
                  * @instance
                  */
-                MovieEntity.prototype.images = emptyObject;
+                MovieEntity.prototype.images = $util.emptyObject;
 
                 /**
                  * MovieEntity sprites.
@@ -3504,7 +3506,7 @@ export const com = $root.com = (() => {
                  * @memberof com.opensource.svga.MovieEntity
                  * @instance
                  */
-                MovieEntity.prototype.sprites = emptyArray;
+                MovieEntity.prototype.sprites = $util.emptyArray;
 
                 /**
                  * Creates a new MovieEntity instance using the specified properties.
@@ -3530,11 +3532,11 @@ export const com = $root.com = (() => {
                 MovieEntity.encode = function encode(message, writer) {
                     if (!writer)
                         writer = $Writer.create();
-                    if (message.version != null && Object.hasOwn(message, "version"))
+                    if (message.version != null && Object.hasOwnProperty.call(message, "version"))
                         writer.uint32(/* id 1, wireType 2 =*/10).string(message.version);
-                    if (message.params != null && Object.hasOwn(message, "params"))
+                    if (message.params != null && Object.hasOwnProperty.call(message, "params"))
                         $root.com.opensource.svga.MovieParams.encode(message.params, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-                    if (message.images != null && Object.hasOwn(message, "images"))
+                    if (message.images != null && Object.hasOwnProperty.call(message, "images"))
                         for (let keys = Object.keys(message.images), i = 0; i < keys.length; ++i)
                             writer.uint32(/* id 3, wireType 2 =*/26).fork().uint32(/* id 1, wireType 2 =*/10).string(keys[i]).uint32(/* id 2, wireType 2 =*/18).bytes(message.images[keys[i]]).ldelim();
                     if (message.sprites != null && message.sprites.length)
@@ -3583,7 +3585,7 @@ export const com = $root.com = (() => {
                                 break;
                             }
                         case 3: {
-                                if (message.images === emptyObject)
+                                if (message.images === $util.emptyObject)
                                     message.images = {};
                                 let end2 = reader.uint32() + reader.pos;
                                 key = "";
@@ -3647,7 +3649,7 @@ export const com = $root.com = (() => {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.version != null && message.hasOwnProperty("version"))
-                        if (!isString(message.version))
+                        if (!$util.isString(message.version))
                             return "version: string expected";
                     if (message.params != null && message.hasOwnProperty("params")) {
                         let error = $root.com.opensource.svga.MovieParams.verify(message.params);
@@ -3655,11 +3657,11 @@ export const com = $root.com = (() => {
                             return "params." + error;
                     }
                     if (message.images != null && message.hasOwnProperty("images")) {
-                        if (!isObject(message.images))
+                        if (!$util.isObject(message.images))
                             return "images: object expected";
                         let key = Object.keys(message.images);
                         for (let i = 0; i < key.length; ++i)
-                            if (!(message.images[key[i]] && typeof message.images[key[i]].length === "number" || isString(message.images[key[i]])))
+                            if (!(message.images[key[i]] && typeof message.images[key[i]].length === "number" || $util.isString(message.images[key[i]])))
                                 return "images: buffer{k:string} expected";
                     }
                     if (message.sprites != null && message.hasOwnProperty("sprites")) {
@@ -3699,7 +3701,7 @@ export const com = $root.com = (() => {
                         message.images = {};
                         for (let keys = Object.keys(object.images), i = 0; i < keys.length; ++i)
                             if (typeof object.images[keys[i]] === "string")
-                                base64.decode(object.images[keys[i]], message.images[keys[i]] = newBuffer(base64.length(object.images[keys[i]])), 0);
+                                $util.base64.decode(object.images[keys[i]], message.images[keys[i]] = $util.newBuffer($util.base64.length(object.images[keys[i]])), 0);
                             else if (object.images[keys[i]].length >= 0)
                                 message.images[keys[i]] = object.images[keys[i]];
                     }
@@ -3745,7 +3747,7 @@ export const com = $root.com = (() => {
                     if (message.images && (keys2 = Object.keys(message.images)).length) {
                         object.images = {};
                         for (let j = 0; j < keys2.length; ++j)
-                            object.images[keys2[j]] = options.bytes === String ? base64.encode(message.images[keys2[j]], 0, message.images[keys2[j]].length) : options.bytes === Array ? Array.prototype.slice.call(message.images[keys2[j]]) : message.images[keys2[j]];
+                            object.images[keys2[j]] = options.bytes === String ? $util.base64.encode(message.images[keys2[j]], 0, message.images[keys2[j]].length) : options.bytes === Array ? Array.prototype.slice.call(message.images[keys2[j]]) : message.images[keys2[j]];
                     }
                     if (message.sprites && message.sprites.length) {
                         object.sprites = [];
@@ -3793,4 +3795,4 @@ export const com = $root.com = (() => {
     return com;
 })();
 
-export default $root
+export { $root as default };

@@ -1,7 +1,8 @@
 export type PlatformCanvas = HTMLCanvasElement | WechatMiniprogram.Canvas;
 export type PlatformOffscreenCanvas = WechatMiniprogram.OffscreenCanvas | OffscreenCanvas;
+export type PlatformImage = HTMLImageElement | WechatMiniprogram.Image;
 export interface RawImages {
-    [key: string]: string | HTMLImageElement | ImageBitmap;
+    [key: string]: string | Uint8Array;
 }
 export interface Rect {
     x: number;
@@ -142,15 +143,15 @@ export interface VideoSprite {
     imageKey: string;
     frames: VideoFrame[];
 }
-export type Bitmap = HTMLImageElement | OffscreenCanvas | ImageBitmap;
+export type Bitmap = PlatformImage | PlatformOffscreenCanvas | ImageBitmap;
 export interface BitmapsCache {
     [key: string]: Bitmap | ImageBitmap;
 }
-export type ReplaceElement = HTMLImageElement | HTMLCanvasElement | OffscreenCanvas;
+export type ReplaceElement = PlatformImage | PlatformCanvas | PlatformOffscreenCanvas;
 export interface ReplaceElements {
     [key: string]: ReplaceElement;
 }
-export type DynamicElement = HTMLImageElement | HTMLCanvasElement | OffscreenCanvas;
+export type DynamicElement = PlatformImage | PlatformCanvas | PlatformOffscreenCanvas;
 export interface DynamicElements {
     [key: string]: DynamicElement;
 }

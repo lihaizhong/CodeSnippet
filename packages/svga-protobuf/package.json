@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "rimraf -rf dist && rollup -c",
-    "compiler": "pbjs -t static-module -w es6 -o src/svga-compiled.js protos/svga.proto",
+    "compiler": "pbjs -t static-module -w es6 -o protos/svga.js protos/svga.proto",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
