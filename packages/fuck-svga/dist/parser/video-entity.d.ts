@@ -1,4 +1,5 @@
-import { Movie, Video, RawImages, ReplaceElements, DynamicElements, VideoSprite } from "../types";
+import { MovieEntity } from "svga-protobuf";
+import { Video, RawImages, ReplaceElements, DynamicElements, VideoSprite } from "../types";
 export declare class VideoEntity implements Video {
     version: string;
     size: {
@@ -11,5 +12,5 @@ export declare class VideoEntity implements Video {
     replaceElements: ReplaceElements;
     dynamicElements: DynamicElements;
     sprites: VideoSprite[];
-    constructor(movie: Movie, images?: RawImages);
+    constructor(movie: MovieEntity, images?: RawImages);
 }

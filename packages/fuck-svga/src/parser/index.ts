@@ -17,7 +17,7 @@ export class Parser {
     }
 
     const inflateData = unzlibSync(u8a);
-    const movieData = MovieEntityReader.decode(inflateData) as unknown as Movie;
+    const movieData = MovieEntityReader.decode(inflateData);
 
     return new VideoEntity(movieData, movieData.images);
   }

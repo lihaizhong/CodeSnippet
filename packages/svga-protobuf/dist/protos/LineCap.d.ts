@@ -7,8 +7,8 @@
  * @property {number} LineCap_SQUARE=2 LineCap_SQUARE value
  */
 declare enum LineCap {
-    LineCap_BUTT = 0,
-    LineCap_ROUND = 1,
-    LineCap_SQUARE = 2
+    BUTT = 0,
+    ROUND = 1,
+    SQUARE = 2
 }
 export default LineCap;

@@ -7,9 +7,9 @@
  * @property {number} LineJoin_BEVEL=2 LineJoin_BEVEL value
  */
 enum LineJoin {
-  LineJoin_MITER = 0,
-  LineJoin_ROUND = 1,
-  LineJoin_BEVEL = 2,
+  MITER = 0,
+  ROUND = 1,
+  BEVEL = 2,
 }
 
 export default LineJoin;

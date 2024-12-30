@@ -1,3 +1,4 @@
+import { MovieEntity } from "svga-protobuf";
 import {
   Movie,
   Video,
@@ -24,10 +25,10 @@ export class VideoEntity implements Video {
   public dynamicElements: DynamicElements = {};
   public sprites: VideoSprite[] = [];
 
-  constructor(movie: Movie, images: RawImages = {}) {
+  constructor(movie: MovieEntity, images: RawImages = {}) {
     this.version = movie.version;
 
-    const { viewBoxWidth, viewBoxHeight, fps, frames } = movie.params;
+    const { viewBoxWidth, viewBoxHeight, fps, frames } = movie.params!;
     this.size.width = viewBoxWidth;
     this.size.height = viewBoxHeight;
     this.fps = fps;
@@ -88,26 +89,26 @@ export class VideoEntity implements Video {
 
           let lineCap: CanvasLineCap | null = null;
           switch (mStyles.lineCap) {
-            case LINE_CAP_CODE.BUTT:
+            case 0:
               lineCap = "butt";
               break;
-            case LINE_CAP_CODE.ROUND:
+            case 1:
               lineCap = "round";
               break;
-            case LINE_CAP_CODE.SQUARE:
+            case 2:
               lineCap = "square";
               break;
           }
 
           let lineJoin: CanvasLineJoin | null = null;
           switch (mStyles.lineJoin) {
-            case LINE_JOIN_CODE.BEVEL:
+            case 2:
               lineJoin = "bevel";
               break;
-            case LINE_JOIN_CODE.ROUND:
+            case 1:
               lineJoin = "round";
               break;
-            case LINE_JOIN_CODE.MITER:
+            case 0:
               lineJoin = "miter";
               break;
           }
@@ -151,27 +152,21 @@ export class VideoEntity implements Video {
             ty: mShape.transform?.ty ?? 0.0,
           };
 
-          if (mShape.type === SHAPE_TYPE_CODE.SHAPE && mShape.shape !== null) {
+          if (mShape.type === 0 && mShape.shape !== null) {
             shapes.push({
               type: SHAPE_TYPE.SHAPE,
               path: mShape.shape,
               styles,
               transform,
             });
-          } else if (
-            mShape.type === SHAPE_TYPE_CODE.RECT &&
-            mShape.rect !== null
-          ) {
+          } else if (mShape.type === 1 && mShape.rect !== null) {
             shapes.push({
               type: SHAPE_TYPE.RECT,
               path: mShape.rect,
               styles,
               transform,
             });
-          } else if (
-            mShape.type === SHAPE_TYPE_CODE.ELLIPSE &&
-            mShape.ellipse !== null
-          ) {
+          } else if (mShape.type === 2 && mShape.ellipse !== null) {
             shapes.push({
               type: SHAPE_TYPE.ELLIPSE,
               path: mShape.ellipse,
@@ -183,7 +178,7 @@ export class VideoEntity implements Video {
 
         if (
           mFrame.shapes[0] !== undefined &&
-          mFrame.shapes[0].type === SHAPE_TYPE_CODE.KEEP &&
+          mFrame.shapes[0].type === 3 &&
           lastShapes !== undefined
         ) {
           shapes = lastShapes;
