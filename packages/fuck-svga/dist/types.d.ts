@@ -240,6 +240,6 @@ export interface PlayerConfig {
      */
     isUseIntersectionObserver: boolean;
 }
-export type PlayerConfigOptions = Partial<Omit<PlayerConfig, 'container' | 'context'> & {
+export type PlayerConfigOptions = Partial<Omit<PlayerConfig, "container" | "context"> & {
     container: string;
 }>;

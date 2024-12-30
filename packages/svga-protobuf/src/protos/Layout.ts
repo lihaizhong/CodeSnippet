@@ -1,6 +1,6 @@
 import Reader from "../serialization/Reader";
 // import Writer from "../serialization/Writer";
-import { toJSONOptions } from "../utils";
+// import { toJSONOptions } from "../utils";
 
 /**
  * Properties of a Layout.
@@ -18,18 +18,7 @@ export interface LayoutProps {
   height: number | null;
 }
 
-export default class Layout {
-  /**
-   * Creates a new Layout instance using the specified properties.
-   * @function create
-   * @memberof com.opensource.svga.Layout
-   * @static
-   * @param {com.opensource.svga.ILayout=} [properties] Properties to set
-   * @returns {com.opensource.svga.Layout} Layout instance
-   */
-  static create(properties?: LayoutProps): Layout {
-    return new Layout(properties);
-  }
+export class LayoutWriter {
   /**
    * Encodes the specified Layout message. Does not implicitly {@link com.opensource.svga.Layout.verify|verify} messages.
    * @function encode
@@ -70,6 +59,9 @@ export default class Layout {
   // static encodeDelimited(message: Layout, writer: Writer): Writer {
   //   return Layout.encode(message, writer).ldelim();
   // }
+}
+
+export class LayoutReader {
   /**
    * Decodes a Layout message from the specified reader or buffer.
    * @function decode
@@ -81,7 +73,7 @@ export default class Layout {
    * @throws {Error} If the payload is not a reader or valid buffer
    * @throws {$protobuf.util.ProtocolError} If required fields are missing
    */
-  static decode(reader: Reader | Uint8Array, length: number): Layout {
+  static decode(reader: Reader | Uint8Array, length?: number): Layout {
     if (!(reader instanceof Reader)) {
       reader = Reader.create(reader);
     }
@@ -129,7 +121,21 @@ export default class Layout {
       reader = new Reader(reader);
     }
 
-    return Layout.decode(reader, reader.uint32());
+    return this.decode(reader, reader.uint32());
+  }
+}
+
+export default class Layout {
+  /**
+   * Creates a new Layout instance using the specified properties.
+   * @function create
+   * @memberof com.opensource.svga.Layout
+   * @static
+   * @param {com.opensource.svga.ILayout=} [properties] Properties to set
+   * @returns {com.opensource.svga.Layout} Layout instance
+   */
+  static create(properties?: LayoutProps): Layout {
+    return new Layout(properties);
   }
   /**
    * Verifies a Layout message.
@@ -203,43 +209,43 @@ export default class Layout {
    * @param {$protobuf.IConversionOptions} [options] Conversion options
    * @returns {Object.<string,*>} Plain object
    */
-  static toObject(
-    message: Layout,
-    options: Record<string, any>
-  ): Record<string, any> {
-    if (!options) {
-      options = {};
-    }
-    const object: Record<string, any> = {};
-    if (options.defaults) {
-      object.x = 0;
-      object.y = 0;
-      object.width = 0;
-      object.height = 0;
-    }
-    if (message.x != null && message.hasOwnProperty("x")) {
-      object.x =
-        options.json && !isFinite(message.x) ? "" + message.x : message.x;
-    }
-    if (message.y != null && message.hasOwnProperty("y")) {
-      object.y =
-        options.json && !isFinite(message.y) ? "" + message.y : message.y;
-    }
-    if (message.width != null && message.hasOwnProperty("width")) {
-      object.width =
-        options.json && !isFinite(message.width)
-          ? "" + message.width
-          : message.width;
-    }
-    if (message.height != null && message.hasOwnProperty("height")) {
-      object.height =
-        options.json && !isFinite(message.height)
-          ? "" + message.height
-          : message.height;
-    }
+  // static toObject(
+  //   message: Layout,
+  //   options: Record<string, any>
+  // ): Record<string, any> {
+  //   if (!options) {
+  //     options = {};
+  //   }
+  //   const object: Record<string, any> = {};
+  //   if (options.defaults) {
+  //     object.x = 0;
+  //     object.y = 0;
+  //     object.width = 0;
+  //     object.height = 0;
+  //   }
+  //   if (message.x != null && message.hasOwnProperty("x")) {
+  //     object.x =
+  //       options.json && !isFinite(message.x) ? "" + message.x : message.x;
+  //   }
+  //   if (message.y != null && message.hasOwnProperty("y")) {
+  //     object.y =
+  //       options.json && !isFinite(message.y) ? "" + message.y : message.y;
+  //   }
+  //   if (message.width != null && message.hasOwnProperty("width")) {
+  //     object.width =
+  //       options.json && !isFinite(message.width)
+  //         ? "" + message.width
+  //         : message.width;
+  //   }
+  //   if (message.height != null && message.hasOwnProperty("height")) {
+  //     object.height =
+  //       options.json && !isFinite(message.height)
+  //         ? "" + message.height
+  //         : message.height;
+  //   }
 
-    return object;
-  }
+  //   return object;
+  // }
   /**
    * Gets the default type url for Layout
    * @function getTypeUrl
@@ -248,13 +254,13 @@ export default class Layout {
    * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
    * @returns {string} The default type url
    */
-  static getTypeUrl(typeUrlPrefix?: string): string {
-    if (typeUrlPrefix === undefined) {
-      typeUrlPrefix = "type.googleapis.com";
-    }
+  // static getTypeUrl(typeUrlPrefix?: string): string {
+  //   if (typeUrlPrefix === undefined) {
+  //     typeUrlPrefix = "type.googleapis.com";
+  //   }
 
-    return typeUrlPrefix + "/com.opensource.svga.Layout";
-  }
+  //   return typeUrlPrefix + "/com.opensource.svga.Layout";
+  // }
 
   /**
    * Layout x.
@@ -320,7 +326,7 @@ export default class Layout {
    * @instance
    * @returns {Object.<string,*>} JSON object
    */
-  toJSON() {
-    return Layout.toObject(this, toJSONOptions);
-  }
+  // toJSON() {
+  //   return Layout.toObject(this, toJSONOptions);
+  // }
 }

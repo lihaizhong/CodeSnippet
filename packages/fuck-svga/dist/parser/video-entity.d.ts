@@ -1,4 +1,4 @@
-import { Movie, Video, RawImages, ReplaceElements, DynamicElements, VideoSprite } from '../types';
+import { Movie, Video, RawImages, ReplaceElements, DynamicElements, VideoSprite } from "../types";
 export declare class VideoEntity implements Video {
     version: string;
     size: {

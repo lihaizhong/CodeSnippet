@@ -4,6 +4,7 @@
   "type": "module",
   "description": "",
   "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "build": "rimraf -rf dist && rollup -c",
     "compiler": "pbjs -t static-module -w es6 -o protos/svga.js protos/svga.proto",

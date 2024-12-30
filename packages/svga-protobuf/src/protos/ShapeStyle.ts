@@ -2,7 +2,7 @@ import Reader from "../serialization/Reader";
 // import Writer from "../serialization/Writer";
 import LineCap from "./LineCap";
 import LineJoin from "./LineJoin";
-import RGBAColor from "./RGBAColor";
+import RGBAColor, { RGBAColorReader } from "./RGBAColor";
 import ShapeEntity from "./ShapeEntity";
 import { toJSONOptions } from "../utils";
 
@@ -32,24 +32,7 @@ export interface ShapeStyleProps {
   lineDashIII: number | null;
 }
 
-export default class ShapeStyle {
-  static RGBAColor = RGBAColor;
-
-  static LineCap = LineCap;
-
-  static LineJoin = LineJoin;
-
-  /**
-   * Creates a new ShapeStyle instance using the specified properties.
-   * @function create
-   * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
-   * @static
-   * @param {com.opensource.svga.ShapeEntity.IShapeStyle=} [properties] Properties to set
-   * @returns {com.opensource.svga.ShapeEntity.ShapeStyle} ShapeStyle instance
-   */
-  static create(properties: ShapeStyleProps) {
-    return new ShapeStyle(properties);
-  }
+export class ShapeStyleWriter {
   /**
    * Encodes the specified ShapeStyle message. Does not implicitly {@link com.opensource.svga.ShapeEntity.ShapeStyle.verify|verify} messages.
    * @function encode
@@ -111,6 +94,9 @@ export default class ShapeStyle {
   // static encodeDelimited(message: ShapeStyle, writer: Writer): Writer {
   //   return ShapeStyle.encode(message, writer).ldelim();
   // }
+}
+
+export class ShapeStyleReader {
   /**
    * Decodes a ShapeStyle message from the specified reader or buffer.
    * @function decode
@@ -122,7 +108,7 @@ export default class ShapeStyle {
    * @throws {Error} If the payload is not a reader or valid buffer
    * @throws {$protobuf.util.ProtocolError} If required fields are missing
    */
-  static decode(reader: Reader | Uint8Array, length: number): ShapeStyle {
+  static decode(reader: Reader | Uint8Array, length?: number): ShapeStyle {
     if (!(reader instanceof Reader)) {
       reader = Reader.create(reader);
     }
@@ -132,14 +118,14 @@ export default class ShapeStyle {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1: {
-          message.fill = RGBAColor.decode(
+          message.fill = RGBAColorReader.decode(
             reader,
             reader.uint32()
           );
           break;
         }
         case 2: {
-          message.stroke = RGBAColor.decode(
+          message.stroke = RGBAColorReader.decode(
             reader,
             reader.uint32()
           );
@@ -196,7 +182,21 @@ export default class ShapeStyle {
       reader = new Reader(reader);
     }
 
-    return ShapeStyle.decode(reader, reader.uint32());
+    return this.decode(reader, reader.uint32());
+  }
+}
+
+export default class ShapeStyle {
+  /**
+   * Creates a new ShapeStyle instance using the specified properties.
+   * @function create
+   * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
+   * @static
+   * @param {com.opensource.svga.ShapeEntity.IShapeStyle=} [properties] Properties to set
+   * @returns {com.opensource.svga.ShapeEntity.ShapeStyle} ShapeStyle instance
+   */
+  static create(properties: ShapeStyleProps) {
+    return new ShapeStyle(properties);
   }
   /**
    * Verifies a ShapeStyle message.
@@ -366,86 +366,86 @@ export default class ShapeStyle {
    * @param {$protobuf.IConversionOptions} [options] Conversion options
    * @returns {Object.<string,*>} Plain object
    */
-  static toObject(
-    message: ShapeStyle,
-    options: Record<string, any>
-  ): Record<string, any> {
-    if (!options) {
-      options = {};
-    }
-    const object: Record<string, any> = {};
-    if (options.defaults) {
-      object.fill = null;
-      object.stroke = null;
-      object.strokeWidth = 0;
-      object.lineCap = options.enums === String ? "LineCap_BUTT" : 0;
-      object.lineJoin = options.enums === String ? "LineJoin_MITER" : 0;
-      object.miterLimit = 0;
-      object.lineDashI = 0;
-      object.lineDashII = 0;
-      object.lineDashIII = 0;
-    }
-    if (message.fill != null && message.hasOwnProperty("fill")) {
-      object.fill = ShapeEntity.ShapeStyle.RGBAColor.toObject(
-        message.fill,
-        options
-      );
-    }
-    if (message.stroke != null && message.hasOwnProperty("stroke")) {
-      object.stroke = ShapeEntity.ShapeStyle.RGBAColor.toObject(
-        message.stroke,
-        options
-      );
-    }
-    if (message.strokeWidth != null && message.hasOwnProperty("strokeWidth")) {
-      object.strokeWidth =
-        options.json && !isFinite(message.strokeWidth)
-          ? "" + message.strokeWidth
-          : message.strokeWidth;
-    }
-    if (message.lineCap != null && message.hasOwnProperty("lineCap")) {
-      object.lineCap =
-        options.enums === String
-          ? ShapeEntity.ShapeStyle.LineCap[message.lineCap] === undefined
-            ? message.lineCap
-            : ShapeEntity.ShapeStyle.LineCap[message.lineCap]
-          : message.lineCap;
-    }
-    if (message.lineJoin != null && message.hasOwnProperty("lineJoin")) {
-      object.lineJoin =
-        options.enums === String
-          ? ShapeEntity.ShapeStyle.LineJoin[message.lineJoin] === undefined
-            ? message.lineJoin
-            : ShapeEntity.ShapeStyle.LineJoin[message.lineJoin]
-          : message.lineJoin;
-    }
-    if (message.miterLimit != null && message.hasOwnProperty("miterLimit")) {
-      object.miterLimit =
-        options.json && !isFinite(message.miterLimit)
-          ? "" + message.miterLimit
-          : message.miterLimit;
-    }
-    if (message.lineDashI != null && message.hasOwnProperty("lineDashI")) {
-      object.lineDashI =
-        options.json && !isFinite(message.lineDashI)
-          ? "" + message.lineDashI
-          : message.lineDashI;
-    }
-    if (message.lineDashII != null && message.hasOwnProperty("lineDashII")) {
-      object.lineDashII =
-        options.json && !isFinite(message.lineDashII)
-          ? "" + message.lineDashII
-          : message.lineDashII;
-    }
-    if (message.lineDashIII != null && message.hasOwnProperty("lineDashIII")) {
-      object.lineDashIII =
-        options.json && !isFinite(message.lineDashIII)
-          ? "" + message.lineDashIII
-          : message.lineDashIII;
-    }
+  // static toObject(
+  //   message: ShapeStyle,
+  //   options: Record<string, any>
+  // ): Record<string, any> {
+  //   if (!options) {
+  //     options = {};
+  //   }
+  //   const object: Record<string, any> = {};
+  //   if (options.defaults) {
+  //     object.fill = null;
+  //     object.stroke = null;
+  //     object.strokeWidth = 0;
+  //     object.lineCap = options.enums === String ? "LineCap_BUTT" : 0;
+  //     object.lineJoin = options.enums === String ? "LineJoin_MITER" : 0;
+  //     object.miterLimit = 0;
+  //     object.lineDashI = 0;
+  //     object.lineDashII = 0;
+  //     object.lineDashIII = 0;
+  //   }
+  //   if (message.fill != null && message.hasOwnProperty("fill")) {
+  //     object.fill = RGBAColor.toObject(
+  //       message.fill,
+  //       options
+  //     );
+  //   }
+  //   if (message.stroke != null && message.hasOwnProperty("stroke")) {
+  //     object.stroke = RGBAColor.toObject(
+  //       message.stroke,
+  //       options
+  //     );
+  //   }
+  //   if (message.strokeWidth != null && message.hasOwnProperty("strokeWidth")) {
+  //     object.strokeWidth =
+  //       options.json && !isFinite(message.strokeWidth)
+  //         ? "" + message.strokeWidth
+  //         : message.strokeWidth;
+  //   }
+  //   if (message.lineCap != null && message.hasOwnProperty("lineCap")) {
+  //     object.lineCap =
+  //       options.enums === String
+  //         ? LineCap[message.lineCap] === undefined
+  //           ? message.lineCap
+  //           : LineCap[message.lineCap]
+  //         : message.lineCap;
+  //   }
+  //   if (message.lineJoin != null && message.hasOwnProperty("lineJoin")) {
+  //     object.lineJoin =
+  //       options.enums === String
+  //         ? LineJoin[message.lineJoin] === undefined
+  //           ? message.lineJoin
+  //           : LineJoin[message.lineJoin]
+  //         : message.lineJoin;
+  //   }
+  //   if (message.miterLimit != null && message.hasOwnProperty("miterLimit")) {
+  //     object.miterLimit =
+  //       options.json && !isFinite(message.miterLimit)
+  //         ? "" + message.miterLimit
+  //         : message.miterLimit;
+  //   }
+  //   if (message.lineDashI != null && message.hasOwnProperty("lineDashI")) {
+  //     object.lineDashI =
+  //       options.json && !isFinite(message.lineDashI)
+  //         ? "" + message.lineDashI
+  //         : message.lineDashI;
+  //   }
+  //   if (message.lineDashII != null && message.hasOwnProperty("lineDashII")) {
+  //     object.lineDashII =
+  //       options.json && !isFinite(message.lineDashII)
+  //         ? "" + message.lineDashII
+  //         : message.lineDashII;
+  //   }
+  //   if (message.lineDashIII != null && message.hasOwnProperty("lineDashIII")) {
+  //     object.lineDashIII =
+  //       options.json && !isFinite(message.lineDashIII)
+  //         ? "" + message.lineDashIII
+  //         : message.lineDashIII;
+  //   }
 
-    return object;
-  }
+  //   return object;
+  // }
   /**
    * Gets the default type url for ShapeStyle
    * @function getTypeUrl
@@ -454,13 +454,13 @@ export default class ShapeStyle {
    * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
    * @returns {string} The default type url
    */
-  static getTypeUrl(typeUrlPrefix?: string): string {
-    if (typeUrlPrefix === undefined) {
-      typeUrlPrefix = "type.googleapis.com";
-    }
+  // static getTypeUrl(typeUrlPrefix?: string): string {
+  //   if (typeUrlPrefix === undefined) {
+  //     typeUrlPrefix = "type.googleapis.com";
+  //   }
 
-    return typeUrlPrefix + "/com.opensource.svga.ShapeEntity.ShapeStyle";
-  }
+  //   return typeUrlPrefix + "/com.opensource.svga.ShapeEntity.ShapeStyle";
+  // }
 
   /**
    * ShapeStyle fill.
@@ -468,14 +468,14 @@ export default class ShapeStyle {
    * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
    * @instance
    */
-  fill?: RGBAColor | null = null;
+  fill: RGBAColor | null = null;
   /**
    * ShapeStyle stroke.
    * @member {com.opensource.svga.ShapeEntity.ShapeStyle.IRGBAColor|null|undefined} stroke
    * @memberof com.opensource.svga.ShapeEntity.ShapeStyle
    * @instance
    */
-  stroke?: RGBAColor | null = null;
+  stroke: RGBAColor | null = null;
   /**
    * ShapeStyle strokeWidth.
    * @member {number} strokeWidth
@@ -581,7 +581,7 @@ export default class ShapeStyle {
    * @instance
    * @returns {Object.<string,*>} JSON object
    */
-  toJSON() {
-    return ShapeStyle.toObject(this, toJSONOptions);
-  }
+  // toJSON() {
+  //   return ShapeStyle.toObject(this, toJSONOptions);
+  // }
 }

@@ -1,6 +1,6 @@
 import Reader from "../serialization/Reader";
 // import Writer from "../serialization/Writer";
-import { toJSONOptions } from "../utils";
+// import { toJSONOptions } from "../utils";
 
 /**
  * Properties of a Transform.
@@ -22,18 +22,7 @@ export interface TransformProps {
   ty: number | null;
 }
 
-export default class Transform {
-  /**
-   * Creates a new Transform instance using the specified properties.
-   * @function create
-   * @memberof com.opensource.svga.Transform
-   * @static
-   * @param {com.opensource.svga.ITransform=} [properties] Properties to set
-   * @returns {com.opensource.svga.Transform} Transform instance
-   */
-  static create(properties: TransformProps): Transform {
-    return new Transform(properties);
-  }
+export class TransformWriter {
   /**
    * Encodes the specified Transform message. Does not implicitly {@link com.opensource.svga.Transform.verify|verify} messages.
    * @function encode
@@ -79,6 +68,9 @@ export default class Transform {
   // static encodeDelimited(message: Transform, writer: Writer): Writer {
   //   return Transform.encode(message, writer).ldelim();
   // }
+}
+
+export class TransformReader {
   /**
    * Decodes a Transform message from the specified reader or buffer.
    * @function decode
@@ -90,7 +82,7 @@ export default class Transform {
    * @throws {Error} If the payload is not a reader or valid buffer
    * @throws {$protobuf.util.ProtocolError} If required fields are missing
    */
-  static decode(reader: Reader | Uint8Array, length: number): Transform {
+  static decode(reader: Reader | Uint8Array, length?: number): Transform {
     if (!(reader instanceof Reader)) {
       reader = Reader.create(reader);
     }
@@ -145,6 +137,20 @@ export default class Transform {
       reader = new Reader(reader);
     }
     return this.decode(reader, reader.uint32());
+  }
+}
+
+export default class Transform {
+  /**
+   * Creates a new Transform instance using the specified properties.
+   * @function create
+   * @memberof com.opensource.svga.Transform
+   * @static
+   * @param {com.opensource.svga.ITransform=} [properties] Properties to set
+   * @returns {com.opensource.svga.Transform} Transform instance
+   */
+  static create(properties: TransformProps): Transform {
+    return new Transform(properties);
   }
   /**
    * Verifies a Transform message.
@@ -234,49 +240,49 @@ export default class Transform {
    * @param {$protobuf.IConversionOptions} [options] Conversion options
    * @returns {Object.<string,*>} Plain object
    */
-  static toObject(
-    message: Transform,
-    options: Record<string, any>
-  ): Record<string, any> {
-    if (!options) {
-      options = {};
-    }
-    let object: Record<string, any> = {};
-    if (options.defaults) {
-      object.a = 0;
-      object.b = 0;
-      object.c = 0;
-      object.d = 0;
-      object.tx = 0;
-      object.ty = 0;
-    }
-    if (message.a != null && message.hasOwnProperty("a")) {
-      object.a =
-        options.json && !isFinite(message.a) ? "" + message.a : message.a;
-    }
-    if (message.b != null && message.hasOwnProperty("b")) {
-      object.b =
-        options.json && !isFinite(message.b) ? "" + message.b : message.b;
-    }
-    if (message.c != null && message.hasOwnProperty("c")) {
-      object.c =
-        options.json && !isFinite(message.c) ? "" + message.c : message.c;
-    }
-    if (message.d != null && message.hasOwnProperty("d")) {
-      object.d =
-        options.json && !isFinite(message.d) ? "" + message.d : message.d;
-    }
-    if (message.tx != null && message.hasOwnProperty("tx")) {
-      object.tx =
-        options.json && !isFinite(message.tx) ? "" + message.tx : message.tx;
-    }
-    if (message.ty != null && message.hasOwnProperty("ty")) {
-      object.ty =
-        options.json && !isFinite(message.ty) ? "" + message.ty : message.ty;
-    }
+  // static toObject(
+  //   message: Transform,
+  //   options: Record<string, any>
+  // ): Record<string, any> {
+  //   if (!options) {
+  //     options = {};
+  //   }
+  //   let object: Record<string, any> = {};
+  //   if (options.defaults) {
+  //     object.a = 0;
+  //     object.b = 0;
+  //     object.c = 0;
+  //     object.d = 0;
+  //     object.tx = 0;
+  //     object.ty = 0;
+  //   }
+  //   if (message.a != null && message.hasOwnProperty("a")) {
+  //     object.a =
+  //       options.json && !isFinite(message.a) ? "" + message.a : message.a;
+  //   }
+  //   if (message.b != null && message.hasOwnProperty("b")) {
+  //     object.b =
+  //       options.json && !isFinite(message.b) ? "" + message.b : message.b;
+  //   }
+  //   if (message.c != null && message.hasOwnProperty("c")) {
+  //     object.c =
+  //       options.json && !isFinite(message.c) ? "" + message.c : message.c;
+  //   }
+  //   if (message.d != null && message.hasOwnProperty("d")) {
+  //     object.d =
+  //       options.json && !isFinite(message.d) ? "" + message.d : message.d;
+  //   }
+  //   if (message.tx != null && message.hasOwnProperty("tx")) {
+  //     object.tx =
+  //       options.json && !isFinite(message.tx) ? "" + message.tx : message.tx;
+  //   }
+  //   if (message.ty != null && message.hasOwnProperty("ty")) {
+  //     object.ty =
+  //       options.json && !isFinite(message.ty) ? "" + message.ty : message.ty;
+  //   }
 
-    return object;
-  }
+  //   return object;
+  // }
   /**
    * Gets the default type url for Transform
    * @function getTypeUrl
@@ -379,7 +385,7 @@ export default class Transform {
    * @instance
    * @returns {Object.<string,*>} JSON object
    */
-  toJSON() {
-    return Transform.toObject(this, toJSONOptions);
-  }
+  // toJSON() {
+  //   return Transform.toObject(this, toJSONOptions);
+  // }
 }

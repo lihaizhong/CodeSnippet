@@ -1,4 +1,4 @@
-import type { PlatformCanvas, PlatformImage, PlatformOffscreenCanvas } from '../types';
+import type { PlatformCanvas, PlatformImage, PlatformOffscreenCanvas } from "../types";
 /**
  * 加载图片
  * @param canvas 画布对象

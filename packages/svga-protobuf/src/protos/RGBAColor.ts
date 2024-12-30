@@ -1,7 +1,7 @@
 import Reader from "../serialization/Reader";
 // import Writer from "../serialization/Writer";
 import ShapeEntity from "./ShapeEntity";
-import { toJSONOptions } from "../utils";
+// import { toJSONOptions } from "../utils";
 
 /**
  * Properties of a RGBAColor.
@@ -19,18 +19,7 @@ export interface RGBAColorProps {
   a: number | null;
 }
 
-export default class RGBAColor {
-  /**
-   * Creates a new RGBAColor instance using the specified properties.
-   * @function create
-   * @memberof com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor
-   * @static
-   * @param {com.opensource.svga.ShapeEntity.ShapeStyle.IRGBAColor=} [properties] Properties to set
-   * @returns {com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor} RGBAColor instance
-   */
-  static create(properties: RGBAColorProps) {
-    return new RGBAColor(properties);
-  }
+export class RGBAColorWriter {
   /**
    * Encodes the specified RGBAColor message. Does not implicitly {@link com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor.verify|verify} messages.
    * @function encode
@@ -71,6 +60,9 @@ export default class RGBAColor {
   // static encodeDelimited(message: RGBAColor, writer: Writer): Writer {
   //   return RGBAColor.encode(message, writer).ldelim();
   // }
+}
+
+export class RGBAColorReader {
   /**
    * Decodes a RGBAColor message from the specified reader or buffer.
    * @function decode
@@ -82,12 +74,12 @@ export default class RGBAColor {
    * @throws {Error} If the payload is not a reader or valid buffer
    * @throws {$protobuf.util.ProtocolError} If required fields are missing
    */
-  static decode(reader: Reader | Uint8Array, length: number): RGBAColor {
+  static decode(reader: Reader | Uint8Array, length?: number): RGBAColor {
     if (!(reader instanceof Reader)) {
       reader = Reader.create(reader);
     }
     const end = length === undefined ? reader.len : reader.pos + length;
-    const message = new ShapeEntity.ShapeStyle.RGBAColor();
+    const message = new RGBAColor();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -130,7 +122,21 @@ export default class RGBAColor {
       reader = new Reader(reader);
     }
 
-    return RGBAColor.decode(reader, reader.uint32());
+    return this.decode(reader, reader.uint32());
+  }
+}
+
+export default class RGBAColor {
+  /**
+   * Creates a new RGBAColor instance using the specified properties.
+   * @function create
+   * @memberof com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor
+   * @static
+   * @param {com.opensource.svga.ShapeEntity.ShapeStyle.IRGBAColor=} [properties] Properties to set
+   * @returns {com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor} RGBAColor instance
+   */
+  static create(properties: RGBAColorProps) {
+    return new RGBAColor(properties);
   }
   /**
    * Verifies a RGBAColor message.
@@ -204,39 +210,39 @@ export default class RGBAColor {
    * @param {$protobuf.IConversionOptions} [options] Conversion options
    * @returns {Object.<string,*>} Plain object
    */
-  static toObject(
-    message: RGBAColor,
-    options: Record<string, any>
-  ): Record<string, any> {
-    if (!options) {
-      options = {};
-    }
-    const object: Record<string, any> = {};
-    if (options.defaults) {
-      object.r = 0;
-      object.g = 0;
-      object.b = 0;
-      object.a = 0;
-    }
-    if (message.r != null && message.hasOwnProperty("r")) {
-      object.r =
-        options.json && !isFinite(message.r) ? "" + message.r : message.r;
-    }
-    if (message.g != null && message.hasOwnProperty("g")) {
-      object.g =
-        options.json && !isFinite(message.g) ? "" + message.g : message.g;
-    }
-    if (message.b != null && message.hasOwnProperty("b")) {
-      object.b =
-        options.json && !isFinite(message.b) ? "" + message.b : message.b;
-    }
-    if (message.a != null && message.hasOwnProperty("a")) {
-      object.a =
-        options.json && !isFinite(message.a) ? "" + message.a : message.a;
-    }
+  // static toObject(
+  //   message: RGBAColor,
+  //   options: Record<string, any>
+  // ): Record<string, any> {
+  //   if (!options) {
+  //     options = {};
+  //   }
+  //   const object: Record<string, any> = {};
+  //   if (options.defaults) {
+  //     object.r = 0;
+  //     object.g = 0;
+  //     object.b = 0;
+  //     object.a = 0;
+  //   }
+  //   if (message.r != null && message.hasOwnProperty("r")) {
+  //     object.r =
+  //       options.json && !isFinite(message.r) ? "" + message.r : message.r;
+  //   }
+  //   if (message.g != null && message.hasOwnProperty("g")) {
+  //     object.g =
+  //       options.json && !isFinite(message.g) ? "" + message.g : message.g;
+  //   }
+  //   if (message.b != null && message.hasOwnProperty("b")) {
+  //     object.b =
+  //       options.json && !isFinite(message.b) ? "" + message.b : message.b;
+  //   }
+  //   if (message.a != null && message.hasOwnProperty("a")) {
+  //     object.a =
+  //       options.json && !isFinite(message.a) ? "" + message.a : message.a;
+  //   }
 
-    return object;
-  }
+  //   return object;
+  // }
   /**
    * Gets the default type url for RGBAColor
    * @function getTypeUrl
@@ -245,15 +251,15 @@ export default class RGBAColor {
    * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
    * @returns {string} The default type url
    */
-  static getTypeUrl(typeUrlPrefix?: string): string {
-    if (typeUrlPrefix === undefined) {
-      typeUrlPrefix = "type.googleapis.com";
-    }
+  // static getTypeUrl(typeUrlPrefix?: string): string {
+  //   if (typeUrlPrefix === undefined) {
+  //     typeUrlPrefix = "type.googleapis.com";
+  //   }
 
-    return (
-      typeUrlPrefix + "/com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor"
-    );
-  }
+  //   return (
+  //     typeUrlPrefix + "/com.opensource.svga.ShapeEntity.ShapeStyle.RGBAColor"
+  //   );
+  // }
 
   /**
    * RGBAColor r.
@@ -319,7 +325,7 @@ export default class RGBAColor {
    * @instance
    * @returns {Object.<string,*>} JSON object
    */
-  toJSON() {
-    return RGBAColor.toObject(this, toJSONOptions);
-  }
+  // toJSON() {
+  //   return RGBAColor.toObject(this, toJSONOptions);
+  // }
 }

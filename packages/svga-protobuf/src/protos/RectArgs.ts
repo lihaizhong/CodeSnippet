@@ -1,7 +1,7 @@
 import Reader from "../serialization/Reader";
 // import Writer from "../serialization/Writer";
 import ShapeEntity from "./ShapeEntity";
-import { toJSONOptions } from "../utils";
+// import { toJSONOptions } from "../utils";
 
 /**
  * Properties of a RectArgs.
@@ -21,18 +21,7 @@ export interface RectArgsProps {
   cornerRadius: number | null;
 }
 
-export default class RectArgs {
-  /**
-   * Creates a new RectArgs instance using the specified properties.
-   * @function create
-   * @memberof com.opensource.svga.ShapeEntity.RectArgs
-   * @static
-   * @param {com.opensource.svga.ShapeEntity.IRectArgs=} [properties] Properties to set
-   * @returns {com.opensource.svga.ShapeEntity.RectArgs} RectArgs instance
-   */
-  static create(properties?: RectArgsProps): RectArgs {
-    return new RectArgs(properties);
-  }
+export class RectArgsWriter {
   /**
    * Encodes the specified RectArgs message. Does not implicitly {@link com.opensource.svga.ShapeEntity.RectArgs.verify|verify} messages.
    * @function encode
@@ -79,6 +68,9 @@ export default class RectArgs {
   // static encodeDelimited(message: RectArgs, writer: Writer): Writer {
   //   return RectArgs.encode(message, writer).ldelim();
   // }
+}
+
+export class RectArgsReader {
   /**
    * Decodes a RectArgs message from the specified reader or buffer.
    * @function decode
@@ -90,12 +82,12 @@ export default class RectArgs {
    * @throws {Error} If the payload is not a reader or valid buffer
    * @throws {$protobuf.util.ProtocolError} If required fields are missing
    */
-  static decode(reader: Reader | Uint8Array, length: number): RectArgs {
+  static decode(reader: Reader | Uint8Array, length?: number): RectArgs {
     if (!(reader instanceof Reader)) {
       reader = Reader.create(reader);
     }
     const end = length === undefined ? reader.len : reader.pos + length;
-    const message = new ShapeEntity.RectArgs();
+    const message = new RectArgs();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -142,7 +134,21 @@ export default class RectArgs {
       reader = new Reader(reader);
     }
 
-    return RectArgs.decode(reader, reader.uint32());
+    return this.decode(reader, reader.uint32());
+  }
+}
+
+export default class RectArgs {
+  /**
+   * Creates a new RectArgs instance using the specified properties.
+   * @function create
+   * @memberof com.opensource.svga.ShapeEntity.RectArgs
+   * @static
+   * @param {com.opensource.svga.ShapeEntity.IRectArgs=} [properties] Properties to set
+   * @returns {com.opensource.svga.ShapeEntity.RectArgs} RectArgs instance
+   */
+  static create(properties?: RectArgsProps): RectArgs {
+    return new RectArgs(properties);
   }
   /**
    * Verifies a RectArgs message.
@@ -227,53 +233,53 @@ export default class RectArgs {
    * @param {$protobuf.IConversionOptions} [options] Conversion options
    * @returns {Object.<string,*>} Plain object
    */
-  static toObject(
-    message: RectArgs,
-    options: Record<string, any>
-  ): Record<string, any> {
-    if (!options) {
-      options = {};
-    }
-    const object: Record<string, any> = {};
-    if (options.defaults) {
-      object.x = 0;
-      object.y = 0;
-      object.width = 0;
-      object.height = 0;
-      object.cornerRadius = 0;
-    }
-    if (message.x != null && message.hasOwnProperty("x")) {
-      object.x =
-        options.json && !isFinite(message.x) ? "" + message.x : message.x;
-    }
-    if (message.y != null && message.hasOwnProperty("y")) {
-      object.y =
-        options.json && !isFinite(message.y) ? "" + message.y : message.y;
-    }
-    if (message.width != null && message.hasOwnProperty("width")) {
-      object.width =
-        options.json && !isFinite(message.width)
-          ? "" + message.width
-          : message.width;
-    }
-    if (message.height != null && message.hasOwnProperty("height")) {
-      object.height =
-        options.json && !isFinite(message.height)
-          ? "" + message.height
-          : message.height;
-    }
-    if (
-      message.cornerRadius != null &&
-      message.hasOwnProperty("cornerRadius")
-    ) {
-      object.cornerRadius =
-        options.json && !isFinite(message.cornerRadius)
-          ? "" + message.cornerRadius
-          : message.cornerRadius;
-    }
+  // static toObject(
+  //   message: RectArgs,
+  //   options: Record<string, any>
+  // ): Record<string, any> {
+  //   if (!options) {
+  //     options = {};
+  //   }
+  //   const object: Record<string, any> = {};
+  //   if (options.defaults) {
+  //     object.x = 0;
+  //     object.y = 0;
+  //     object.width = 0;
+  //     object.height = 0;
+  //     object.cornerRadius = 0;
+  //   }
+  //   if (message.x != null && message.hasOwnProperty("x")) {
+  //     object.x =
+  //       options.json && !isFinite(message.x) ? "" + message.x : message.x;
+  //   }
+  //   if (message.y != null && message.hasOwnProperty("y")) {
+  //     object.y =
+  //       options.json && !isFinite(message.y) ? "" + message.y : message.y;
+  //   }
+  //   if (message.width != null && message.hasOwnProperty("width")) {
+  //     object.width =
+  //       options.json && !isFinite(message.width)
+  //         ? "" + message.width
+  //         : message.width;
+  //   }
+  //   if (message.height != null && message.hasOwnProperty("height")) {
+  //     object.height =
+  //       options.json && !isFinite(message.height)
+  //         ? "" + message.height
+  //         : message.height;
+  //   }
+  //   if (
+  //     message.cornerRadius != null &&
+  //     message.hasOwnProperty("cornerRadius")
+  //   ) {
+  //     object.cornerRadius =
+  //       options.json && !isFinite(message.cornerRadius)
+  //         ? "" + message.cornerRadius
+  //         : message.cornerRadius;
+  //   }
 
-    return object;
-  }
+  //   return object;
+  // }
   /**
    * Gets the default type url for RectArgs
    * @function getTypeUrl
@@ -282,13 +288,13 @@ export default class RectArgs {
    * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
    * @returns {string} The default type url
    */
-  static getTypeUrl(typeUrlPrefix?: string): string {
-    if (typeUrlPrefix === undefined) {
-      typeUrlPrefix = "type.googleapis.com";
-    }
+  // static getTypeUrl(typeUrlPrefix?: string): string {
+  //   if (typeUrlPrefix === undefined) {
+  //     typeUrlPrefix = "type.googleapis.com";
+  //   }
 
-    return typeUrlPrefix + "/com.opensource.svga.ShapeEntity.RectArgs";
-  }
+  //   return typeUrlPrefix + "/com.opensource.svga.ShapeEntity.RectArgs";
+  // }
 
   /**
    * RectArgs x.
@@ -365,7 +371,7 @@ export default class RectArgs {
    * @instance
    * @returns {Object.<string,*>} JSON object
    */
-  toJSON(): Record<string, any> {
-    return RectArgs.toObject(this, toJSONOptions);
-  }
+  // toJSON(): Record<string, any> {
+  //   return RectArgs.toObject(this, toJSONOptions);
+  // }
 }

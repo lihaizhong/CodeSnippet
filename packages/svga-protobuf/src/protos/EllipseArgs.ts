@@ -1,7 +1,7 @@
 import Reader from "../serialization/Reader";
 // import Writer from "../serialization/Writer";
-import ShapeEntity from "./ShapeEntity";
-import { toJSONOptions } from "../utils";
+// import ShapeEntity from "./ShapeEntity";
+// import { toJSONOptions } from "../utils";
 
 /**
  * Properties of an EllipseArgs.
@@ -19,18 +19,7 @@ export interface EllipseArgsProps {
   radiusY: number | null;
 }
 
-export default class EllipseArgs {
-  /**
-   * Creates a new EllipseArgs instance using the specified properties.
-   * @function create
-   * @memberof com.opensource.svga.ShapeEntity.EllipseArgs
-   * @static
-   * @param {com.opensource.svga.ShapeEntity.IEllipseArgs=} [properties] Properties to set
-   * @returns {com.opensource.svga.ShapeEntity.EllipseArgs} EllipseArgs instance
-   */
-  static create(properties?: EllipseArgsProps) {
-    return new EllipseArgs(properties);
-  }
+export class EllipseArgsWriter {
   /**
    * Encodes the specified EllipseArgs message. Does not implicitly {@link com.opensource.svga.ShapeEntity.EllipseArgs.verify|verify} messages.
    * @function encode
@@ -56,7 +45,6 @@ export default class EllipseArgs {
   //   if (message.radiusY != null && Object.hasOwn(message, "radiusY")) {
   //     writer.uint32(/* id 4, wireType 5 =*/ 37).float(message.radiusY);
   //   }
-
   //   return writer;
   // }
   /**
@@ -71,6 +59,9 @@ export default class EllipseArgs {
   // static encodeDelimited(message: EllipseArgs, writer: Writer): Writer {
   //   return EllipseArgs.encode(message, writer).ldelim();
   // }
+}
+
+export class EllipseArgsReader {
   /**
    * Decodes an EllipseArgs message from the specified reader or buffer.
    * @function decode
@@ -82,12 +73,12 @@ export default class EllipseArgs {
    * @throws {Error} If the payload is not a reader or valid buffer
    * @throws {$protobuf.util.ProtocolError} If required fields are missing
    */
-  static decode(reader: Reader | Uint8Array, length: number): EllipseArgs {
+  static decode(reader: Reader | Uint8Array, length?: number): EllipseArgs {
     if (!(reader instanceof Reader)) {
       reader = Reader.create(reader);
     }
     const end = length === undefined ? reader.len : reader.pos + length;
-    const message = new ShapeEntity.EllipseArgs();
+    const message = new EllipseArgs();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -130,7 +121,21 @@ export default class EllipseArgs {
       reader = new Reader(reader);
     }
 
-    return EllipseArgs.decode(reader, reader.uint32());
+    return this.decode(reader, reader.uint32());
+  }
+}
+
+export default class EllipseArgs {
+  /**
+   * Creates a new EllipseArgs instance using the specified properties.
+   * @function create
+   * @memberof com.opensource.svga.ShapeEntity.EllipseArgs
+   * @static
+   * @param {com.opensource.svga.ShapeEntity.IEllipseArgs=} [properties] Properties to set
+   * @returns {com.opensource.svga.ShapeEntity.EllipseArgs} EllipseArgs instance
+   */
+  static create(properties?: EllipseArgsProps) {
+    return new EllipseArgs(properties);
   }
   /**
    * Verifies an EllipseArgs message.
@@ -204,43 +209,43 @@ export default class EllipseArgs {
    * @param {$protobuf.IConversionOptions} [options] Conversion options
    * @returns {Object.<string,*>} Plain object
    */
-  static toObject(
-    message: EllipseArgs,
-    options: Record<string, any>
-  ): Record<string, any> {
-    if (!options) {
-      options = {};
-    }
-    const object: Record<string, any> = {};
-    if (options.defaults) {
-      object.x = 0;
-      object.y = 0;
-      object.radiusX = 0;
-      object.radiusY = 0;
-    }
-    if (message.x != null && message.hasOwnProperty("x")) {
-      object.x =
-        options.json && !isFinite(message.x) ? "" + message.x : message.x;
-    }
-    if (message.y != null && message.hasOwnProperty("y")) {
-      object.y =
-        options.json && !isFinite(message.y) ? "" + message.y : message.y;
-    }
-    if (message.radiusX != null && message.hasOwnProperty("radiusX")) {
-      object.radiusX =
-        options.json && !isFinite(message.radiusX)
-          ? "" + message.radiusX
-          : message.radiusX;
-    }
-    if (message.radiusY != null && message.hasOwnProperty("radiusY")) {
-      object.radiusY =
-        options.json && !isFinite(message.radiusY)
-          ? "" + message.radiusY
-          : message.radiusY;
-    }
+  // static toObject(
+  //   message: EllipseArgs,
+  //   options: Record<string, any>
+  // ): Record<string, any> {
+  //   if (!options) {
+  //     options = {};
+  //   }
+  //   const object: Record<string, any> = {};
+  //   if (options.defaults) {
+  //     object.x = 0;
+  //     object.y = 0;
+  //     object.radiusX = 0;
+  //     object.radiusY = 0;
+  //   }
+  //   if (message.x != null && message.hasOwnProperty("x")) {
+  //     object.x =
+  //       options.json && !isFinite(message.x) ? "" + message.x : message.x;
+  //   }
+  //   if (message.y != null && message.hasOwnProperty("y")) {
+  //     object.y =
+  //       options.json && !isFinite(message.y) ? "" + message.y : message.y;
+  //   }
+  //   if (message.radiusX != null && message.hasOwnProperty("radiusX")) {
+  //     object.radiusX =
+  //       options.json && !isFinite(message.radiusX)
+  //         ? "" + message.radiusX
+  //         : message.radiusX;
+  //   }
+  //   if (message.radiusY != null && message.hasOwnProperty("radiusY")) {
+  //     object.radiusY =
+  //       options.json && !isFinite(message.radiusY)
+  //         ? "" + message.radiusY
+  //         : message.radiusY;
+  //   }
 
-    return object;
-  }
+  //   return object;
+  // }
   /**
    * Gets the default type url for EllipseArgs
    * @function getTypeUrl
@@ -249,13 +254,13 @@ export default class EllipseArgs {
    * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
    * @returns {string} The default type url
    */
-  static getTypeUrl(typeUrlPrefix?: string): string {
-    if (typeUrlPrefix === undefined) {
-      typeUrlPrefix = "type.googleapis.com";
-    }
+  // static getTypeUrl(typeUrlPrefix?: string): string {
+  //   if (typeUrlPrefix === undefined) {
+  //     typeUrlPrefix = "type.googleapis.com";
+  //   }
 
-    return typeUrlPrefix + "/com.opensource.svga.ShapeEntity.EllipseArgs";
-  }
+  //   return typeUrlPrefix + "/com.opensource.svga.ShapeEntity.EllipseArgs";
+  // }
 
   /**
    * EllipseArgs x.
@@ -297,19 +302,19 @@ export default class EllipseArgs {
   constructor(properties?: EllipseArgsProps) {
     if (properties) {
       if (properties.x != null) {
-        this.x = properties.x
+        this.x = properties.x;
       }
 
       if (properties.y != null) {
-        this.y = properties.y
+        this.y = properties.y;
       }
 
       if (properties.radiusX != null) {
-        this.radiusX = properties.radiusX
+        this.radiusX = properties.radiusX;
       }
 
       if (properties.radiusY != null) {
-        this.radiusY = properties.radiusY
+        this.radiusY = properties.radiusY;
       }
     }
   }
@@ -321,7 +326,7 @@ export default class EllipseArgs {
    * @instance
    * @returns {Object.<string,*>} JSON object
    */
-  toJSON() {
-    return EllipseArgs.toObject(this, toJSONOptions);
-  }
+  // toJSON() {
+  //   return EllipseArgs.toObject(this, toJSONOptions);
+  // }
 }

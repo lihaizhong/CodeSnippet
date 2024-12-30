@@ -1,31 +1,35 @@
-import { platform, SupportedPlatform, throwUnsupportedPlatform } from './platform'
+import {
+  platform,
+  SupportedPlatform,
+  throwUnsupportedPlatform,
+} from "./platform";
 
-let bridge: any = null
+let bridge: any = null;
 
 export function getBridge(): WechatMiniprogram.Wx | Window {
   if (bridge) {
-    return bridge
+    return bridge;
   }
 
   if (platform === SupportedPlatform.WECHAT) {
-    bridge = wx
-    return wx
+    bridge = wx;
+    return wx;
   }
 
   if (platform === SupportedPlatform.H5) {
-    bridge = window
-    return window
+    bridge = window;
+    return window;
   }
 
   if (platform === SupportedPlatform.ALIPAY) {
-    bridge = my
-    return my
+    bridge = my;
+    return my;
   }
 
   if (platform === SupportedPlatform.DOUYIN) {
-    bridge = tt
-    return tt
+    bridge = tt;
+    return tt;
   }
 
-  throw throwUnsupportedPlatform()
+  throw throwUnsupportedPlatform();
 }

@@ -1,36 +1,36 @@
 export const SupportedPlatform = {
-  ALIPAY: 'alipay',
-  WECHAT: 'wechat',
-  DOUYIN: 'douyin',
-  H5: 'h5',
-  UNKNOWN: 'unknown'
-}
+  ALIPAY: "alipay",
+  WECHAT: "wechat",
+  DOUYIN: "douyin",
+  H5: "h5",
+  UNKNOWN: "unknown",
+};
 
-export const throwUnsupportedPlatform = () => new Error('Unsupported platform')
+export const throwUnsupportedPlatform = () => new Error("Unsupported platform");
 
 /**
  * 获取平台信息
- * @returns 
+ * @returns
  */
 export function getPlatform() {
   // FIXME：由于抖音场景支持wx对象，所以需要放在wx对象之前检查
-  if (typeof tt !== 'undefined') {
-    return SupportedPlatform.DOUYIN
+  if (typeof tt !== "undefined") {
+    return SupportedPlatform.DOUYIN;
   }
 
-  if (typeof my !== 'undefined') {
-    return SupportedPlatform.ALIPAY
+  if (typeof my !== "undefined") {
+    return SupportedPlatform.ALIPAY;
   }
 
-  if (typeof wx !== 'undefined') {
-    return SupportedPlatform.WECHAT
+  if (typeof wx !== "undefined") {
+    return SupportedPlatform.WECHAT;
   }
 
-  if (typeof window !== 'undefined') {
-    return SupportedPlatform.H5
+  if (typeof window !== "undefined") {
+    return SupportedPlatform.H5;
   }
 
-  return SupportedPlatform.UNKNOWN
+  return SupportedPlatform.UNKNOWN;
 }
 
-export const platform = getPlatform()
+export const platform = getPlatform();

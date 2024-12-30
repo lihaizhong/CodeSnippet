@@ -42,8 +42,10 @@ Component({
           player.stop();
         }
 
+        wx.showLoading();
         const videoItem = await parser.load(this.properties.url);
         await player.mount(videoItem);
+        wx.hideLoading();
         player.start();
       } catch (ex) {
         console.error("svga初始化失败！", ex);

@@ -1,7 +1,7 @@
 import Reader from "../serialization/Reader";
 // import Writer from "../serialization/Writer";
-import FrameEntity from "./FrameEntity";
-import { isString, toJSONOptions } from "../utils";
+import FrameEntity, { FrameEntityReader } from "./FrameEntity";
+// import { isString, toJSONOptions } from "../utils";
 
 /**
  * Properties of a SpriteEntity.
@@ -17,19 +17,7 @@ export interface SpriteEntityProps {
   matteKey: string | null;
 }
 
-export default class SpriteEntity {
-  /**
-   * Creates a new SpriteEntity instance using the specified properties.
-   * @function create
-   * @memberof com.opensource.svga.SpriteEntity
-   * @static
-   * @param {com.opensource.svga.ISpriteEntity=} [properties] Properties to set
-   * @returns {com.opensource.svga.SpriteEntity} SpriteEntity instance
-   */
-  static create(properties: SpriteEntityProps): SpriteEntity {
-    return new SpriteEntity(properties);
-  }
-
+export class SpriteEntityWriter {
   /**
    * Encodes the specified SpriteEntity message. Does not implicitly {@link com.opensource.svga.SpriteEntity.verify|verify} messages.
    * @function encode
@@ -73,7 +61,9 @@ export default class SpriteEntity {
   // static encodeDelimited(message: SpriteEntity, writer: Writer): Writer {
   //   return SpriteEntity.encode(message, writer).ldelim();
   // }
+}
 
+export class SpriteEntityReader {
   /**
    * Decodes a SpriteEntity message from the specified reader or buffer.
    * @function decode
@@ -85,7 +75,7 @@ export default class SpriteEntity {
    * @throws {Error} If the payload is not a reader or valid buffer
    * @throws {$protobuf.util.ProtocolError} If required fields are missing
    */
-  static decode(reader: Reader | Uint8Array, length: number): SpriteEntity {
+  static decode(reader: Reader | Uint8Array, length?: number): SpriteEntity {
     if (!(reader instanceof Reader)) {
       reader = Reader.create(reader);
     }
@@ -102,7 +92,7 @@ export default class SpriteEntity {
           if (!(message.frames && message.frames.length)) {
             message.frames = [];
           }
-          message.frames.push(FrameEntity.decode(reader, reader.uint32()));
+          message.frames.push(FrameEntityReader.decode(reader, reader.uint32()));
           break;
         }
         case 3: {
@@ -131,7 +121,21 @@ export default class SpriteEntity {
       reader = new Reader(reader);
     }
 
-    return SpriteEntity.decode(reader, reader.uint32());
+    return this.decode(reader, reader.uint32());
+  }
+}
+
+export default class SpriteEntity {
+  /**
+   * Creates a new SpriteEntity instance using the specified properties.
+   * @function create
+   * @memberof com.opensource.svga.SpriteEntity
+   * @static
+   * @param {com.opensource.svga.ISpriteEntity=} [properties] Properties to set
+   * @returns {com.opensource.svga.SpriteEntity} SpriteEntity instance
+   */
+  static create(properties: SpriteEntityProps): SpriteEntity {
+    return new SpriteEntity(properties);
   }
   /**
    * Verifies a SpriteEntity message.
@@ -217,37 +221,37 @@ export default class SpriteEntity {
    * @param {$protobuf.IConversionOptions} [options] Conversion options
    * @returns {Object.<string,*>} Plain object
    */
-  static toObject(
-    message: SpriteEntity,
-    options: Record<string, any>
-  ): Record<string, any> {
-    if (!options) {
-      options = {};
-    }
+  // static toObject(
+  //   message: SpriteEntity,
+  //   options: Record<string, any>
+  // ): Record<string, any> {
+  //   if (!options) {
+  //     options = {};
+  //   }
 
-    const object: Record<string, any> = {};
-    if (options.arrays || options.defaults) {
-      object.frames = [];
-    }
-    if (options.defaults) {
-      object.imageKey = "";
-      object.matteKey = "";
-    }
-    if (message.imageKey != null && message.hasOwnProperty("imageKey")) {
-      object.imageKey = message.imageKey;
-    }
-    if (message.frames && message.frames.length) {
-      object.frames = [];
-      for (let j = 0; j < message.frames.length; ++j) {
-        object.frames[j] = FrameEntity.toObject(message.frames[j], options);
-      }
-    }
-    if (message.matteKey != null && message.hasOwnProperty("matteKey")) {
-      object.matteKey = message.matteKey;
-    }
+  //   const object: Record<string, any> = {};
+  //   if (options.arrays || options.defaults) {
+  //     object.frames = [];
+  //   }
+  //   if (options.defaults) {
+  //     object.imageKey = "";
+  //     object.matteKey = "";
+  //   }
+  //   if (message.imageKey != null && message.hasOwnProperty("imageKey")) {
+  //     object.imageKey = message.imageKey;
+  //   }
+  //   if (message.frames && message.frames.length) {
+  //     object.frames = [];
+  //     for (let j = 0; j < message.frames.length; ++j) {
+  //       object.frames[j] = FrameEntity.toObject(message.frames[j], options);
+  //     }
+  //   }
+  //   if (message.matteKey != null && message.hasOwnProperty("matteKey")) {
+  //     object.matteKey = message.matteKey;
+  //   }
 
-    return object;
-  }
+  //   return object;
+  // }
   /**
    * Gets the default type url for SpriteEntity
    * @function getTypeUrl
@@ -256,13 +260,13 @@ export default class SpriteEntity {
    * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
    * @returns {string} The default type url
    */
-  static getTypeUrl(typeUrlPrefix?: string): string {
-    if (typeUrlPrefix === undefined) {
-      typeUrlPrefix = "type.googleapis.com";
-    }
+  // static getTypeUrl(typeUrlPrefix?: string): string {
+  //   if (typeUrlPrefix === undefined) {
+  //     typeUrlPrefix = "type.googleapis.com";
+  //   }
 
-    return typeUrlPrefix + "/com.opensource.svga.SpriteEntity";
-  }
+  //   return typeUrlPrefix + "/com.opensource.svga.SpriteEntity";
+  // }
 
   /**
    * SpriteEntity frames.
@@ -317,7 +321,7 @@ export default class SpriteEntity {
    * @instance
    * @returns {Object.<string,*>} JSON object
    */
-  toJSON(): Record<string, any> {
-    return SpriteEntity.toObject(this, toJSONOptions);
-  }
+  // toJSON(): Record<string, any> {
+  //   return SpriteEntity.toObject(this, toJSONOptions);
+  // }
 }

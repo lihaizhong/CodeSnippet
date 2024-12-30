@@ -1,6 +1,6 @@
 import Reader from "../serialization/Reader";
 // import Writer from "../serialization/Writer";
-import { isInteger, toJSONOptions } from "../utils";
+// import { isInteger, toJSONOptions } from "../utils";
 
 /**
  * Properties of a MovieParams.
@@ -18,19 +18,7 @@ export interface MovieParamsProps {
   frames: number | null;
 }
 
-export default class MovieParams {
-  /**
-   * Creates a new MovieParams instance using the specified properties.
-   * @function create
-   * @memberof com.opensource.svga.MovieParams
-   * @static
-   * @param {com.opensource.svga.IMovieParams=} [properties] Properties to set
-   * @returns {com.opensource.svga.MovieParams} MovieParams instance
-   */
-  static create(properties?: MovieParamsProps): MovieParams {
-    return new MovieParams(properties);
-  }
-
+export class MovieParamsWriter {
   /**
    * Encodes the specified MovieParams message. Does not implicitly {@link com.opensource.svga.MovieParams.verify|verify} messages.
    * @function encode
@@ -62,10 +50,8 @@ export default class MovieParams {
   //   if (message.frames != null && Object.hasOwn(message, "frames")) {
   //     writer.uint32(/* id 4, wireType 0 =*/ 32).int32(message.frames);
   //   }
-
   //   return writer;
   // }
-
   /**
    * Encodes the specified MovieParams message, length delimited. Does not implicitly {@link com.opensource.svga.MovieParams.verify|verify} messages.
    * @function encodeDelimited
@@ -78,7 +64,9 @@ export default class MovieParams {
   // static encodeDelimited(message: MovieParams, writer: Writer): Writer {
   //   return MovieParams.encode(message, writer).ldelim();
   // }
+}
 
+export class MovieParamsReader {
   /**
    * Decodes a MovieParams message from the specified reader or buffer.
    * @function decode
@@ -90,7 +78,7 @@ export default class MovieParams {
    * @throws {Error} If the payload is not a reader or valid buffer
    * @throws {$protobuf.util.ProtocolError} If required fields are missing
    */
-  static decode(reader: Reader | Uint8Array, length: number): MovieParams {
+  static decode(reader: Reader | Uint8Array, length?: number): MovieParams {
     if (!(reader instanceof Reader)) {
       reader = Reader.create(reader);
     }
@@ -140,9 +128,22 @@ export default class MovieParams {
       reader = new Reader(reader);
     }
 
-    return MovieParams.decode(reader, reader.uint32());
+    return this.decode(reader, reader.uint32());
   }
+}
 
+export default class MovieParams {
+  /**
+   * Creates a new MovieParams instance using the specified properties.
+   * @function create
+   * @memberof com.opensource.svga.MovieParams
+   * @static
+   * @param {com.opensource.svga.IMovieParams=} [properties] Properties to set
+   * @returns {com.opensource.svga.MovieParams} MovieParams instance
+   */
+  static create(properties?: MovieParamsProps): MovieParams {
+    return new MovieParams(properties);
+  }
   /**
    * Verifies a MovieParams message.
    * @function verify
@@ -184,7 +185,6 @@ export default class MovieParams {
 
   //   return null;
   // }
-
   /**
    * Creates a MovieParams message from a plain object. Also converts values to their respective internal types.
    * @function fromObject
@@ -214,7 +214,6 @@ export default class MovieParams {
 
   //   return message;
   // }
-
   /**
    * Creates a plain object from a MovieParams message. Also converts values to other types if specified.
    * @function toObject
@@ -224,49 +223,48 @@ export default class MovieParams {
    * @param {$protobuf.IConversionOptions} [options] Conversion options
    * @returns {Object.<string,*>} Plain object
    */
-  static toObject(
-    message: MovieParams,
-    options: Record<string, any>
-  ): Record<string, any> {
-    if (!options) {
-      options = {};
-    }
+  // static toObject(
+  //   message: MovieParams,
+  //   options: Record<string, any>
+  // ): Record<string, any> {
+  //   if (!options) {
+  //     options = {};
+  //   }
 
-    const object: Record<string, any> = {};
-    if (options.defaults) {
-      object.viewBoxWidth = 0;
-      object.viewBoxHeight = 0;
-      object.fps = 0;
-      object.frames = 0;
-    }
-    if (
-      message.viewBoxWidth != null &&
-      message.hasOwnProperty("viewBoxWidth")
-    ) {
-      object.viewBoxWidth =
-        options.json && !isFinite(message.viewBoxWidth)
-          ? "" + message.viewBoxWidth
-          : message.viewBoxWidth;
-    }
-    if (
-      message.viewBoxHeight != null &&
-      message.hasOwnProperty("viewBoxHeight")
-    ) {
-      object.viewBoxHeight =
-        options.json && !isFinite(message.viewBoxHeight)
-          ? "" + message.viewBoxHeight
-          : message.viewBoxHeight;
-    }
-    if (message.fps != null && message.hasOwnProperty("fps")) {
-      object.fps = message.fps;
-    }
-    if (message.frames != null && message.hasOwnProperty("frames")) {
-      object.frames = message.frames;
-    }
+  //   const object: Record<string, any> = {};
+  //   if (options.defaults) {
+  //     object.viewBoxWidth = 0;
+  //     object.viewBoxHeight = 0;
+  //     object.fps = 0;
+  //     object.frames = 0;
+  //   }
+  //   if (
+  //     message.viewBoxWidth != null &&
+  //     message.hasOwnProperty("viewBoxWidth")
+  //   ) {
+  //     object.viewBoxWidth =
+  //       options.json && !isFinite(message.viewBoxWidth)
+  //         ? "" + message.viewBoxWidth
+  //         : message.viewBoxWidth;
+  //   }
+  //   if (
+  //     message.viewBoxHeight != null &&
+  //     message.hasOwnProperty("viewBoxHeight")
+  //   ) {
+  //     object.viewBoxHeight =
+  //       options.json && !isFinite(message.viewBoxHeight)
+  //         ? "" + message.viewBoxHeight
+  //         : message.viewBoxHeight;
+  //   }
+  //   if (message.fps != null && message.hasOwnProperty("fps")) {
+  //     object.fps = message.fps;
+  //   }
+  //   if (message.frames != null && message.hasOwnProperty("frames")) {
+  //     object.frames = message.frames;
+  //   }
 
-    return object;
-  }
-
+  //   return object;
+  // }
   /**
    * Gets the default type url for MovieParams
    * @function getTypeUrl
@@ -275,13 +273,13 @@ export default class MovieParams {
    * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
    * @returns {string} The default type url
    */
-  static getTypeUrl(typeUrlPrefix?: string): string {
-    if (typeUrlPrefix === undefined) {
-      typeUrlPrefix = "type.googleapis.com";
-    }
+  // static getTypeUrl(typeUrlPrefix?: string): string {
+  //   if (typeUrlPrefix === undefined) {
+  //     typeUrlPrefix = "type.googleapis.com";
+  //   }
 
-    return typeUrlPrefix + "/com.opensource.svga.MovieParams";
-  }
+  //   return typeUrlPrefix + "/com.opensource.svga.MovieParams";
+  // }
 
   /**
    * MovieParams viewBoxWidth.
@@ -322,24 +320,31 @@ export default class MovieParams {
   constructor(properties?: MovieParamsProps) {
     if (properties) {
       if (properties.viewBoxWidth != null) {
-        this.viewBoxWidth = properties.viewBoxWidth
+        this.viewBoxWidth = properties.viewBoxWidth;
       }
 
       if (properties.viewBoxHeight != null) {
-        this.viewBoxHeight = properties.viewBoxHeight
+        this.viewBoxHeight = properties.viewBoxHeight;
       }
 
       if (properties.fps != null) {
-        this.fps = properties.fps
+        this.fps = properties.fps;
       }
 
       if (properties.frames != null) {
-        this.frames = properties.frames
+        this.frames = properties.frames;
       }
     }
   }
 
-  toJSON() {
-    return MovieParams.toObject(this, toJSONOptions);
-  }
+  /**
+   * Converts this MovieParams to JSON.
+   * @function toJSON
+   * @memberof com.opensource.svga.MovieParams
+   * @instance
+   * @returns {Object.<string,*>} JSON object
+   */
+  // toJSON() {
+  //   return MovieParams.toObject(this, toJSONOptions);
+  // }
 }

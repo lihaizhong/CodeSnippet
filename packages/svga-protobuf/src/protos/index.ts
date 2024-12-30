@@ -1,24 +1,24 @@
-import root from "../utils/roots";
-import MovieEntity from "./MovieEntity";
-import FrameEntity from "./FrameEntity";
-import ShapeEntity from "./ShapeEntity";
-import SpriteEntity from "./SpriteEntity";
-import MovieParams from "./MovieParams";
-import Layout from "./Layout";
-import Transform from "./Transform";
+import MovieEntity, { MovieEntityReader } from "./MovieEntity";
+import FrameEntity, { FrameEntityReader } from "./FrameEntity";
+import ShapeEntity, { ShapeEntityReader } from "./ShapeEntity";
+import SpriteEntity, { SpriteEntityReader } from "./SpriteEntity";
+import MovieParams, { MovieParamsReader } from "./MovieParams";
+import Layout, { LayoutReader } from "./Layout";
+import Transform, { TransformReader } from "./Transform";
 
-root.com = {
-  opensource: {
-    svga: {
-      MovieParams,
-      Layout,
-      Transform,
-      ShapeEntity,
-      FrameEntity,
-      SpriteEntity,
-      MovieEntity,
-    },
-  },
+export {
+  MovieParams,
+  MovieParamsReader,
+  Layout,
+  LayoutReader,
+  Transform,
+  TransformReader,
+  ShapeEntity,
+  ShapeEntityReader,
+  FrameEntity,
+  FrameEntityReader,
+  SpriteEntity,
+  SpriteEntityReader,
+  MovieEntity,
+  MovieEntityReader
 };
-
-export default root;

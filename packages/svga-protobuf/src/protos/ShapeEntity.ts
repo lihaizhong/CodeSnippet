@@ -1,12 +1,12 @@
 import Reader from "../serialization/Reader";
 // import Writer from "../serialization/Writer";
-import Transform from "./Transform";
+import Transform, { TransformReader } from "./Transform";
 import ShapeType from "./ShapeType";
-import ShapeArgs from "./ShapeArgs";
-import RectArgs from "./RectArgs";
-import EllipseArgs from "./EllipseArgs";
-import ShapeStyle from "./ShapeStyle";
-import { toJSONOptions } from "../utils";
+import ShapeArgs, { ShapeArgsReader } from "./ShapeArgs";
+import RectArgs, { RectArgsReader } from "./RectArgs";
+import EllipseArgs, { EllipseArgsReader } from "./EllipseArgs";
+import ShapeStyle, { ShapeStyleReader } from "./ShapeStyle";
+// import { toJSONOptions } from "../utils";
 
 /**
  * Properties of a ShapeEntity.
@@ -28,28 +28,7 @@ export interface ShapeEntityProps {
   transform: Transform | null;
 }
 
-export default class ShapeEntity {
-  static ShapeType = ShapeType;
-
-  static ShapeArgs = ShapeArgs;
-
-  static RectArgs = RectArgs;
-
-  static EllipseArgs = EllipseArgs;
-
-  static ShapeStyle = ShapeStyle;
-
-  /**
-   * Creates a new ShapeEntity instance using the specified properties.
-   * @function create
-   * @memberof com.opensource.svga.ShapeEntity
-   * @static
-   * @param {com.opensource.svga.IShapeEntity=} [properties] Properties to set
-   * @returns {com.opensource.svga.ShapeEntity} ShapeEntity instance
-   */
-  static create(properties: ShapeEntityProps): ShapeEntity {
-    return new ShapeEntity(properties);
-  }
+export class ShapeEntityWriter {
   /**
    * Encodes the specified ShapeEntity message. Does not implicitly {@link com.opensource.svga.ShapeEntity.verify|verify} messages.
    * @function encode
@@ -111,6 +90,9 @@ export default class ShapeEntity {
   // static encodeDelimited(message: ShapeEntity, writer: Writer): Writer {
   //   return ShapeEntity.encode(message, writer).ldelim();
   // }
+}
+
+export class ShapeEntityReader {
   /**
    * Decodes a ShapeEntity message from the specified reader or buffer.
    * @function decode
@@ -122,7 +104,7 @@ export default class ShapeEntity {
    * @throws {Error} If the payload is not a reader or valid buffer
    * @throws {$protobuf.util.ProtocolError} If required fields are missing
    */
-  static decode(reader: Reader | Uint8Array, length: number): ShapeEntity {
+  static decode(reader: Reader | Uint8Array, length?: number): ShapeEntity {
     if (!(reader instanceof Reader)) {
       reader = Reader.create(reader);
     }
@@ -136,29 +118,29 @@ export default class ShapeEntity {
           break;
         }
         case 2: {
-          message.shape = ShapeEntity.ShapeArgs.decode(reader, reader.uint32());
+          message.shape = ShapeArgsReader.decode(reader, reader.uint32());
           break;
         }
         case 3: {
-          message.rect = ShapeEntity.RectArgs.decode(reader, reader.uint32());
+          message.rect = RectArgsReader.decode(reader, reader.uint32());
           break;
         }
         case 4: {
-          message.ellipse = ShapeEntity.EllipseArgs.decode(
+          message.ellipse = EllipseArgsReader.decode(
             reader,
             reader.uint32()
           );
           break;
         }
         case 10: {
-          message.styles = ShapeEntity.ShapeStyle.decode(
+          message.styles = ShapeStyleReader.decode(
             reader,
             reader.uint32()
           );
           break;
         }
         case 11: {
-          message.transform = Transform.decode(reader, reader.uint32());
+          message.transform = TransformReader.decode(reader, reader.uint32());
           break;
         }
         default:
@@ -184,7 +166,21 @@ export default class ShapeEntity {
       reader = new Reader(reader);
     }
 
-    return ShapeEntity.decode(reader, reader.uint32());
+    return this.decode(reader, reader.uint32());
+  }
+}
+
+export default class ShapeEntity {
+  /**
+   * Creates a new ShapeEntity instance using the specified properties.
+   * @function create
+   * @memberof com.opensource.svga.ShapeEntity
+   * @static
+   * @param {com.opensource.svga.IShapeEntity=} [properties] Properties to set
+   * @returns {com.opensource.svga.ShapeEntity} ShapeEntity instance
+   */
+  static create(properties: ShapeEntityProps): ShapeEntity {
+    return new ShapeEntity(properties);
   }
   /**
    * Verifies a ShapeEntity message.
@@ -344,57 +340,57 @@ export default class ShapeEntity {
    * @param {$protobuf.IConversionOptions} [options] Conversion options
    * @returns {Object.<string,*>} Plain object
    */
-  static toObject(
-    message: ShapeEntity,
-    options: Record<string, any>
-  ): Record<string, any> {
-    if (!options) {
-      options = {};
-    }
-    const object: Record<string, any> = {};
-    if (options.defaults) {
-      object.type = options.enums === String ? "SHAPE" : 0;
-      object.styles = null;
-      object.transform = null;
-    }
-    if (message.type != null && message.hasOwnProperty("type")) {
-      object.type =
-        options.enums === String
-          ? ShapeType[message.type] === undefined
-            ? message.type
-            : ShapeType[message.type]
-          : message.type;
-    }
-    if (message.shape != null && message.hasOwnProperty("shape")) {
-      object.shape = ShapeEntity.ShapeArgs.toObject(message.shape, options);
-      if (options.oneofs) {
-        object.args = "shape";
-      }
-    }
-    if (message.rect != null && message.hasOwnProperty("rect")) {
-      object.rect = ShapeEntity.RectArgs.toObject(message.rect, options);
-      if (options.oneofs) {
-        object.args = "rect";
-      }
-    }
-    if (message.ellipse != null && message.hasOwnProperty("ellipse")) {
-      object.ellipse = ShapeEntity.EllipseArgs.toObject(
-        message.ellipse,
-        options
-      );
-      if (options.oneofs) {
-        object.args = "ellipse";
-      }
-    }
-    if (message.styles != null && message.hasOwnProperty("styles")) {
-      object.styles = ShapeEntity.ShapeStyle.toObject(message.styles, options);
-    }
-    if (message.transform != null && message.hasOwnProperty("transform")) {
-      object.transform = Transform.toObject(message.transform, options);
-    }
+  // static toObject(
+  //   message: ShapeEntity,
+  //   options: Record<string, any>
+  // ): Record<string, any> {
+  //   if (!options) {
+  //     options = {};
+  //   }
+  //   const object: Record<string, any> = {};
+  //   if (options.defaults) {
+  //     object.type = options.enums === String ? "SHAPE" : 0;
+  //     object.styles = null;
+  //     object.transform = null;
+  //   }
+  //   if (message.type != null && message.hasOwnProperty("type")) {
+  //     object.type =
+  //       options.enums === String
+  //         ? ShapeType[message.type] === undefined
+  //           ? message.type
+  //           : ShapeType[message.type]
+  //         : message.type;
+  //   }
+  //   if (message.shape != null && message.hasOwnProperty("shape")) {
+  //     object.shape = ShapeEntity.ShapeArgs.toObject(message.shape, options);
+  //     if (options.oneofs) {
+  //       object.args = "shape";
+  //     }
+  //   }
+  //   if (message.rect != null && message.hasOwnProperty("rect")) {
+  //     object.rect = ShapeEntity.RectArgs.toObject(message.rect, options);
+  //     if (options.oneofs) {
+  //       object.args = "rect";
+  //     }
+  //   }
+  //   if (message.ellipse != null && message.hasOwnProperty("ellipse")) {
+  //     object.ellipse = ShapeEntity.EllipseArgs.toObject(
+  //       message.ellipse,
+  //       options
+  //     );
+  //     if (options.oneofs) {
+  //       object.args = "ellipse";
+  //     }
+  //   }
+  //   if (message.styles != null && message.hasOwnProperty("styles")) {
+  //     object.styles = ShapeEntity.ShapeStyle.toObject(message.styles, options);
+  //   }
+  //   if (message.transform != null && message.hasOwnProperty("transform")) {
+  //     object.transform = Transform.toObject(message.transform, options);
+  //   }
 
-    return object;
-  }
+  //   return object;
+  // }
   /**
    * Gets the default type url for ShapeEntity
    * @function getTypeUrl
@@ -403,13 +399,13 @@ export default class ShapeEntity {
    * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
    * @returns {string} The default type url
    */
-  static getTypeUrl(typeUrlPrefix?: string): string {
-    if (typeUrlPrefix === undefined) {
-      typeUrlPrefix = "type.googleapis.com";
-    }
+  // static getTypeUrl(typeUrlPrefix?: string): string {
+  //   if (typeUrlPrefix === undefined) {
+  //     typeUrlPrefix = "type.googleapis.com";
+  //   }
 
-    return typeUrlPrefix + "/com.opensource.svga.ShapeEntity";
-  }
+  //   return typeUrlPrefix + "/com.opensource.svga.ShapeEntity";
+  // }
 
   /**
    * ShapeEntity type.
@@ -424,35 +420,35 @@ export default class ShapeEntity {
    * @memberof com.opensource.svga.ShapeEntity
    * @instance
    */
-  shape?: ShapeArgs | null = null;
+  shape: ShapeArgs | null = null;
   /**
    * ShapeEntity rect.
    * @member {com.opensource.svga.ShapeEntity.IRectArgs|null|undefined} rect
    * @memberof com.opensource.svga.ShapeEntity
    * @instance
    */
-  rect?: RectArgs | null = null;
+  rect: RectArgs | null = null;
   /**
    * ShapeEntity ellipse.
    * @member {com.opensource.svga.ShapeEntity.IEllipseArgs|null|undefined} ellipse
    * @memberof com.opensource.svga.ShapeEntity
    * @instance
    */
-  ellipse?: EllipseArgs | null = null;
+  ellipse: EllipseArgs | null = null;
   /**
    * ShapeEntity styles.
    * @member {com.opensource.svga.ShapeEntity.IShapeStyle|null|undefined} styles
    * @memberof com.opensource.svga.ShapeEntity
    * @instance
    */
-  styles?: ShapeStyle | null = null;
+  styles: ShapeStyle | null = null;
   /**
    * ShapeEntity transform.
    * @member {com.opensource.svga.ITransform|null|undefined} transform
    * @memberof com.opensource.svga.ShapeEntity
    * @instance
    */
-  transform?: Transform | null = null;
+  transform: Transform | null = null;
 
   private $oneOfFields: ["shape", "rect", "ellipse"] = [
     "shape",
@@ -531,7 +527,7 @@ export default class ShapeEntity {
    * @instance
    * @returns {Object.<string,*>} JSON object
    */
-  toJSON() {
-    return ShapeEntity.toObject(this, toJSONOptions);
-  }
+  // toJSON() {
+  //   return ShapeEntity.toObject(this, toJSONOptions);
+  // }
 }

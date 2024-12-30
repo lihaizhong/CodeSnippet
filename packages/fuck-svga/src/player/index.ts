@@ -153,7 +153,7 @@ export class Player {
     for (let key in images) {
       const image = images[key];
       const p = loadImage(this.ofsCanvas, image).then((img) => {
-        this.bitmapsCache[key] = img
+        this.bitmapsCache[key] = img;
       });
 
       imageArr.push(p);

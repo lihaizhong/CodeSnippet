@@ -1,9 +1,9 @@
 import Reader from "../serialization/Reader";
 // import Writer from "../serialization/Writer";
-import Layout from "./Layout";
-import Transform from "./Transform";
-import ShapeEntity from "./ShapeEntity";
-import { isString, toJSONOptions } from "../utils";
+import Layout, { LayoutReader } from "./Layout";
+import Transform, { TransformReader } from "./Transform";
+import ShapeEntity, { ShapeEntityReader } from "./ShapeEntity";
+// import { isString, toJSONOptions } from "../utils";
 
 /**
  * Properties of a FrameEntity.
@@ -23,18 +23,7 @@ export interface FrameEntityProps {
   shapes: ShapeEntity[] | null;
 }
 
-export default class FrameEntity {
-  /**
-   * Creates a new FrameEntity instance using the specified properties.
-   * @function create
-   * @memberof com.opensource.svga.FrameEntity
-   * @static
-   * @param {com.opensource.svga.IFrameEntity=} [properties] Properties to set
-   * @returns {com.opensource.svga.FrameEntity} FrameEntity instance
-   */
-  static create(properties?: FrameEntityProps): FrameEntity {
-    return new FrameEntity(properties);
-  }
+export class FrameEntityWriter {
   /**
    * Encodes the specified FrameEntity message. Does not implicitly {@link com.opensource.svga.FrameEntity.verify|verify} messages.
    * @function encode
@@ -74,7 +63,6 @@ export default class FrameEntity {
   //       ).ldelim();
   //     }
   //   }
-
   //   return writer;
   // }
   /**
@@ -89,6 +77,9 @@ export default class FrameEntity {
   // static encodeDelimited(message: FrameEntity, writer: Writer): Writer {
   //   return FrameEntity.encode(message, writer).ldelim();
   // }
+}
+
+export class FrameEntityReader {
   /**
    * Decodes a FrameEntity message from the specified reader or buffer.
    * @function decode
@@ -100,7 +91,7 @@ export default class FrameEntity {
    * @throws {Error} If the payload is not a reader or valid buffer
    * @throws {$protobuf.util.ProtocolError} If required fields are missing
    */
-  static decode(reader: Reader | Uint8Array, length: number): FrameEntity {
+  static decode(reader: Reader | Uint8Array, length?: number): FrameEntity {
     if (!(reader instanceof Reader)) {
       reader = Reader.create(reader);
     }
@@ -114,11 +105,11 @@ export default class FrameEntity {
           break;
         }
         case 2: {
-          message.layout = Layout.decode(reader, reader.uint32());
+          message.layout = LayoutReader.decode(reader, reader.uint32());
           break;
         }
         case 3: {
-          message.transform = Transform.decode(reader, reader.uint32());
+          message.transform = TransformReader.decode(reader, reader.uint32());
           break;
         }
         case 4: {
@@ -129,7 +120,7 @@ export default class FrameEntity {
           if (!(message.shapes && message.shapes.length)) {
             message.shapes = [];
           }
-          message.shapes.push(ShapeEntity.decode(reader, reader.uint32()));
+          message.shapes.push(ShapeEntityReader.decode(reader, reader.uint32()));
           break;
         }
         default:
@@ -156,6 +147,20 @@ export default class FrameEntity {
     }
 
     return this.decode(reader, reader.uint32());
+  }
+}
+
+export default class FrameEntity {
+  /**
+   * Creates a new FrameEntity instance using the specified properties.
+   * @function create
+   * @memberof com.opensource.svga.FrameEntity
+   * @static
+   * @param {com.opensource.svga.IFrameEntity=} [properties] Properties to set
+   * @returns {com.opensource.svga.FrameEntity} FrameEntity instance
+   */
+  static create(properties?: FrameEntityProps): FrameEntity {
+    return new FrameEntity(properties);
   }
   /**
    * Verifies a FrameEntity message.
@@ -268,47 +273,47 @@ export default class FrameEntity {
    * @param {$protobuf.IConversionOptions} [options] Conversion options
    * @returns {Object.<string,*>} Plain object
    */
-  static toObject(
-    message: FrameEntity,
-    options: Record<string, any>
-  ): Record<string, any> {
-    if (!options) {
-      options = {};
-    }
-    const object: Record<string, any> = {};
-    if (options.arrays || options.defaults) {
-      object.shapes = [];
-    }
-    if (options.defaults) {
-      object.alpha = 0;
-      object.layout = null;
-      object.transform = null;
-      object.clipPath = "";
-    }
-    if (message.alpha != null && message.hasOwnProperty("alpha")) {
-      object.alpha =
-        options.json && !isFinite(message.alpha)
-          ? "" + message.alpha
-          : message.alpha;
-    }
-    if (message.layout != null && message.hasOwnProperty("layout")) {
-      object.layout = Layout.toObject(message.layout, options);
-    }
-    if (message.transform != null && message.hasOwnProperty("transform")) {
-      object.transform = Transform.toObject(message.transform, options);
-    }
-    if (message.clipPath != null && message.hasOwnProperty("clipPath")) {
-      object.clipPath = message.clipPath;
-    }
-    if (message.shapes && message.shapes.length) {
-      object.shapes = [];
-      for (let j = 0; j < message.shapes.length; ++j) {
-        object.shapes[j] = ShapeEntity.toObject(message.shapes[j], options);
-      }
-    }
+  // static toObject(
+  //   message: FrameEntity,
+  //   options: Record<string, any>
+  // ): Record<string, any> {
+  //   if (!options) {
+  //     options = {};
+  //   }
+  //   const object: Record<string, any> = {};
+  //   if (options.arrays || options.defaults) {
+  //     object.shapes = [];
+  //   }
+  //   if (options.defaults) {
+  //     object.alpha = 0;
+  //     object.layout = null;
+  //     object.transform = null;
+  //     object.clipPath = "";
+  //   }
+  //   if (message.alpha != null && message.hasOwnProperty("alpha")) {
+  //     object.alpha =
+  //       options.json && !isFinite(message.alpha)
+  //         ? "" + message.alpha
+  //         : message.alpha;
+  //   }
+  //   if (message.layout != null && message.hasOwnProperty("layout")) {
+  //     object.layout = Layout.toObject(message.layout, options);
+  //   }
+  //   if (message.transform != null && message.hasOwnProperty("transform")) {
+  //     object.transform = Transform.toObject(message.transform, options);
+  //   }
+  //   if (message.clipPath != null && message.hasOwnProperty("clipPath")) {
+  //     object.clipPath = message.clipPath;
+  //   }
+  //   if (message.shapes && message.shapes.length) {
+  //     object.shapes = [];
+  //     for (let j = 0; j < message.shapes.length; ++j) {
+  //       object.shapes[j] = ShapeEntity.toObject(message.shapes[j], options);
+  //     }
+  //   }
 
-    return object;
-  }
+  //   return object;
+  // }
   /**
    * Gets the default type url for FrameEntity
    * @function getTypeUrl
@@ -317,13 +322,13 @@ export default class FrameEntity {
    * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
    * @returns {string} The default type url
    */
-  static getTypeUrl(typeUrlPrefix?: string): string {
-    if (typeUrlPrefix === undefined) {
-      typeUrlPrefix = "type.googleapis.com";
-    }
+  // static getTypeUrl(typeUrlPrefix?: string): string {
+  //   if (typeUrlPrefix === undefined) {
+  //     typeUrlPrefix = "type.googleapis.com";
+  //   }
 
-    return typeUrlPrefix + "/com.opensource.svga.FrameEntity";
-  }
+  //   return typeUrlPrefix + "/com.opensource.svga.FrameEntity";
+  // }
 
   /**
    * FrameEntity shapes.
@@ -372,23 +377,23 @@ export default class FrameEntity {
   constructor(properties?: FrameEntityProps) {
     if (properties) {
       if (properties.alpha != null) {
-        this.alpha = properties.alpha
+        this.alpha = properties.alpha;
       }
 
       if (properties.clipPath != null) {
-        this.clipPath = properties.clipPath
+        this.clipPath = properties.clipPath;
       }
 
       if (properties.layout != null) {
-        this.layout = properties.layout
+        this.layout = properties.layout;
       }
 
       if (properties.shapes != null) {
-        this.shapes = properties.shapes
+        this.shapes = properties.shapes;
       }
 
       if (properties.transform != null) {
-        this.transform = properties.transform
+        this.transform = properties.transform;
       }
     }
   }
@@ -400,7 +405,7 @@ export default class FrameEntity {
    * @instance
    * @returns {Object.<string,*>} JSON object
    */
-  toJSON() {
-    return FrameEntity.toObject(this, toJSONOptions);
-  }
+  // toJSON() {
+  //   return FrameEntity.toObject(this, toJSONOptions);
+  // }
 }

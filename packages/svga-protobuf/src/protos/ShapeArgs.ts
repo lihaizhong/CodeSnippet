@@ -1,7 +1,7 @@
 import Reader from "../serialization/Reader";
 // import Writer from "../serialization/Writer";
 import ShapeEntity from "./ShapeEntity";
-import { isString, toJSONOptions } from "../utils";
+// import { isString, toJSONOptions } from "../utils";
 
 /**
  * Properties of a ShapeArgs.
@@ -13,18 +13,7 @@ export interface ShapeArgsProps {
   d: string | null;
 }
 
-export default class ShapeArgs {
-  /**
-   * Creates a new ShapeArgs instance using the specified properties.
-   * @function create
-   * @memberof com.opensource.svga.ShapeEntity.ShapeArgs
-   * @static
-   * @param {com.opensource.svga.ShapeEntity.IShapeArgs=} [properties] Properties to set
-   * @returns {com.opensource.svga.ShapeEntity.ShapeArgs} ShapeArgs instance
-   */
-  static create(properties: ShapeArgsProps): ShapeArgs {
-    return new ShapeArgs(properties);
-  }
+export class ShapeArgsWriter {
   /**
    * Encodes the specified ShapeArgs message. Does not implicitly {@link com.opensource.svga.ShapeEntity.ShapeArgs.verify|verify} messages.
    * @function encode
@@ -56,6 +45,9 @@ export default class ShapeArgs {
   // static encodeDelimited(message: ShapeArgs, writer: Writer): Writer {
   //   return ShapeArgs.encode(message, writer).ldelim();
   // }
+}
+
+export class ShapeArgsReader {
   /**
    * Decodes a ShapeArgs message from the specified reader or buffer.
    * @function decode
@@ -67,12 +59,12 @@ export default class ShapeArgs {
    * @throws {Error} If the payload is not a reader or valid buffer
    * @throws {$protobuf.util.ProtocolError} If required fields are missing
    */
-  static decode(reader: Reader | Uint8Array, length: number): ShapeArgs {
+  static decode(reader: Reader | Uint8Array, length?: number): ShapeArgs {
     if (!(reader instanceof Reader)) {
       reader = Reader.create(reader);
     }
     const end = length === undefined ? reader.len : reader.pos + length;
-    const message = new ShapeEntity.ShapeArgs();
+    const message = new ShapeArgs();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -103,7 +95,21 @@ export default class ShapeArgs {
       reader = new Reader(reader);
     }
 
-    return ShapeArgs.decode(reader, reader.uint32());
+    return this.decode(reader, reader.uint32());
+  }
+}
+
+export default class ShapeArgs {
+  /**
+   * Creates a new ShapeArgs instance using the specified properties.
+   * @function create
+   * @memberof com.opensource.svga.ShapeEntity.ShapeArgs
+   * @static
+   * @param {com.opensource.svga.ShapeEntity.IShapeArgs=} [properties] Properties to set
+   * @returns {com.opensource.svga.ShapeEntity.ShapeArgs} ShapeArgs instance
+   */
+  static create(properties: ShapeArgsProps): ShapeArgs {
+    return new ShapeArgs(properties);
   }
   /**
    * Verifies a ShapeArgs message.
@@ -153,23 +159,23 @@ export default class ShapeArgs {
    * @param {$protobuf.IConversionOptions} [options] Conversion options
    * @returns {Object.<string,*>} Plain object
    */
-  static toObject(
-    message: ShapeArgs,
-    options: Record<string, any>
-  ): Record<string, any> {
-    if (!options) {
-      options = {};
-    }
-    const object: Record<string, any> = {};
-    if (options.defaults) {
-      object.d = "";
-    }
-    if (message.d != null && message.hasOwnProperty("d")) {
-      object.d = message.d;
-    }
+  // static toObject(
+  //   message: ShapeArgs,
+  //   options: Record<string, any>
+  // ): Record<string, any> {
+  //   if (!options) {
+  //     options = {};
+  //   }
+  //   const object: Record<string, any> = {};
+  //   if (options.defaults) {
+  //     object.d = "";
+  //   }
+  //   if (message.d != null && message.hasOwnProperty("d")) {
+  //     object.d = message.d;
+  //   }
 
-    return object;
-  }
+  //   return object;
+  // }
   /**
    * Gets the default type url for ShapeArgs
    * @function getTypeUrl
@@ -178,13 +184,13 @@ export default class ShapeArgs {
    * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
    * @returns {string} The default type url
    */
-  static getTypeUrl(typeUrlPrefix?: string): string {
-    if (typeUrlPrefix === undefined) {
-      typeUrlPrefix = "type.googleapis.com";
-    }
+  // static getTypeUrl(typeUrlPrefix?: string): string {
+  //   if (typeUrlPrefix === undefined) {
+  //     typeUrlPrefix = "type.googleapis.com";
+  //   }
 
-    return typeUrlPrefix + "/com.opensource.svga.ShapeEntity.ShapeArgs";
-  }
+  //   return typeUrlPrefix + "/com.opensource.svga.ShapeEntity.ShapeArgs";
+  // }
 
   d: string = "";
 
@@ -211,7 +217,7 @@ export default class ShapeArgs {
    * @instance
    * @returns {Object.<string,*>} JSON object
    */
-  toJSON(): Record<string, any> {
-    return ShapeArgs.toObject(this, toJSONOptions);
-  }
+  // toJSON(): Record<string, any> {
+  //   return ShapeArgs.toObject(this, toJSONOptions);
+  // }
 }

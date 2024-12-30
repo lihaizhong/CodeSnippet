@@ -1,8 +1,8 @@
-import base64 from "@protobufjs/base64";
+// import base64 from "@protobufjs/base64";
 import Reader from "../serialization/Reader";
 // import Writer from "../serialization/Writer";
-import SpriteEntity from "./SpriteEntity";
-import MovieParams from "./MovieParams";
+import SpriteEntity, { SpriteEntityReader } from "./SpriteEntity";
+import MovieParams, { MovieParamsReader } from "./MovieParams";
 import { emptyObject, isObject, isString, toJSONOptions } from "../utils";
 
 /**
@@ -21,18 +21,7 @@ export interface MovieEntityProps {
   sprites: SpriteEntity[] | null;
 }
 
-export default class MovieEntity {
-  /**
-   * Creates a new MovieEntity instance using the specified properties.
-   * @function create
-   * @memberof com.opensource.svga.MovieEntity
-   * @static
-   * @param {com.opensource.svga.IMovieEntity=} [properties] Properties to set
-   * @returns {com.opensource.svga.MovieEntity} MovieEntity instance
-   */
-  static create(properties?: MovieEntityProps): MovieEntity {
-    return new MovieEntity(properties);
-  }
+export class MovieEntityWriter {
   /**
    * Encodes the specified MovieEntity message. Does not implicitly {@link com.opensource.svga.MovieEntity.verify|verify} messages.
    * @function encode
@@ -91,6 +80,9 @@ export default class MovieEntity {
   // static encodeDelimited(message: MovieEntity, writer: Writer): Writer {
   //   return MovieEntity.encode(message, writer).ldelim();
   // }
+}
+
+export class MovieEntityReader {
   /**
    * Decodes a MovieEntity message from the specified reader or buffer.
    * @function decode
@@ -102,7 +94,7 @@ export default class MovieEntity {
    * @throws {Error} If the payload is not a reader or valid buffer
    * @throws {$protobuf.util.ProtocolError} If required fields are missing
    */
-  static decode(reader: Reader | Uint8Array, length: number): MovieEntity {
+  static decode(reader: Reader | Uint8Array, length?: number): MovieEntity {
     if (!(reader instanceof Reader)) {
       reader = Reader.create(reader);
     }
@@ -118,7 +110,7 @@ export default class MovieEntity {
           break;
         }
         case 2: {
-          message.params = MovieParams.decode(reader, reader.uint32());
+          message.params = MovieParamsReader.decode(reader, reader.uint32());
           break;
         }
         case 3: {
@@ -149,7 +141,7 @@ export default class MovieEntity {
           if (!(message.sprites && message.sprites.length)) {
             message.sprites = [];
           }
-          message.sprites.push(SpriteEntity.decode(reader, reader.uint32()));
+          message.sprites.push(SpriteEntityReader.decode(reader, reader.uint32()));
           break;
         }
         default:
@@ -174,7 +166,21 @@ export default class MovieEntity {
       reader = new Reader(reader);
     }
 
-    return MovieEntity.decode(reader, reader.uint32());
+    return this.decode(reader, reader.uint32());
+  }
+}
+
+export default class MovieEntity {
+  /**
+   * Creates a new MovieEntity instance using the specified properties.
+   * @function create
+   * @memberof com.opensource.svga.MovieEntity
+   * @static
+   * @param {com.opensource.svga.IMovieEntity=} [properties] Properties to set
+   * @returns {com.opensource.svga.MovieEntity} MovieEntity instance
+   */
+  static create(properties?: MovieEntityProps): MovieEntity {
+    return new MovieEntity(properties);
   }
   /**
    * Verifies a MovieEntity message.
@@ -306,52 +312,52 @@ export default class MovieEntity {
    * @param {$protobuf.IConversionOptions} [options] Conversion options
    * @returns {Object.<string,*>} Plain object
    */
-  static toObject(
-    message: MovieEntity,
-    options: Record<string, any>
-  ): Record<string, any> {
-    if (!options) {
-      options = {};
-    }
-    const object: Record<string, any> = {};
-    if (options.arrays || options.defaults) {
-      object.sprites = [];
-    }
-    if (options.objects || options.defaults) {
-      object.images = {};
-    }
-    if (options.defaults) {
-      object.version = "";
-      object.params = null;
-    }
-    if (message.version != null && message.hasOwnProperty("version")) {
-      object.version = message.version;
-    }
-    if (message.params != null && message.hasOwnProperty("params")) {
-      object.params = MovieParams.toObject(message.params, options);
-    }
-    let keys2;
-    if (message.images && (keys2 = Object.keys(message.images)).length) {
-      object.images = {};
-      for (let j = 0; j < keys2.length; ++j) {
-        const key = keys2[j];
-        object.images[key] =
-          options.bytes === String
-            ? base64.encode(message.images[key], 0, message.images[key].length)
-            : options.bytes === Array
-            ? [...message.images[key]]
-            : message.images[key];
-      }
-    }
-    if (message.sprites && message.sprites.length) {
-      object.sprites = [];
-      for (let j = 0; j < message.sprites.length; ++j) {
-        object.sprites[j] = SpriteEntity.toObject(message.sprites[j], options);
-      }
-    }
+  // static toObject(
+  //   message: MovieEntity,
+  //   options: Record<string, any>
+  // ): Record<string, any> {
+  //   if (!options) {
+  //     options = {};
+  //   }
+  //   const object: Record<string, any> = {};
+  //   if (options.arrays || options.defaults) {
+  //     object.sprites = [];
+  //   }
+  //   if (options.objects || options.defaults) {
+  //     object.images = {};
+  //   }
+  //   if (options.defaults) {
+  //     object.version = "";
+  //     object.params = null;
+  //   }
+  //   if (message.version != null && message.hasOwnProperty("version")) {
+  //     object.version = message.version;
+  //   }
+  //   if (message.params != null && message.hasOwnProperty("params")) {
+  //     object.params = MovieParams.toObject(message.params, options);
+  //   }
+  //   let keys2;
+  //   if (message.images && (keys2 = Object.keys(message.images)).length) {
+  //     object.images = {};
+  //     for (let j = 0; j < keys2.length; ++j) {
+  //       const key = keys2[j];
+  //       object.images[key] =
+  //         options.bytes === String
+  //           ? base64.encode(message.images[key], 0, message.images[key].length)
+  //           : options.bytes === Array
+  //           ? [...message.images[key]]
+  //           : message.images[key];
+  //     }
+  //   }
+  //   if (message.sprites && message.sprites.length) {
+  //     object.sprites = [];
+  //     for (let j = 0; j < message.sprites.length; ++j) {
+  //       object.sprites[j] = SpriteEntity.toObject(message.sprites[j], options);
+  //     }
+  //   }
 
-    return object;
-  }
+  //   return object;
+  // }
   /**
    * Gets the default type url for MovieEntity
    * @function getTypeUrl
@@ -360,13 +366,13 @@ export default class MovieEntity {
    * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
    * @returns {string} The default type url
    */
-  static getTypeUrl(typeUrlPrefix?: string) {
-    if (typeUrlPrefix === undefined) {
-      typeUrlPrefix = "type.googleapis.com";
-    }
+  // static getTypeUrl(typeUrlPrefix?: string) {
+  //   if (typeUrlPrefix === undefined) {
+  //     typeUrlPrefix = "type.googleapis.com";
+  //   }
 
-    return typeUrlPrefix + "/com.opensource.svga.MovieEntity";
-  }
+  //   return typeUrlPrefix + "/com.opensource.svga.MovieEntity";
+  // }
 
   /**
    * MovieEntity version.
@@ -381,14 +387,14 @@ export default class MovieEntity {
    * @memberof com.opensource.svga.MovieEntity
    * @instance
    */
-  params?: MovieParams | null = null;
+  params: MovieParams | null = null;
   /**
    * MovieEntity images.
    * @member {Object.<string,Uint8Array>} images
    * @memberof com.opensource.svga.MovieEntity
    * @instance
    */
-  images: Record<string, Uint8Array> = {};
+  images: Record<string, Uint8Array> = emptyObject;
   /**
    * MovieEntity sprites.
    * @member {Array.<com.opensource.svga.ISpriteEntity>} sprites
@@ -432,7 +438,7 @@ export default class MovieEntity {
    * @instance
    * @returns {Object.<string,*>} JSON object
    */
-  toJSON() {
-    return MovieEntity.toObject(this, toJSONOptions);
-  }
+  // toJSON() {
+  //   return MovieEntity.toObject(this, toJSONOptions);
+  // }
 }
