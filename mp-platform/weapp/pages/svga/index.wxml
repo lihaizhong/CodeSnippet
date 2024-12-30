@@ -1,4 +1,5 @@
 <!-- <navigation-bar title="SVGA动画" color="black" background="#FFF"></navigation-bar> -->
+<view class="area-top"></view>
 <scroll-view class="scroll-area" type="list" scroll-y>
   <svga-player url="{{ url }}"></svga-player>
   <view class="footer">

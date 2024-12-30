@@ -52,14 +52,14 @@ Component({
           player = new Player();
         }
 
-        this.setData({ message: "实例化成功" })
+        this.setData({ message: "准备下载资源" })
         // wx.showLoading();
         const videoItem = await parser.load(this.properties.url);
         this.setData({ message: "下载资源成功" })
         await player.mount(videoItem, "#palette", this);
-        this.setData({ message: "资源装载成功" })
+        // this.setData({ message: "资源装载成功" })
         // wx.hideLoading();
-        this.setData({ message: "准备开始播放" })
+        // this.setData({ message: "准备开始播放" })
         player.start();
         this.setData({ message: "" })
       } catch (ex) {

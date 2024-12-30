@@ -58,8 +58,7 @@ Component({
     displayStyle: '',
     ios: false,
     innerPaddingRight: '0px',
-    leftWidth: '0px',
-    safeAreaTop: '0px'
+    leftWidth: '0px'
   },
   lifetimes: {
     ready() {
@@ -71,8 +70,7 @@ Component({
           this.setData({
             ios: !isAndroid,
             innerPaddingRight: `padding-right: ${res.windowWidth - rect.left}px`,
-            leftWidth: `width: ${res.windowWidth - rect.left }px`,
-            safeAreaTop: isDevtools || isAndroid ? `height: calc(var(--height) + ${res.safeArea.top}px); padding-top: ${res.safeArea.top}px` : ""
+            leftWidth: `width: ${res.windowWidth - rect.left }px`
           })
         }
       })
