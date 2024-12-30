@@ -1,6 +1,6 @@
 import Reader from "../serialization/Reader";
 // import Writer from "../serialization/Writer";
-import ShapeEntity from "./ShapeEntity";
+// import ShapeEntity from "./ShapeEntity";
 // import { toJSONOptions } from "../utils";
 
 /**

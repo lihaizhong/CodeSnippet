@@ -136,6 +136,7 @@ export class TransformReader {
     if (!(reader instanceof Reader)) {
       reader = new Reader(reader);
     }
+
     return this.decode(reader, reader.uint32());
   }
 }
@@ -291,13 +292,13 @@ export default class Transform {
    * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
    * @returns {string} The default type url
    */
-  static getTypeUrl(typeUrlPrefix?: string): string {
-    if (typeUrlPrefix === undefined) {
-      typeUrlPrefix = "type.googleapis.com";
-    }
+  // static getTypeUrl(typeUrlPrefix?: string): string {
+  //   if (typeUrlPrefix === undefined) {
+  //     typeUrlPrefix = "type.googleapis.com";
+  //   }
 
-    return typeUrlPrefix + "/com.opensource.svga.Transform";
-  }
+  //   return typeUrlPrefix + "/com.opensource.svga.Transform";
+  // }
 
   /**
    * Transform a.

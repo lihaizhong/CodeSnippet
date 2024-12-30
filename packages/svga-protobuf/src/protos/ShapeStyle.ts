@@ -3,8 +3,8 @@ import Reader from "../serialization/Reader";
 import LineCap from "./LineCap";
 import LineJoin from "./LineJoin";
 import RGBAColor, { RGBAColorReader } from "./RGBAColor";
-import ShapeEntity from "./ShapeEntity";
-import { toJSONOptions } from "../utils";
+// import ShapeEntity from "./ShapeEntity";
+// import { toJSONOptions } from "../utils";
 
 /**
  * Properties of a ShapeStyle.

@@ -88,7 +88,6 @@ export default class Transform {
      * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
      * @returns {string} The default type url
      */
-    static getTypeUrl(typeUrlPrefix?: string): string;
     /**
      * Transform a.
      * @member {number} a
