@@ -22,9 +22,9 @@ export declare class Player {
     readonly config: PlayerConfig;
     private readonly selector;
     private animator;
-    private readonly ofsCanvas;
+    private ofsCanvas;
     private bitmapsCache;
-    constructor();
+    private isReady;
     /**
      * 设置配置项
      * @param options 可配置项
@@ -35,7 +35,7 @@ export declare class Player {
      * @param videoEntity SVGA 数据源
      * @returns Promise<void>
      */
-    mount(videoEntity: Video): Promise<void>;
+    mount(videoEntity: Video, options: string | PlayerConfigOptions, component?: WechatMiniprogram.Component.TrivialInstance | null): Promise<void>;
     /**
      * 开始播放事件回调
      */

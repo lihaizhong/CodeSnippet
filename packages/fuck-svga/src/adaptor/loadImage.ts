@@ -106,8 +106,8 @@ export function loadImage(
       img.onload = () => resolve(img);
       img.onerror = (error: Error) =>
         reject(new Error(`[SVGA LOADING FAILURE]: ${error.message}`));
-      img.width = canvas.width
-      img.height = canvas.height
+      // img.width = canvas.width
+      // img.height = canvas.height
       img.src = genImageSource(data as Uint8Array | string);
     } else {
       reject(throwUnsupportedPlatform());

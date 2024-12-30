@@ -1,5 +1,5 @@
 import { unzlibSync } from 'fflate'
-import { MovieEntity } from '../../utils/svga-protobuf'
+import { MovieEntityReader } from '../../utils/svga-protobuf'
 
 Page({
   data: {
@@ -39,7 +39,7 @@ Page({
         }
 
         const inflateData = unzlibSync(u8a)
-        const movieData = MovieEntity.decode(inflateData)
+        const movieData = MovieEntityReader.decode(inflateData)
 
         console.log('movieData', movieData)
       }

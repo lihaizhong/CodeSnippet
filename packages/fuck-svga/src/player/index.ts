@@ -53,22 +53,13 @@ export class Player {
   };
 
   private readonly selector: string = "#svga-board";
-  private animator: Animator | null;
-  private readonly ofsCanvas: PlatformOffscreenCanvas;
+  private animator: Animator | null = null;
+  private ofsCanvas: PlatformOffscreenCanvas | null = null;
 
   // private isBeIntersection = true;
   // private intersectionObserver: IntersectionObserver | null = null
   private bitmapsCache: BitmapsCache = {};
-
-  constructor() {
-    this.ofsCanvas = createOffscreenCanvas({});
-    this.animator = new Animator(this.ofsCanvas);
-    this.animator.onEnd = () => {
-      if (this.onEnd !== undefined) {
-        this.onEnd();
-      }
-    };
-  }
+  private isReady: boolean = false;
 
   /**
    * 设置配置项
@@ -109,6 +100,17 @@ export class Player {
       config.isUseIntersectionObserver ?? false;
     // 监听容器是否处于浏览器视窗内
     // this.setIntersectionObserver()
+    this.ofsCanvas = createOffscreenCanvas({
+      width: result.canvas.width,
+      height: result.canvas.height,
+    });
+    this.animator = new Animator(this.ofsCanvas);
+    this.animator.onEnd = () => {
+      if (this.onEnd !== undefined) {
+        this.onEnd();
+      }
+    };
+    this.isReady = true;
   }
 
   // private setIntersectionObserver (): void {
@@ -132,7 +134,15 @@ export class Player {
    * @param videoEntity SVGA 数据源
    * @returns Promise<void>
    */
-  public mount(videoEntity: Video): Promise<void> {
+  public async mount(
+    videoEntity: Video,
+    options: string | PlayerConfigOptions,
+    component?: WechatMiniprogram.Component.TrivialInstance | null
+  ): Promise<void> {
+    if (options) {
+      await this.setConfig(options, component);
+    }
+
     this.currentFrame = 0;
     this.totalFrames = videoEntity.frames - 1;
     this.videoEntity = videoEntity;
@@ -140,19 +150,19 @@ export class Player {
     this.setSize();
 
     if (this.videoEntity === undefined) {
-      return Promise.resolve();
+      return;
     }
 
     const { images } = this.videoEntity;
 
     if (Object.keys(images).length === 0) {
-      return Promise.resolve();
+      return;
     }
 
     let imageArr: any[] = [];
     for (let key in images) {
       const image = images[key];
-      const p = loadImage(this.ofsCanvas, image).then((img) => {
+      const p = loadImage(this.ofsCanvas!, image).then((img) => {
         this.bitmapsCache[key] = img;
       });
 
@@ -188,6 +198,10 @@ export class Player {
   public onEnd: EventCallback;
 
   private clearContainer(): void {
+    if (!this.isReady) {
+      return
+    }
+
     const { container } = this.config;
 
     if (container !== null) {
@@ -200,6 +214,9 @@ export class Player {
    * 开始播放
    */
   public start(): void {
+    if (!this.isReady) {
+      return
+    }
     if (this.videoEntity === undefined) {
       throw new Error("videoEntity undefined");
     }
@@ -214,6 +231,9 @@ export class Player {
    * 重新播放
    */
   public resume(): void {
+    if (!this.isReady) {
+      return
+    }
     this.startAnimation();
     if (this.onResume !== undefined) {
       this.onResume();
@@ -224,7 +244,10 @@ export class Player {
    * 暂停播放
    */
   public pause(): void {
-    (this.animator as Animator).stop();
+    if (!this.isReady) {
+      return
+    }
+    this.animator!.stop();
     if (this.onPause !== undefined) {
       this.onPause();
     }
@@ -234,7 +257,10 @@ export class Player {
    * 停止播放
    */
   public stop(): void {
-    (this.animator as Animator).stop();
+    if (!this.isReady) {
+      return
+    }
+    this.animator!.stop();
     this.currentFrame = 0;
     this.clearContainer();
     if (this.onStop !== undefined) {
@@ -246,6 +272,9 @@ export class Player {
    * 清理容器画布
    */
   public clear(): void {
+    if (!this.isReady) {
+      return
+    }
     this.clearContainer();
   }
 
@@ -253,7 +282,10 @@ export class Player {
    * 销毁实例
    */
   public destroy(): void {
-    (this.animator as Animator).stop();
+    if (!this.isReady) {
+      return
+    }
+    this.animator!.stop();
     this.clearContainer();
 
     this.animator = null;
@@ -355,12 +387,12 @@ export class Player {
     ) {
       ofsCanvas = createOffscreenCanvas({ width, height });
     } else {
-      ofsCanvas.width = width;
-      ofsCanvas.height = height;
+      ofsCanvas!.width = width;
+      ofsCanvas!.height = height;
     }
 
     const imageData = render(
-      ofsCanvas,
+      ofsCanvas!,
       this.bitmapsCache,
       this.videoEntity.dynamicElements,
       this.videoEntity.replaceElements,
@@ -374,8 +406,8 @@ export class Player {
       0,
       0,
       0,
-      ofsCanvas.width,
-      ofsCanvas.height
+      ofsCanvas!.width,
+      ofsCanvas!.height
     );
   }
 }
