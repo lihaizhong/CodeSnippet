@@ -49,7 +49,7 @@ export class Player {
     startFrame: 0,
     endFrame: 0,
     loopStartFrame: 0,
-    isUseIntersectionObserver: false,
+    // isUseIntersectionObserver: false,
   };
 
   private readonly selector: string = "#svga-board";
@@ -96,8 +96,8 @@ export class Player {
     this.config.startFrame = config.startFrame ?? 0;
     this.config.endFrame = config.endFrame ?? 0;
     this.config.loopStartFrame = config.loopStartFrame ?? 0;
-    this.config.isUseIntersectionObserver =
-      config.isUseIntersectionObserver ?? false;
+    // this.config.isUseIntersectionObserver =
+    //   config.isUseIntersectionObserver ?? false;
     // 监听容器是否处于浏览器视窗内
     // this.setIntersectionObserver()
     this.ofsCanvas = createOffscreenCanvas({
@@ -272,24 +272,22 @@ export class Player {
    * 清理容器画布
    */
   public clear(): void {
-    if (!this.isReady) {
-      return
+    if (this.isReady) {
+      this.clearContainer();
     }
-    this.clearContainer();
   }
 
   /**
    * 销毁实例
    */
   public destroy(): void {
-    if (!this.isReady) {
-      return
-    }
-    this.animator!.stop();
-    this.clearContainer();
+    if (this.isReady) {
+      this.animator!.stop();
+      this.clearContainer();
 
-    this.animator = null;
-    (this.videoEntity as any) = null;
+      this.animator = null;
+      (this.videoEntity as any) = null;
+    }
   }
 
   private startAnimation(): void {

@@ -1,6 +1,5 @@
 import { MovieEntity } from "svga-protobuf";
 import {
-  Movie,
   Video,
   RawImages,
   ReplaceElements,
@@ -8,10 +7,7 @@ import {
   VideoFrame,
   VideoSprite,
   SHAPE_TYPE,
-  SHAPE_TYPE_CODE,
   VideoFrameShapes,
-  LINE_CAP_CODE,
-  LINE_JOIN_CODE,
   RGBA,
 } from "../types";
 
