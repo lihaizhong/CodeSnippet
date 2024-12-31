@@ -65,7 +65,7 @@ Component({
       } catch (ex) {
         // wx.hideLoading();
         console.error("svga初始化失败！", ex);
-        this.setData({ message: ex.message })
+        this.setData({ message: ex.message + '\n' + ex.stack })
       }
     },
     stop() {
