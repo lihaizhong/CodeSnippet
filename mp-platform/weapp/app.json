@@ -5,7 +5,7 @@
     "pages/webview/index"
   ],
   "window": {
-    "navigationStyle": "custom"
+    "navigationStyle": "default"
   },
   "style": "v2",
   "rendererOptions": {

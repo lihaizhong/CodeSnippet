@@ -1,4 +1,6 @@
-<navigation-bar title="首页" back="{{false}}" color="black" background="#FFF"></navigation-bar>
 <view class="page-container">
   <button wx:for="{{ btnList }}" wx:key="path" class="btn" type="primary" data-url="{{ item.path }}" bindtap="handleNavigateTo">{{ item.text }}</button>
+</view>
+<view style="background: #979797;">
+  <image wx:for="{{ images }}" wx:key="item" style="width: {{ params.width }}px; height: {{ params.height }}px;" src="{{ item }}"></image>
 </view>

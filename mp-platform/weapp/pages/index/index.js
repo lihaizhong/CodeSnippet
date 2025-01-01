@@ -12,7 +12,12 @@ Page({
         text: '跳转Webview',
         path: '/pages/webview/index'
       }
-    ]
+    ],
+    images: [],
+    params: {
+      width: 0,
+      height: 0
+    },
   },
   handleNavigateTo(e) {
     const { url } = e.currentTarget.dataset
@@ -30,7 +35,7 @@ Page({
       url: 'https://assets.2dfire.com/frontend/1ddb590515d196f07c411794633e4406.svga',
       responseType: 'arraybuffer',
       enableCache: true,
-      success(res) {
+      success: (res) => {
         const header = new Uint8Array(res.data, 0, 4)
         const u8a = new Uint8Array(res.data)
 
@@ -42,6 +47,25 @@ Page({
         const movieData = MovieEntityReader.decode(inflateData)
 
         console.log('movieData', movieData)
+
+        const windowInfo = wx.getWindowInfo()
+        const images = []
+        const { viewBoxHeight, viewBoxWidth } = movieData.params
+        Object.keys(movieData.images).forEach((key) => {
+          const data = movieData.images[key]
+          const ab = data.buffer.slice(
+            data.byteOffset,
+            data.byteOffset + data.byteLength
+          )
+          images.push(`data:image/png;base64,${wx.arrayBufferToBase64(ab)}`.replace(/[\r\n]/g,"").replace(" ",""))
+        })
+        this.setData({
+          images,
+          params: {
+            width: windowInfo.screenWidth,
+            height: viewBoxHeight * (windowInfo.screenWidth / viewBoxWidth)
+          }
+        })
       }
     })
   }
