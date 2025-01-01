@@ -2,7 +2,7 @@ import { unzlibSync } from "fflate";
 import { MovieEntityReader } from "svga-protobuf";
 import download from "../adaptor/download";
 import { VideoEntity } from "./video-entity";
-import type { Movie, Video } from "../types";
+import type { Video } from "../types";
 
 /**
  * SVGA 下载解析器

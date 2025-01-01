@@ -16,6 +16,7 @@
   "license": "MIT",
   "devDependencies": {
     "@changesets/cli": "^2.27.11",
+    "benchmark": "^2.1.4",
     "serve": "^14.2.4"
   }
 }

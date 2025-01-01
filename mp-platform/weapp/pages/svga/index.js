@@ -1,8 +1,6 @@
 import { getImageSourceByShuffle } from './actions'
 import { ImageSources } from './constants'
 
-const app = getApp()
-
 Page({
   data: {
     url: ImageSources[0],
