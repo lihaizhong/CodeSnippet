@@ -1,4 +1,4 @@
-import { MovieEntity } from "svga-protobuf";
+import type { MovieEntity } from "svga-protobuf";
 import { Video, RawImages, ReplaceElements, DynamicElements, VideoSprite } from "../types";
 export declare class VideoEntity implements Video {
     version: string;

@@ -2,17 +2,6 @@ import float from "@protobufjs/float";
 import utf8 from "@protobufjs/utf8";
 // import { LongBits } from "../dts";
 
-function indexOutOfRange(reader: Reader, writeLength?: number) {
-  return RangeError(
-    "index out of range: " +
-      reader.pos +
-      " + " +
-      (writeLength || 1) +
-      " > " +
-      reader.len
-  );
-}
-
 export default class Reader {
   /**
    * Creates a new reader using the specified buffer.
@@ -61,6 +50,17 @@ export default class Reader {
     return buf.subarray(begin, end);
   }
 
+  private indexOutOfRange(reader: Reader, writeLength?: number) {
+    return RangeError(
+      "index out of range: " +
+        reader.pos +
+        " + " +
+        (writeLength || 1) +
+        " > " +
+        reader.len
+    );
+  }
+
   // private readLongVarint() {
   //   // tends to deopt with local vars for octet etc.
   //   const bits = new LongBits(0, 0);
@@ -86,7 +86,7 @@ export default class Reader {
   //     for (; i < 3; ++i) {
   //       /* istanbul ignore if */
   //       if (this.pos >= this.len) {
-  //         throw indexOutOfRange(this);
+  //         throw this.indexOutOfRange(this);
   //       }
   //       // 1st..3th
   //       bits.lo = (bits.lo | ((this.buf[this.pos] & 127) << (i * 7))) >>> 0;
@@ -111,7 +111,7 @@ export default class Reader {
   //     for (; i < 5; ++i) {
   //       /* istanbul ignore if */
   //       if (this.pos >= this.len) {
-  //         throw indexOutOfRange(this);
+  //         throw this.indexOutOfRange(this);
   //       }
   //       // 6th..10th
   //       bits.hi = (bits.hi | ((this.buf[this.pos] & 127) << (i * 7 + 3))) >>> 0;
@@ -138,7 +138,7 @@ export default class Reader {
 
   // private readFixed64(/* this: Reader */) {
   //   /* istanbul ignore if */
-  //   if (this.pos + 8 > this.len) throw indexOutOfRange(this, 8);
+  //   if (this.pos + 8 > this.len) throw this.indexOutOfRange(this, 8);
 
   //   return new LongBits(
   //     this.readFixed32_end(this.buf, (this.pos += 4)),
@@ -182,7 +182,7 @@ export default class Reader {
     if ((this.pos += 5) > this.len) {
       this.pos = this.len;
 
-      throw indexOutOfRange(this, 10);
+      throw this.indexOutOfRange(this, 10);
     }
 
     return value;
@@ -250,7 +250,7 @@ export default class Reader {
    */
   // fixed32() {
   //   if (this.pos + 4 > this.len) {
-  //     throw indexOutOfRange(this, 4);
+  //     throw this.indexOutOfRange(this, 4);
   //   }
 
   //   return this.readFixed32_end(this.buf, (this.pos += 4));
@@ -262,7 +262,7 @@ export default class Reader {
    */
   // sfixed32() {
   //   if (this.pos + 4 > this.len) {
-  //     throw indexOutOfRange(this, 4);
+  //     throw this.indexOutOfRange(this, 4);
   //   }
 
   //   return this.readFixed32_end(this.buf, (this.pos += 4)) | 0;
@@ -295,7 +295,7 @@ export default class Reader {
    */
   float() {
     if (this.pos + 4 > this.len) {
-      throw indexOutOfRange(this, 4);
+      throw this.indexOutOfRange(this, 4);
     }
 
     const value = float.readFloatLE(this.buf, this.pos);
@@ -311,7 +311,7 @@ export default class Reader {
    */
   // double() {
   //   if (this.pos + 8 > this.len) {
-  //     throw indexOutOfRange(this, 4);
+  //     throw this.indexOutOfRange(this, 4);
   //   }
 
   //   const value = float.readDoubleLE(this.buf, this.pos);
@@ -330,7 +330,7 @@ export default class Reader {
     const end = this.pos + length;
 
     if (end > this.len) {
-      throw indexOutOfRange(this, length);
+      throw this.indexOutOfRange(this, length);
     }
 
     this.pos += length;
@@ -360,14 +360,14 @@ export default class Reader {
     if (typeof length === "number") {
       /* istanbul ignore if */
       if (this.pos + length > this.len) {
-        throw indexOutOfRange(this, length);
+        throw this.indexOutOfRange(this, length);
       }
       this.pos += length;
     } else {
       do {
         /* istanbul ignore if */
         if (this.pos >= this.len) {
-          throw indexOutOfRange(this);
+          throw this.indexOutOfRange(this);
         }
       } while (this.buf[this.pos++] & 128);
     }

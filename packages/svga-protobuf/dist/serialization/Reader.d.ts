@@ -30,6 +30,7 @@ export default class Reader {
      */
     constructor(buffer: Uint8Array);
     private slice;
+    private indexOutOfRange;
     /**
      * Reads a varint as an unsigned 32 bit value.
      * @function
