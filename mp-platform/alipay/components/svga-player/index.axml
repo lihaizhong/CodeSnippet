@@ -1,0 +1,5 @@
+<view class="svga-palette-container">
+  <canvas type="2d" id="palette" class="svga-palette"></canvas>
+</view>
+
+<view a:if="{{ message }}" class="svga-error-popup">{{ message }}</view>

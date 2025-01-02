@@ -1,0 +1,30 @@
+page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #111;
+}
+
+.area-top {
+  padding-top: calc(44px + constant(safe-area-inset-top)); /* 兼容 iOS < 11.2 */
+ 	padding-top: calc(44px + env(safe-area-inset-top)); /* 兼容 iOS >= 11.2 */
+}
+
+.scroll-area {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.footer {
+  display: flex;
+  padding: 0 20rpx;
+  text-align: center;
+}
+
+.foot-btn {
+  flex: 1 auto;
+}
+
+.foot-btn + .foot-btn {
+  margin-left: 20rpx;
+}

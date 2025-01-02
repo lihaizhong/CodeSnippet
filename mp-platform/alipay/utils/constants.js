@@ -1,4 +1,4 @@
-export const ImageSources = [
+export const svgaSources = [
   'https://assets.2dfire.com/frontend/9ce0cce7205fbebba380ed44879e5660.svga',
   'https://assets.2dfire.com/frontend/1ddb590515d196f07c411794633e4406.svga',
   'https://assets.2dfire.com/frontend/9a96c2c0fbe8ec39f0a192e3e1303d22.svga',
