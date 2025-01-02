@@ -1,6 +1,3 @@
-import { unzlibSync } from 'fflate'
-import { MovieEntityReader } from '../../utils/svga-protobuf'
-
 Page({
   data: {
     btnList: [
@@ -11,13 +8,12 @@ Page({
       {
         text: '跳转Webview',
         path: '/pages/webview/index'
+      },
+      {
+        text: '跳转SVGA分析',
+        path: '/pages/svga-analyze/index'
       }
-    ],
-    images: [],
-    params: {
-      width: 0,
-      height: 0
-    },
+    ]
   },
   handleNavigateTo(e) {
     const { url } = e.currentTarget.dataset
@@ -25,48 +21,7 @@ Page({
     if (url) {
       wx.navigateTo({ url })
     } else {
-      console.error('为获取到跳转路径', e)
+      console.error('未获取到跳转路径', e)
     }
-  },
-
-  onLoad() {
-    // 测试svga解析
-    wx.request({
-      url: 'https://assets.2dfire.com/frontend/1ddb590515d196f07c411794633e4406.svga',
-      responseType: 'arraybuffer',
-      enableCache: true,
-      success: (res) => {
-        const header = new Uint8Array(res.data, 0, 4)
-        const u8a = new Uint8Array(res.data)
-
-        if (header.toString() === '80,75,3,4') {
-          throw new Error('this parser only support version@2 of SVGA.')
-        }
-
-        const inflateData = unzlibSync(u8a)
-        const movieData = MovieEntityReader.decode(inflateData)
-
-        console.log('movieData', movieData)
-
-        const windowInfo = wx.getWindowInfo()
-        const images = []
-        const { viewBoxHeight, viewBoxWidth } = movieData.params
-        Object.keys(movieData.images).forEach((key) => {
-          const data = movieData.images[key]
-          const ab = data.buffer.slice(
-            data.byteOffset,
-            data.byteOffset + data.byteLength
-          )
-          images.push(`data:image/png;base64,${wx.arrayBufferToBase64(ab)}`.replace(/[\r\n]/g,"").replace(" ",""))
-        })
-        this.setData({
-          images,
-          params: {
-            width: windowInfo.screenWidth,
-            height: viewBoxHeight * (windowInfo.screenWidth / viewBoxWidth)
-          }
-        })
-      }
-    })
   }
 })

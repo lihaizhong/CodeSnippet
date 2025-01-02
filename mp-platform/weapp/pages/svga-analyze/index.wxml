@@ -1,0 +1,3 @@
+<view class="page-container">
+  <image wx:for="{{ images }}" wx:key="item" style="width: {{ params.width }}px; height: {{ params.height }}px;" src="{{ item }}"></image>
+</view>

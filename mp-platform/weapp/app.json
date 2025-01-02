@@ -2,7 +2,8 @@
   "pages": [
     "pages/index/index",
     "pages/svga/index",
-    "pages/webview/index"
+    "pages/webview/index",
+    "pages/svga-analyze/index"
   ],
   "window": {
     "navigationStyle": "default"
