@@ -140,7 +140,7 @@ export class Player {
     videoEntity: Video,
     options: string | PlayerConfigOptions,
     component?: WechatMiniprogram.Component.TrivialInstance | null
-  ): Promise<void> {
+  ): Promise<void | void[]> {
     if (options) {
       await this.setConfig(options, component);
     }
@@ -161,7 +161,7 @@ export class Player {
       return;
     }
 
-    let imageArr: any[] = [];
+    let imageArr: Promise<void>[] = [];
     for (let key in images) {
       const image = images[key];
       const p = loadImage(this.ofsCanvas!, image).then((img) => {
@@ -171,7 +171,7 @@ export class Player {
       imageArr.push(p);
     }
 
-    return Promise.all(imageArr) as unknown as Promise<void>;
+    return Promise.all<void>(imageArr);
   }
 
   /**
@@ -288,7 +288,7 @@ export class Player {
       this.clearContainer();
 
       this.animator = null;
-      (this.videoEntity as any) = null;
+      this.videoEntity = undefined;
     }
   }
 

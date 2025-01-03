@@ -184,11 +184,12 @@ export interface VideoSprite {
 export type Bitmap = PlatformImage | PlatformOffscreenCanvas | ImageBitmap;
 
 export interface BitmapsCache {
-  [key: string]: Bitmap | ImageBitmap;
+  [key: string]: Bitmap;
 }
 
 export type ReplaceElement =
   | PlatformImage
+  | ImageBitmap
   | PlatformCanvas
   | PlatformOffscreenCanvas;
 
@@ -196,10 +197,7 @@ export interface ReplaceElements {
   [key: string]: ReplaceElement;
 }
 
-export type DynamicElement =
-  | PlatformImage
-  | PlatformCanvas
-  | PlatformOffscreenCanvas;
+export type DynamicElement = ReplaceElement;
 
 export interface DynamicElements {
   [key: string]: DynamicElement;

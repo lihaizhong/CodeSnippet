@@ -35,8 +35,8 @@ function readRemoteFile(url: string): Promise<ArrayBuffer> {
         url,
         responseType: "arraybuffer",
         enableCache: true,
-        success(res: any) {
-          resolve(res.data);
+        success(res) {
+          resolve(res.data as ArrayBuffer);
         },
         fail: reject,
       });
@@ -57,7 +57,7 @@ function readLocalFile(url: string): Promise<ArrayBuffer> {
 
     bridge.getFileSystemManager().readFile({
       filePath: url,
-      success: (res: any) => resolve(res.data),
+      success: (res) => resolve(res.data as ArrayBuffer),
       fail: reject,
     });
   });
