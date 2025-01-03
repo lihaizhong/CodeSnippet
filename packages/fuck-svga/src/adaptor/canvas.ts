@@ -1,10 +1,6 @@
 import type { PlatformCanvas, PlatformOffscreenCanvas } from "../types";
 import { getBridge } from "./bridge";
-import {
-  platform,
-  SP,
-  throwUnsupportedPlatform,
-} from "./platform";
+import { platform, SP, throwUnsupportedPlatform } from "./platform";
 
 export function createOffscreenCanvas(
   options: WechatMiniprogram.CreateOffscreenCanvasOption
@@ -46,6 +42,28 @@ export interface IGetCanvasResult {
   ctx: CanvasRenderingContext2D;
 }
 
+export function getDevicePixelRatio() {
+  if (platform === SP.H5) {
+    return window.devicePixelRatio;
+  }
+
+  if (platform !== SP.UNKNOWN) {
+    const bridge = getBridge();
+
+    if ("getWindowInfo" in bridge) {
+      const { pixelRatio } = (bridge as any).getWindowInfo();
+
+      return pixelRatio;
+    }
+
+    const { pixelRatio } = (bridge as WechatMiniprogram.Wx).getSystemInfoSync();
+
+    return pixelRatio;
+  }
+
+  throw throwUnsupportedPlatform();
+}
+
 export function getCanvas(
   selector: string,
   component?: WechatMiniprogram.Component.TrivialInstance | null
@@ -66,18 +84,16 @@ export function getCanvas(
         reject("canvas context not found.");
         return;
       }
-      canvas!.width = width;
-      canvas!.height = height;
+      const ratio = getDevicePixelRatio();
+      canvas!.width = width * ratio;
+      canvas!.height = height * ratio;
       resolve({ canvas, ctx });
     };
 
     if (platform === SP.H5) {
       const canvas = document.querySelector(selector) as HTMLCanvasElement;
-      initCanvas(
-        canvas,
-        parseFloat(canvas.style.width),
-        parseFloat(canvas.style.height)
-      );
+      const { width, height } = canvas.style;
+      initCanvas(canvas, parseFloat(width), parseFloat(height));
     } else if (platform !== SP.UNKNOWN) {
       let query = (bridge as WechatMiniprogram.Wx).createSelectorQuery();
       if (component) {
@@ -87,10 +103,10 @@ export function getCanvas(
         .select(selector)
         .fields({ node: true, size: true }, (res) => {
           if (res?.node) {
-            const { node, width, height } = res
+            const { node, width, height } = res;
             initCanvas(node, width, height);
           } else {
-            reject(new Error('canvas not found!'))
+            reject(new Error("canvas not found!"));
           }
         })
         .exec();

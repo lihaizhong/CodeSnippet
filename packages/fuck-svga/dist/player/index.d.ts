@@ -36,7 +36,7 @@ export declare class Player {
      * @param videoEntity SVGA 数据源
      * @returns Promise<void>
      */
-    mount(videoEntity: Video, options: string | PlayerConfigOptions, component?: WechatMiniprogram.Component.TrivialInstance | null): Promise<void>;
+    mount(videoEntity: Video, options: string | PlayerConfigOptions, component?: WechatMiniprogram.Component.TrivialInstance | null): Promise<void | void[]>;
     /**
      * 开始播放事件回调
      */

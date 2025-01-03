@@ -4,4 +4,5 @@ export interface IGetCanvasResult {
     canvas: PlatformCanvas;
     ctx: CanvasRenderingContext2D;
 }
+export declare function getDevicePixelRatio(): any;
 export declare function getCanvas(selector: string, component?: WechatMiniprogram.Component.TrivialInstance | null): Promise<IGetCanvasResult>;
