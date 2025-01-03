@@ -26,23 +26,22 @@ interface CurrentPoint {
 const validMethods = "MLHVCSQRZmlhvcsqrz";
 
 function render(
-  canvas: PlatformOffscreenCanvas,
+  context: OffscreenCanvasRenderingContext2D,
   bitmapsCache: BitmapsCache,
-  dynamicElements: DynamicElements,
-  replaceElements: ReplaceElements,
   videoEntity: Video,
   currentFrame: number
-): ImageData {
-  const context = canvas.getContext("2d");
-
+): void {
   if (context === null) {
     throw new Error("Render Context cannot be null");
   }
+
+  const { replaceElements, dynamicElements } = videoEntity
 
   videoEntity.sprites.forEach((sprite) => {
     const bitmap = bitmapsCache[sprite.imageKey];
     const replaceElement = replaceElements[sprite.imageKey];
     const dynamicElement = dynamicElements[sprite.imageKey];
+
     drawSprite(
       context,
       sprite,
@@ -52,8 +51,6 @@ function render(
       dynamicElement
     );
   });
-
-  return context.getImageData(0, 0, canvas.width, canvas.height);
 }
 
 function drawSprite(

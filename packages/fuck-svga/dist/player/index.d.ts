@@ -23,6 +23,7 @@ export declare class Player {
     private readonly selector;
     private animator;
     private ofsCanvas;
+    private ofsContext;
     private bitmapsCache;
     private isReady;
     /**

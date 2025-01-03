@@ -1,7 +1,7 @@
-import type { PlatformOffscreenCanvas } from "../types";
+import type { PlatformCanvas, PlatformOffscreenCanvas } from "../types";
 export declare function createOffscreenCanvas(options: WechatMiniprogram.CreateOffscreenCanvasOption): PlatformOffscreenCanvas;
 export interface IGetCanvasResult {
-    canvas: WechatMiniprogram.Canvas | HTMLCanvasElement;
+    canvas: PlatformCanvas;
     ctx: CanvasRenderingContext2D;
 }
 export declare function getCanvas(selector: string, component?: WechatMiniprogram.Component.TrivialInstance | null): Promise<IGetCanvasResult>;

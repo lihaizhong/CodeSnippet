@@ -1,3 +1,3 @@
-import { DynamicElements, Video, BitmapsCache, ReplaceElements, PlatformOffscreenCanvas } from "../types";
-declare function render(canvas: PlatformOffscreenCanvas, bitmapsCache: BitmapsCache, dynamicElements: DynamicElements, replaceElements: ReplaceElements, videoEntity: Video, currentFrame: number): ImageData;
+import { Video, BitmapsCache } from "../types";
+declare function render(context: OffscreenCanvasRenderingContext2D, bitmapsCache: BitmapsCache, videoEntity: Video, currentFrame: number): void;
 export default render;

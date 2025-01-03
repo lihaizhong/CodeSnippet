@@ -6,7 +6,7 @@ import type {
 import { getBridge } from "./bridge";
 import {
   platform,
-  SupportedPlatform,
+  SP,
   throwUnsupportedPlatform,
 } from "./platform";
 
@@ -19,7 +19,7 @@ function toBase64(data: Uint8Array): string {
   const ab = createArrayBuffer(data);
   let b: string;
 
-  if (platform === SupportedPlatform.H5) {
+  if (platform === SP.H5) {
     b = btoa(String.fromCharCode(...new Uint8Array(ab)));
   } else {
     b = (getBridge() as WechatMiniprogram.Wx).arrayBufferToBase64(ab);
@@ -47,11 +47,11 @@ function toBitmap(data: Uint8Array): Promise<ImageBitmap> {
 function createImage(
   canvas: PlatformCanvas | PlatformOffscreenCanvas
 ): WechatMiniprogram.Image | HTMLImageElement | null {
-  if (platform === SupportedPlatform.H5) {
+  if (platform === SP.H5) {
     return new Image();
   }
 
-  if (platform !== SupportedPlatform.UNKNOWN) {
+  if (platform !== SP.UNKNOWN) {
     return (
       canvas as WechatMiniprogram.Canvas | WechatMiniprogram.OffscreenCanvas
     ).createImage();
@@ -95,7 +95,7 @@ export function loadImage(
   canvas: PlatformCanvas | PlatformOffscreenCanvas,
   data: Uint8Array | string
 ): Promise<PlatformImage | ImageBitmap> {
-  if (platform === SupportedPlatform.H5) {
+  if (platform === SP.H5 && 'createImageBitmap' in window) {
     return toBitmap(data as Uint8Array);
   }
 

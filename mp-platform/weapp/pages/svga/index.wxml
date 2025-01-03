@@ -4,7 +4,7 @@
   <svga-player url="{{ url }}"></svga-player>
   <view class="footer">
     <button class="foot-btn" type="primary" bindtap="handleSwitchPrev">上一张</button>
-    <button class="foot-btn" type="primary" bindtap="handleSwitch">试一试</button>
+    <button class="foot-btn" type="primary" bindtap="handleSwitchAtRandom">试一试</button>
     <button class="foot-btn" type="primary" bindtap="handleSwitchNext">下一张</button>
   </view>
 </scroll-view>

@@ -1,1 +1,2 @@
-export declare function startAnimationFrame(canvas: WechatMiniprogram.Canvas | HTMLCanvasElement | WechatMiniprogram.OffscreenCanvas | OffscreenCanvas, callback: () => void): number;
+import { PlatformCanvas } from "../types";
+export declare function startAnimationFrame(canvas: PlatformCanvas, callback: () => void): number;

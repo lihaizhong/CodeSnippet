@@ -1,22 +1,19 @@
+import { PlatformCanvas, PlatformOffscreenCanvas } from "../types";
 import {
   platform,
-  SupportedPlatform,
+  SP,
   throwUnsupportedPlatform,
 } from "./platform";
 
 export function startAnimationFrame(
-  canvas:
-    | WechatMiniprogram.Canvas
-    | HTMLCanvasElement
-    | WechatMiniprogram.OffscreenCanvas
-    | OffscreenCanvas,
+  canvas: PlatformCanvas,
   callback: () => void
 ): number {
-  if (platform === SupportedPlatform.H5) {
+  if (platform === SP.H5) {
     return requestAnimationFrame(callback);
   }
 
-  if (platform !== SupportedPlatform.UNKNOWN) {
+  if (platform !== SP.UNKNOWN) {
     return (canvas as WechatMiniprogram.Canvas).requestAnimationFrame(callback);
   }
 

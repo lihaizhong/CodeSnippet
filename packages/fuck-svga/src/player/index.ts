@@ -3,7 +3,7 @@ import {
   getCanvas,
   loadImage,
   platform,
-  SupportedPlatform,
+  SP,
 } from "../adaptor";
 import {
   PLAYER_FILL_MODE,
@@ -55,6 +55,7 @@ export class Player {
   private readonly selector: string = "#svga-board";
   private animator: Animator | null = null;
   private ofsCanvas: PlatformOffscreenCanvas | null = null;
+  private ofsContext: OffscreenCanvasRenderingContext2D | null = null;
 
   // private isBeIntersection = true;
   // private intersectionObserver: IntersectionObserver | null = null
@@ -104,7 +105,8 @@ export class Player {
       width: result.canvas.width,
       height: result.canvas.height,
     });
-    this.animator = new Animator(this.ofsCanvas);
+    this.ofsContext = this.ofsCanvas.getContext("2d");
+    this.animator = new Animator(result.canvas);
     this.animator.onEnd = () => {
       if (this.onEnd !== undefined) {
         this.onEnd();
@@ -199,7 +201,7 @@ export class Player {
 
   private clearContainer(): void {
     if (!this.isReady) {
-      return
+      return;
     }
 
     const { container } = this.config;
@@ -215,7 +217,7 @@ export class Player {
    */
   public start(): void {
     if (!this.isReady) {
-      return
+      return;
     }
     if (this.videoEntity === undefined) {
       throw new Error("videoEntity undefined");
@@ -232,7 +234,7 @@ export class Player {
    */
   public resume(): void {
     if (!this.isReady) {
-      return
+      return;
     }
     this.startAnimation();
     if (this.onResume !== undefined) {
@@ -245,7 +247,7 @@ export class Player {
    */
   public pause(): void {
     if (!this.isReady) {
-      return
+      return;
     }
     this.animator!.stop();
     if (this.onPause !== undefined) {
@@ -258,7 +260,7 @@ export class Player {
    */
   public stop(): void {
     if (!this.isReady) {
-      return
+      return;
     }
     this.animator!.stop();
     this.currentFrame = 0;
@@ -304,14 +306,12 @@ export class Player {
     }
 
     if (playMode === PLAYER_PLAY_MODE.FORWARDS) {
-      (this.animator as Animator).startValue = startFrame > 0 ? startFrame : 0;
-      (this.animator as Animator).endValue =
-        endFrame > 0 ? endFrame : totalFrames;
+      this.animator!.startValue = startFrame > 0 ? startFrame : 0;
+      this.animator!.endValue = endFrame > 0 ? endFrame : totalFrames;
     } else {
       // 倒播
-      (this.animator as Animator).startValue =
-        endFrame > 0 ? endFrame : totalFrames;
-      (this.animator as Animator).endValue = startFrame > 0 ? startFrame : 0;
+      this.animator!.startValue = endFrame > 0 ? endFrame : totalFrames;
+      this.animator!.endValue = startFrame > 0 ? startFrame : 0;
     }
 
     let frames = videoEntity.frames;
@@ -322,20 +322,19 @@ export class Player {
       frames = videoEntity.frames - startFrame;
     }
 
-    (this.animator as Animator).duration =
-      frames * (1.0 / videoEntity.fps) * 1000;
-    (this.animator as Animator).loopStart =
+    this.animator!.duration = frames * (1.0 / videoEntity.fps) * 1000;
+    this.animator!.loopStart =
       loopStartFrame > startFrame
-        ? (loopStartFrame - startFrame) * (1.0 / videoEntity.fps) * 1000
+        ? (loopStartFrame - startFrame) * (1.0 / videoEntity.fps) * 100
         : 0;
-    (this.animator as Animator).loop =
+    this.animator!.loop =
       loop === true || (loop as number) <= 0
         ? Infinity
         : loop === false
         ? 1
         : loop;
-    (this.animator as Animator).fillRule = fillMode === "backwards" ? 1 : 0;
-    (this.animator as Animator).onUpdate = (value: number) => {
+    this.animator!.fillRule = fillMode === "backwards" ? 1 : 0;
+    this.animator!.onUpdate = (value: number) => {
       if (this.currentFrame === value) {
         return;
       }
@@ -346,7 +345,7 @@ export class Player {
       }
     };
 
-    (this.animator as Animator).start();
+    this.animator!.start();
   }
 
   private setSize(): void {
@@ -357,8 +356,8 @@ export class Player {
     const { container } = this.config;
     const { width, height } = this.videoEntity.size;
 
-    (container as PlatformCanvas).width = width;
-    (container as PlatformCanvas).height = height;
+    container!.width = width;
+    container!.height = height;
   }
 
   /// ----------- 描绘一帧 -----------
@@ -376,36 +375,18 @@ export class Player {
     }
 
     const { width = 0, height = 0 } = container as PlatformCanvas;
-    let { ofsCanvas } = this;
+    let { ofsCanvas, ofsContext } = this;
 
     // OffscreenCanvas 在 Firefox 浏览器无法被清理历史内容
-    if (
-      platform === SupportedPlatform.H5 &&
-      navigator.userAgent.includes("Firefox")
-    ) {
+    if (platform === SP.H5 && navigator.userAgent.includes("Firefox")) {
       ofsCanvas = createOffscreenCanvas({ width, height });
     } else {
       ofsCanvas!.width = width;
       ofsCanvas!.height = height;
     }
 
-    const imageData = render(
-      ofsCanvas!,
-      this.bitmapsCache,
-      this.videoEntity.dynamicElements,
-      this.videoEntity.replaceElements,
-      this.videoEntity,
-      this.currentFrame
-    );
-
-    context.putImageData(
-      imageData,
-      0,
-      0,
-      0,
-      0,
-      ofsCanvas!.width,
-      ofsCanvas!.height
-    );
+    render(ofsContext!, this.bitmapsCache, this.videoEntity, this.currentFrame);
+    const imageData = ofsContext!.getImageData(0, 0, width, height);
+    context.putImageData(imageData, 0, 0, 0, 0, width, height);
   }
 }

@@ -1,6 +1,6 @@
-import type { PlatformCanvas, PlatformOffscreenCanvas } from "../types";
+import type { PlatformCanvas } from "../types";
 export declare class Animator {
-    private canvas;
+    private readonly canvas;
     private isRunning;
     private startTime;
     private currentFrication;
@@ -13,7 +13,7 @@ export declare class Animator {
     onStart: () => void;
     onUpdate: (currentValue: number) => void;
     onEnd: () => void;
-    constructor(canvas: PlatformCanvas | PlatformOffscreenCanvas);
+    constructor(canvas: PlatformCanvas);
     currentTimeMillSecond(): number;
     start(): void;
     stop(): void;

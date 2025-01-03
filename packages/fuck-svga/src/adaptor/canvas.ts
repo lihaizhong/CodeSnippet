@@ -1,36 +1,36 @@
-import type { PlatformOffscreenCanvas } from "../types";
+import type { PlatformCanvas, PlatformOffscreenCanvas } from "../types";
 import { getBridge } from "./bridge";
 import {
   platform,
-  SupportedPlatform,
+  SP,
   throwUnsupportedPlatform,
 } from "./platform";
 
 export function createOffscreenCanvas(
   options: WechatMiniprogram.CreateOffscreenCanvasOption
 ): PlatformOffscreenCanvas {
-  if (platform === SupportedPlatform.WECHAT) {
+  if (platform === SP.WECHAT) {
     return wx.createOffscreenCanvas({
       ...options,
       type: "2d",
     });
   }
 
-  if (platform === SupportedPlatform.H5) {
+  if (platform === SP.H5) {
     return new OffscreenCanvas(
       options.width as number,
       options.height as number
     );
   }
 
-  if (platform === SupportedPlatform.ALIPAY) {
+  if (platform === SP.ALIPAY) {
     return my.createOffscreenCanvas({
       width: options.width,
       height: options.height,
     });
   }
 
-  if (platform === SupportedPlatform.DOUYIN) {
+  if (platform === SP.DOUYIN) {
     const canvas = (tt as any).createOffscreenCanvas();
     canvas.width = options.width;
     canvas.height = options.height;
@@ -42,7 +42,7 @@ export function createOffscreenCanvas(
 }
 
 export interface IGetCanvasResult {
-  canvas: WechatMiniprogram.Canvas | HTMLCanvasElement;
+  canvas: PlatformCanvas;
   ctx: CanvasRenderingContext2D;
 }
 
@@ -53,7 +53,7 @@ export function getCanvas(
   return new Promise((resolve, reject) => {
     const bridge = getBridge();
     const initCanvas = (
-      canvas?: WechatMiniprogram.Canvas | HTMLCanvasElement,
+      canvas?: PlatformCanvas,
       width: number = 0,
       height: number = 0
     ) => {
@@ -66,32 +66,34 @@ export function getCanvas(
         reject("canvas context not found.");
         return;
       }
-      const dpr = (bridge as WechatMiniprogram.Wx).getSystemInfoSync()
-        .pixelRatio;
-      canvas!.width = width * dpr;
-      canvas!.height = height * dpr;
+      canvas!.width = width;
+      canvas!.height = height;
       resolve({ canvas, ctx });
     };
 
-    if (platform === SupportedPlatform.H5) {
+    if (platform === SP.H5) {
       const canvas = document.querySelector(selector) as HTMLCanvasElement;
       initCanvas(
         canvas,
         parseFloat(canvas.style.width),
         parseFloat(canvas.style.height)
       );
-    } else if (platform !== SupportedPlatform.UNKNOWN) {
+    } else if (platform !== SP.UNKNOWN) {
       let query = (bridge as WechatMiniprogram.Wx).createSelectorQuery();
       if (component) {
         query = query.in(component);
       }
       query
         .select(selector)
-        .fields({ node: true, size: true })
-        .exec((res) => {
-          const { node, width, height } = res?.[0] || {};
-          initCanvas(node, width, height);
-        });
+        .fields({ node: true, size: true }, (res) => {
+          if (res?.node) {
+            const { node, width, height } = res
+            initCanvas(node, width, height);
+          } else {
+            reject(new Error('canvas not found!'))
+          }
+        })
+        .exec();
     } else {
       reject(throwUnsupportedPlatform());
     }

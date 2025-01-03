@@ -1,7 +1,7 @@
 import { getBridge } from "./bridge";
 import {
   platform,
-  SupportedPlatform,
+  SP,
   throwUnsupportedPlatform,
 } from "./platform";
 
@@ -12,7 +12,7 @@ import {
  */
 function readRemoteFile(url: string): Promise<ArrayBuffer> {
   // H5环境
-  if (platform === SupportedPlatform.H5) {
+  if (platform === SP.H5) {
     return fetch(url, {
       cache: "no-cache",
     }).then((response) => {
@@ -27,7 +27,7 @@ function readRemoteFile(url: string): Promise<ArrayBuffer> {
   }
 
   // 小程序环境
-  if (platform !== SupportedPlatform.UNKNOWN) {
+  if (platform !== SP.UNKNOWN) {
     const bridge = getBridge() as WechatMiniprogram.Wx;
 
     return new Promise((resolve, reject) => {
@@ -75,7 +75,7 @@ export default function download(url: string): Promise<ArrayBuffer> {
   }
 
   // 读取本地文件
-  if (platform !== SupportedPlatform.H5) {
+  if (platform !== SP.H5) {
     return readLocalFile(url);
   }
 

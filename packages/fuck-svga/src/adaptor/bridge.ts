@@ -1,6 +1,6 @@
 import {
   platform,
-  SupportedPlatform,
+  SP,
   throwUnsupportedPlatform,
 } from "./platform";
 
@@ -11,22 +11,22 @@ export function getBridge(): WechatMiniprogram.Wx | Window {
     return bridge;
   }
 
-  if (platform === SupportedPlatform.WECHAT) {
+  if (platform === SP.WECHAT) {
     bridge = wx;
     return wx;
   }
 
-  if (platform === SupportedPlatform.H5) {
+  if (platform === SP.H5) {
     bridge = window;
     return window;
   }
 
-  if (platform === SupportedPlatform.ALIPAY) {
+  if (platform === SP.ALIPAY) {
     bridge = my;
     return my;
   }
 
-  if (platform === SupportedPlatform.DOUYIN) {
+  if (platform === SP.DOUYIN) {
     bridge = tt;
     return tt;
   }

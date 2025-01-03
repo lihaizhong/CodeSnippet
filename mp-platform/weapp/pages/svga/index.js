@@ -1,25 +1,19 @@
-import { getImageSourceByShuffle } from './actions'
+import { getOneAtRandom } from './actions'
 import { svgaSources } from '../../utils/constants'
 
 Page({
   data: {
-    url: svgaSources[0],
+    url: '',
     current: 0
   },
 
-  switchRandom() {
-    const ShuffleImageSources = getImageSourceByShuffle()
-    const { length } = ShuffleImageSources
-    const index = Math.floor(Math.random() * length)
+  handleSwitchAtRandom() {
+    const { ranIndex, url } = getOneAtRandom()
 
     this.setData({
-      url: ShuffleImageSources[index],
-      current: index
+      url,
+      current: ranIndex
     })
-  },
-
-  handleSwitch() {
-    this.switchRandom()
   },
 
   handleSwitchPrev() {
@@ -49,4 +43,8 @@ Page({
       current: next
     })
   },
+
+  onLoad() {
+    this.handleSwitchAtRandom()
+  }
 })

@@ -1,8 +1,7 @@
-import type { PlatformCanvas, PlatformOffscreenCanvas } from "../types";
-import { platform, startAnimationFrame, SupportedPlatform } from "../adaptor";
+import type { PlatformCanvas } from "../types";
+import { platform, startAnimationFrame, SP } from "../adaptor";
 
 export class Animator {
-  private canvas: PlatformCanvas | PlatformOffscreenCanvas;
   private isRunning = false;
   private startTime = 0;
   private currentFrication: number = 0.0;
@@ -16,12 +15,10 @@ export class Animator {
   public onUpdate: (currentValue: number) => void = () => {};
   public onEnd: () => void = () => {};
 
-  constructor(canvas: PlatformCanvas | PlatformOffscreenCanvas) {
-    this.canvas = canvas;
-  }
+  constructor(private readonly canvas: PlatformCanvas) {}
 
   public currentTimeMillSecond(): number {
-    if (platform === SupportedPlatform.H5 && performance) {
+    if (platform === SP.H5 && performance) {
       return performance.now();
     }
 
@@ -41,6 +38,10 @@ export class Animator {
   }
 
   public get animatedValue(): number {
+    if (!this.currentFrication) {
+      return Math.floor(this.startValue)
+    }
+
     return Math.floor(
       (this.endValue - this.startValue) * this.currentFrication +
         this.startValue

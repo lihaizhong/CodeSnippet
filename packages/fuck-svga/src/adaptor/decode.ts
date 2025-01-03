@@ -3,7 +3,13 @@ const b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 const b64re =
   /^(?:[A-Za-z\d+\/]{4})*?(?:[A-Za-z\d+\/]{2}(?:==)?|[A-Za-z\d+\/]{3}=?)?$/;
 
-// btoa
+/**
+ * btoa
+ * 将一个二进制字符串（例如，将字符串中的每一个字节都视为一个二进制数据字节）编码为 Base64 编码的 ASCII 字符串
+ * https://developer.mozilla.org/zh-CN/docs/Web/API/Window/btoa
+ * @param string 二进制字符串
+ * @returns
+ */
 export function miniBtoa(string: string): string {
   let bitmap,
     a,
@@ -33,7 +39,13 @@ export function miniBtoa(string: string): string {
   return rest ? result.slice(0, rest - 3) + "===".substring(rest) : result;
 }
 
-// atob
+/**
+ * atob
+ * 对经过 Base64 编码的字符串进行解码
+ * https://developer.mozilla.org/zh-CN/docs/Web/API/Window/atob
+ * @param base64 base64字符串
+ * @returns 
+ */
 export function miniAtob(base64: string): string {
   let string = String(base64).replace(/[\t\n\f\r ]+/g, "");
   if (!b64re.test(string))
@@ -41,10 +53,10 @@ export function miniAtob(base64: string): string {
       'Failed to execute "atob" on "Window": The string to be decoded is not correctly encoded.'
     );
   string += "==".slice(2 - (string.length & 3));
-  let bitmap,
-    result = "",
-    r1,
-    r2;
+  let bitmap;
+  let result = "";
+  let r1;
+  let r2;
   for (let i = 0; i < string.length; ) {
     bitmap =
       (b64.indexOf(string.charAt(i++)) << 18) |
