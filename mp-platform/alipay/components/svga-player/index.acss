@@ -3,7 +3,7 @@
 }
 
 .svga-palette {
-  width: 90vw;
+  width: 100vw;
   height: 160vw;
   margin: 100rpx auto 50rpx;
 }

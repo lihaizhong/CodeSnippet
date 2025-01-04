@@ -22,11 +22,11 @@ export default class ReadyGo {
   go() {
     this.#isReady = true;
     this.#list.forEach((callback) => callback());
-    this.#list = [];
+    this.#list = new Set();
   }
 
   reset() {
     this.#isReady = false;
-    this.#list = [];
+    this.#list = new Set();
   }
 }

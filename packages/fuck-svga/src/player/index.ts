@@ -17,6 +17,7 @@ import {
 } from "../types";
 import { Animator } from "./animator";
 import render from "./render";
+import benchmark from "../test/benchmark";
 
 type EventCallback = undefined | (() => void);
 
@@ -150,6 +151,8 @@ export class Player {
     this.videoEntity = videoEntity;
     this.clearContainer();
     this.setSize();
+    benchmark.clearTime('render');
+    benchmark.line();
 
     if (this.videoEntity === undefined) {
       return;
@@ -366,27 +369,28 @@ export class Player {
       throw new Error("Player VideoEntity undefined");
     }
     // if (this.config.isUseIntersectionObserver && !this.isBeIntersection) return;
+    benchmark.time('render', () => {
+      this.clearContainer();
 
-    this.clearContainer();
+      const { context, container } = this.config;
+      if (context === null) {
+        throw new Error("Canvas Context cannot be null");
+      }
 
-    const { context, container } = this.config;
-    if (context === null) {
-      throw new Error("Canvas Context cannot be null");
-    }
+      const { width = 0, height = 0 } = container as PlatformCanvas;
+      let { ofsCanvas, ofsContext } = this;
 
-    const { width = 0, height = 0 } = container as PlatformCanvas;
-    let { ofsCanvas, ofsContext } = this;
+      // OffscreenCanvas 在 Firefox 浏览器无法被清理历史内容
+      if (platform === SP.H5 && navigator.userAgent.includes("Firefox")) {
+        ofsCanvas = createOffscreenCanvas({ width, height });
+      } else {
+        ofsCanvas!.width = width;
+        ofsCanvas!.height = height;
+      }
 
-    // OffscreenCanvas 在 Firefox 浏览器无法被清理历史内容
-    if (platform === SP.H5 && navigator.userAgent.includes("Firefox")) {
-      ofsCanvas = createOffscreenCanvas({ width, height });
-    } else {
-      ofsCanvas!.width = width;
-      ofsCanvas!.height = height;
-    }
-
-    render(ofsContext!, this.bitmapsCache, this.videoEntity, this.currentFrame);
-    const imageData = ofsContext!.getImageData(0, 0, width, height);
-    context.putImageData(imageData, 0, 0, 0, 0, width, height);
+      render(ofsContext!, this.bitmapsCache, this.videoEntity!, this.currentFrame);
+      const imageData = ofsContext!.getImageData(0, 0, width, height);
+      context.putImageData(imageData, 0, 0, 0, 0, width, height);
+    });
   }
 }

@@ -1,6 +1,7 @@
 {
   "pages": [
-    "pages/index/index"
+    "pages/index/index",
+    "pages/svga/index"
   ],
   "window": {
     "defaultTitle": "My App"

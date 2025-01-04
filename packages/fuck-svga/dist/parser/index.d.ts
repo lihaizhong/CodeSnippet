@@ -4,6 +4,7 @@ import type { Video } from "../types";
  */
 export declare class Parser {
     static parseVideoEntity(data: ArrayBuffer): Video;
+    static parsePlacardEntity(data: any[]): void;
     /**
      * 通过 url 下载并解析 SVGA 文件
      * @param url SVGA 文件的下载链接

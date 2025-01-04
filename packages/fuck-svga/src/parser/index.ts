@@ -22,6 +22,10 @@ export class Parser {
     return new VideoEntity(movieData, movieData.images);
   }
 
+  static parsePlacardEntity(data: any[]) {
+    
+  }
+
   /**
    * 通过 url 下载并解析 SVGA 文件
    * @param url SVGA 文件的下载链接

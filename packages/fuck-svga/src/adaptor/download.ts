@@ -33,6 +33,8 @@ function readRemoteFile(url: string): Promise<ArrayBuffer> {
     return new Promise((resolve, reject) => {
       bridge.request({
         url,
+        // @ts-ignore 支付宝小程序必须有该字段
+        dataType: 'arraybuffer',
         responseType: "arraybuffer",
         enableCache: true,
         success(res) {

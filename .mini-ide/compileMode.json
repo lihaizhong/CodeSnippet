@@ -1,0 +1,10 @@
+{
+  "modes": [
+    {
+      "title": "动画",
+      "page": "pages/svga/index",
+      "launchMode": "common",
+      "pageQuery": ""
+    }
+  ]
+}
