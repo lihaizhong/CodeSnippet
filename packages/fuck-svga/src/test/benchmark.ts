@@ -2,6 +2,9 @@ const timers: Record<string, number> = {};
 
 export default {
   count: 20,
+  label(label: string) {
+    console.log(label);
+  },
   time(label: string, callback: () => void): void {
     if (timers[label] === undefined) {
       timers[label] = 1;
@@ -21,6 +24,6 @@ export default {
     delete timers[label];
   },
   line(size: number = 30) {
-    console.log('-'.repeat(size));
-  }
+    console.log("-".repeat(size));
+  },
 };

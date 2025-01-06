@@ -3,6 +3,7 @@ import { MovieEntityReader } from "svga-protobuf";
 import download from "../adaptor/download";
 import { VideoEntity } from "./video-entity";
 import type { Video } from "../types";
+import benchmark from "test/benchmark";
 
 /**
  * SVGA 下载解析器
@@ -34,6 +35,8 @@ export class Parser {
   async load(url: string): Promise<Video> {
     const data = await download(url);
 
+    benchmark.line()
+    benchmark.label(url);
     return Parser.parseVideoEntity(data);
   }
 }

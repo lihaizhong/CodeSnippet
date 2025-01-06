@@ -8,7 +8,7 @@ export default class ReadyGo {
   }
 
   has() {
-    return this.#list.length !== 0
+    return this.#list.length !== 0;
   }
 
   ready(callback) {

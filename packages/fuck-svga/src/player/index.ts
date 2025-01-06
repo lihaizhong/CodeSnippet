@@ -41,7 +41,7 @@ export class Player {
   /**
    * 当前配置项
    */
-  public readonly config: PlayerConfig = {
+  public readonly config: PlayerConfig = Object.create({
     container: null,
     context: null,
     loop: 0,
@@ -51,7 +51,7 @@ export class Player {
     endFrame: 0,
     loopStartFrame: 0,
     // isUseIntersectionObserver: false,
-  };
+  });
 
   private readonly selector: string = "#svga-board";
   private animator: Animator | null = null;
@@ -61,7 +61,18 @@ export class Player {
   // private isBeIntersection = true;
   // private intersectionObserver: IntersectionObserver | null = null
   private bitmapsCache: BitmapsCache = {};
+  /**
+   * 配置是否准备完成
+   */
   private isReady: boolean = false;
+  /**
+   * 片段绘制开始位置
+   */
+  private fragmentStart: number = 0;
+  /**
+   * 片段绘制结束位置
+   */
+  private fragmentEnd: number = 0;
 
   /**
    * 设置配置项
@@ -109,9 +120,7 @@ export class Player {
     this.ofsContext = this.ofsCanvas.getContext("2d");
     this.animator = new Animator(result.canvas);
     this.animator.onEnd = () => {
-      if (this.onEnd !== undefined) {
-        this.onEnd();
-      }
+      this.onEnd?.();
     };
     this.isReady = true;
   }
@@ -151,8 +160,7 @@ export class Player {
     this.videoEntity = videoEntity;
     this.clearContainer();
     this.setSize();
-    benchmark.clearTime('render');
-    benchmark.line();
+    benchmark.clearTime("render");
 
     if (this.videoEntity === undefined) {
       return;
@@ -227,9 +235,7 @@ export class Player {
     }
     this.clearContainer();
     this.startAnimation();
-    if (this.onStart !== undefined) {
-      this.onStart();
-    }
+    this.onStart?.();
   }
 
   /**
@@ -240,9 +246,7 @@ export class Player {
       return;
     }
     this.startAnimation();
-    if (this.onResume !== undefined) {
-      this.onResume();
-    }
+    this.onResume?.();
   }
 
   /**
@@ -253,9 +257,7 @@ export class Player {
       return;
     }
     this.animator!.stop();
-    if (this.onPause !== undefined) {
-      this.onPause();
-    }
+    this.onPause?.();
   }
 
   /**
@@ -268,9 +270,7 @@ export class Player {
     this.animator!.stop();
     this.currentFrame = 0;
     this.clearContainer();
-    if (this.onStop !== undefined) {
-      this.onStop();
-    }
+    this.onStop?.();
   }
 
   /**
@@ -292,6 +292,8 @@ export class Player {
 
       this.animator = null;
       this.videoEntity = undefined;
+      this.ofsCanvas = null;
+      this.ofsContext = null;
     }
   }
 
@@ -300,52 +302,53 @@ export class Player {
       throw new Error("videoEntity undefined");
 
     const { config, totalFrames, videoEntity } = this;
-    const { playMode, startFrame, endFrame, loopStartFrame, fillMode, loop } =
-      config;
+    const { playMode, loopStartFrame, fillMode, loop } = config;
+    let startFrame = config.startFrame > 0 ? config.startFrame : 0;
+    let endFrame = config.endFrame > 0 ? config.endFrame : totalFrames;
 
     // 如果开始动画的当前帧是最后一帧，重置为第 0 帧
     if (this.currentFrame === totalFrames) {
-      this.currentFrame = startFrame > 0 ? startFrame : 0;
+      this.currentFrame = startFrame;
     }
 
+    // 顺序播放/倒叙播放
     if (playMode === PLAYER_PLAY_MODE.FORWARDS) {
-      this.animator!.startValue = startFrame > 0 ? startFrame : 0;
-      this.animator!.endValue = endFrame > 0 ? endFrame : totalFrames;
+      this.animator!.setRange(startFrame, endFrame);
     } else {
-      // 倒播
-      this.animator!.startValue = endFrame > 0 ? endFrame : totalFrames;
-      this.animator!.endValue = startFrame > 0 ? startFrame : 0;
+      this.animator!.setRange(endFrame, startFrame);
     }
 
-    let frames = videoEntity.frames;
-
-    if (endFrame > 0 && endFrame > startFrame) {
+    let { frames, fps } = videoEntity;
+    // 更新活动帧总数
+    if (endFrame !== totalFrames) {
       frames = endFrame - startFrame;
-    } else if (endFrame <= 0 && startFrame > 0) {
-      frames = videoEntity.frames - startFrame;
+    } else if (startFrame !== 0) {
+      frames -= startFrame;
     }
 
-    this.animator!.duration = frames * (1.0 / videoEntity.fps) * 1000;
+    // frames * (1 / fps) * 1000
+    this.animator!.duration = frames * 1000 / fps;
+    // (loopStartFrame - startFrame) * (1 / fps) * 100
     this.animator!.loopStart =
       loopStartFrame > startFrame
-        ? (loopStartFrame - startFrame) * (1.0 / videoEntity.fps) * 100
+        ? (loopStartFrame - startFrame) * 100 / fps
         : 0;
-    this.animator!.loop =
-      loop === true || (loop as number) <= 0
-        ? Infinity
-        : loop === false
-        ? 1
-        : loop;
-    this.animator!.fillRule = fillMode === "backwards" ? 1 : 0;
+    this.animator!.loop = loop <= 0 ? Infinity : loop;
+    this.animator!.fillRule = +(fillMode === PLAYER_FILL_MODE.BACKWARDS);
+    this.animator!.onStart = () => {
+      this.clearRender();
+    };
     this.animator!.onUpdate = (value: number) => {
+      this.drawFragmentFrame();
+
       if (this.currentFrame === value) {
         return;
       }
+
       this.currentFrame = value;
-      this.drawFrame();
-      if (this.onProcess !== undefined) {
-        this.onProcess();
-      }
+      this.render();
+      this.clearRender();
+      this.onProcess?.();
     };
 
     this.animator!.start();
@@ -363,34 +366,51 @@ export class Player {
     container!.height = height;
   }
 
-  /// ----------- 描绘一帧 -----------
-  private drawFrame(): void {
+  private clearRender() {
     if (this.videoEntity === undefined) {
       throw new Error("Player VideoEntity undefined");
     }
-    // if (this.config.isUseIntersectionObserver && !this.isBeIntersection) return;
-    benchmark.time('render', () => {
-      this.clearContainer();
 
-      const { context, container } = this.config;
-      if (context === null) {
-        throw new Error("Canvas Context cannot be null");
-      }
+    this.clearContainer();
 
+    const { container } = this.config;
+
+    const { width = 0, height = 0 } = container as PlatformCanvas;
+    let { ofsCanvas } = this;
+
+    // OffscreenCanvas 在 Firefox 浏览器无法被清理历史内容
+    if (platform === SP.H5 && navigator.userAgent.includes("Firefox")) {
+      ofsCanvas = createOffscreenCanvas({ width, height });
+    } else {
+      ofsCanvas!.width = width;
+      ofsCanvas!.height = height;
+    }
+  }
+
+  private drawFragmentFrame(): void {
+    benchmark.time("draw", () => {
+      let { ofsContext, fragmentStart, fragmentEnd } = this;
+
+      render(
+        ofsContext!,
+        this.bitmapsCache,
+        this.videoEntity!,
+        this.currentFrame,
+        fragmentStart,
+        fragmentEnd
+      );
+    });
+  }
+
+  /// ----------- 描绘一帧 -----------
+  private render(): void {
+    benchmark.time("render", () => {
+      const { container, context } = this.config
       const { width = 0, height = 0 } = container as PlatformCanvas;
-      let { ofsCanvas, ofsContext } = this;
+      let { ofsContext } = this;
 
-      // OffscreenCanvas 在 Firefox 浏览器无法被清理历史内容
-      if (platform === SP.H5 && navigator.userAgent.includes("Firefox")) {
-        ofsCanvas = createOffscreenCanvas({ width, height });
-      } else {
-        ofsCanvas!.width = width;
-        ofsCanvas!.height = height;
-      }
-
-      render(ofsContext!, this.bitmapsCache, this.videoEntity!, this.currentFrame);
       const imageData = ofsContext!.getImageData(0, 0, width, height);
-      context.putImageData(imageData, 0, 0, 0, 0, width, height);
+      context!.putImageData(imageData, 0, 0, 0, 0, width, height);
     });
   }
 }

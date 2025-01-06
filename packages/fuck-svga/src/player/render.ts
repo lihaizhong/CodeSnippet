@@ -10,8 +10,6 @@ import {
   BitmapsCache,
   Bitmap,
   ReplaceElement,
-  ReplaceElements,
-  PlatformOffscreenCanvas,
 } from "../types";
 
 interface CurrentPoint {
@@ -29,18 +27,26 @@ function render(
   context: OffscreenCanvasRenderingContext2D,
   bitmapsCache: BitmapsCache,
   videoEntity: Video,
-  currentFrame: number
+  currentFrame: number,
+  start?: number,
+  end?: number
 ): void {
   if (context === null) {
     throw new Error("Render Context cannot be null");
   }
 
-  const { replaceElements, dynamicElements } = videoEntity
+  if (start === end) {
+    return
+  }
 
-  videoEntity.sprites.forEach((sprite) => {
-    const bitmap = bitmapsCache[sprite.imageKey];
-    const replaceElement = replaceElements[sprite.imageKey];
-    const dynamicElement = dynamicElements[sprite.imageKey];
+  const { replaceElements, dynamicElements } = videoEntity
+  const sprites = videoEntity.sprites.slice(start, end);
+
+  sprites.forEach((sprite) => {
+    const { imageKey } = sprite
+    const bitmap = bitmapsCache[imageKey];
+    const replaceElement = replaceElements[imageKey];
+    const dynamicElement = dynamicElements[imageKey];
 
     drawSprite(
       context,
