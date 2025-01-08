@@ -1,5 +1,5 @@
 import type { PlatformCanvas, PlatformOffscreenCanvas } from "../types";
-import { getBridge } from "./bridge";
+import bridge from "./bridge";
 import { platform, SP, throwUnsupportedPlatform } from "./platform";
 
 export function createOffscreenCanvas(
@@ -37,6 +37,11 @@ export function createOffscreenCanvas(
   throw throwUnsupportedPlatform();
 }
 
+export interface IGetOffscreenCanvasResult {
+  canvas: PlatformOffscreenCanvas;
+  ctx: OffscreenRenderingContext;
+}
+
 export interface IGetCanvasResult {
   canvas: PlatformCanvas;
   ctx: CanvasRenderingContext2D;
@@ -48,8 +53,6 @@ export function getDevicePixelRatio() {
   }
 
   if (platform !== SP.UNKNOWN) {
-    const bridge = getBridge();
-
     if ("getWindowInfo" in bridge) {
       const { pixelRatio } = (bridge as any).getWindowInfo();
 
@@ -69,7 +72,6 @@ export function getCanvas(
   component?: WechatMiniprogram.Component.TrivialInstance | null
 ): Promise<IGetCanvasResult> {
   return new Promise((resolve, reject) => {
-    const bridge = getBridge();
     const initCanvas = (
       canvas?: PlatformCanvas,
       width: number = 0,
@@ -114,4 +116,25 @@ export function getCanvas(
       reject(throwUnsupportedPlatform());
     }
   });
+}
+
+export interface IGetSecondaryScreenOptions {
+  width: number;
+  height: number;
+  component?: WechatMiniprogram.Component.TrivialInstance | null;
+}
+
+export function getSecondaryScreen(
+  selector: string | null,
+  options: IGetSecondaryScreenOptions
+): Promise<IGetCanvasResult | IGetOffscreenCanvasResult> {
+  if (typeof selector === "string" && selector !== "") {
+    return getCanvas(selector, options.component);
+  }
+
+  const { width, height } = options;
+  const ofsCanvas = createOffscreenCanvas({ width, height });
+  const ofsContext = ofsCanvas.getContext("2d");
+
+  return Promise.resolve({ canvas: ofsCanvas, ctx: ofsContext });
 }

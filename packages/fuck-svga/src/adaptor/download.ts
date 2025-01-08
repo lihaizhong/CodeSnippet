@@ -1,4 +1,4 @@
-import { getBridge } from "./bridge";
+import bridge from "./bridge";
 import {
   platform,
   SP,
@@ -28,8 +28,6 @@ function readRemoteFile(url: string): Promise<ArrayBuffer> {
 
   // 小程序环境
   if (platform !== SP.UNKNOWN) {
-    const bridge = getBridge() as WechatMiniprogram.Wx;
-
     return new Promise((resolve, reject) => {
       bridge.request({
         url,
@@ -37,7 +35,7 @@ function readRemoteFile(url: string): Promise<ArrayBuffer> {
         dataType: 'arraybuffer',
         responseType: "arraybuffer",
         enableCache: true,
-        success(res) {
+        success(res: any) {
           resolve(res.data as ArrayBuffer);
         },
         fail: reject,
@@ -55,11 +53,9 @@ function readRemoteFile(url: string): Promise<ArrayBuffer> {
  */
 function readLocalFile(url: string): Promise<ArrayBuffer> {
   return new Promise((resolve, reject) => {
-    const bridge = getBridge() as WechatMiniprogram.Wx;
-
     bridge.getFileSystemManager().readFile({
       filePath: url,
-      success: (res) => resolve(res.data as ArrayBuffer),
+      success: (res: any) => resolve(res.data as ArrayBuffer),
       fail: reject,
     });
   });

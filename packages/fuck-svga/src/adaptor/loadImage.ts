@@ -3,7 +3,7 @@ import type {
   PlatformImage,
   PlatformOffscreenCanvas,
 } from "../types";
-import { getBridge } from "./bridge";
+import bridge from "./bridge";
 import {
   platform,
   SP,
@@ -22,7 +22,7 @@ function toBase64(data: Uint8Array): string {
   if (platform === SP.H5) {
     b = btoa(String.fromCharCode(...new Uint8Array(ab)));
   } else {
-    b = (getBridge() as WechatMiniprogram.Wx).arrayBufferToBase64(ab);
+    b = bridge.arrayBufferToBase64(ab);
   }
 
   return `data:image/png;base64,${b}`;
