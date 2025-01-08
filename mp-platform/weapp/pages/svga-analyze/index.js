@@ -1,5 +1,6 @@
 import { unzlibSync } from 'fflate'
 import { MovieEntityReader } from '../../utils/svga-protobuf'
+import { getOneAtRandom } from '../../utils/constants'
 
 Page({
   data: {
@@ -11,9 +12,11 @@ Page({
   },
 
   onLoad() {
+    const { url } = getOneAtRandom()
+
     // 测试svga解析
     wx.request({
-      url: 'https://assets.2dfire.com/frontend/1ddb590515d196f07c411794633e4406.svga',
+      url,
       responseType: 'arraybuffer',
       enableCache: true,
       success: (res) => {

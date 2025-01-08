@@ -383,11 +383,11 @@ export class Player {
         return;
       }
 
-      this.currentFrame = value;
       this.drawFrame();
+      this.onProcess?.();
+      this.currentFrame = value;
       this.fragmentEnd = 0;
       this.isDrawnFragment = false;
-      this.onProcess?.();
     };
 
     this.animator!.start();

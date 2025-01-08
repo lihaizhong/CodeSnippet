@@ -1,5 +1,4 @@
-import { getOneAtRandom } from './actions'
-import { svgaSources } from '../../utils/constants'
+import { svgaSources, getOneAtRandom } from '../../utils/constants'
 
 Page({
   data: {
