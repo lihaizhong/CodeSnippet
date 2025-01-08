@@ -383,7 +383,9 @@ export class Player {
         return;
       }
 
+      this.clearContainer();
       this.drawFrame();
+      this.clearOfsCanvas();
       this.onProcess?.();
       this.currentFrame = value;
       this.fragmentEnd = 0;
@@ -425,10 +427,8 @@ export class Player {
       const { container, context } = this.config;
       const { width = 0, height = 0 } = container as PlatformCanvas;
       let { ofsContext } = this;
-      this.clearContainer();
       const imageData = ofsContext!.getImageData(0, 0, width, height);
       context!.putImageData(imageData, 0, 0, 0, 0, width, height);
-      this.clearOfsCanvas();
     }, null, (count) => {
       if (count < benchmark.count + 1) {
         benchmark.line(20);
