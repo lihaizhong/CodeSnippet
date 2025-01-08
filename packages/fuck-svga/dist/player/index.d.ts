@@ -25,7 +25,19 @@ export declare class Player {
     private ofsCanvas;
     private ofsContext;
     private bitmapsCache;
+    /**
+     * 配置是否准备完成
+     */
     private isReady;
+    /**
+     * 片段绘制开始位置
+     */
+    private fragmentStart;
+    /**
+     * 片段绘制结束位置
+     */
+    private fragmentEnd;
+    private isDrawnFragment;
     /**
      * 设置配置项
      * @param options 可配置项
@@ -88,6 +100,7 @@ export declare class Player {
     destroy(): void;
     private startAnimation;
     private setSize;
+    private clearOfsCanvas;
     private drawFrame;
 }
 export {};

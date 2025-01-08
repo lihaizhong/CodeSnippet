@@ -213,7 +213,7 @@ export interface PlayerConfig {
     /**
      * 循环次数，默认值 0（无限循环）
      */
-    loop: number | boolean;
+    loop: number;
     /**
      * 最后停留的目标模式，类似于 animation-fill-mode，默认值 forwards。
      */

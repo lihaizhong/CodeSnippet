@@ -24,7 +24,7 @@ interface CurrentPoint {
 const validMethods = "MLHVCSQRZmlhvcsqrz";
 
 function render(
-  context: OffscreenCanvasRenderingContext2D,
+  context: OffscreenCanvasRenderingContext2D | CanvasRenderingContext2D,
   bitmapsCache: BitmapsCache,
   videoEntity: Video,
   currentFrame: number,
@@ -60,7 +60,7 @@ function render(
 }
 
 function drawSprite(
-  context: OffscreenCanvasRenderingContext2D,
+  context: OffscreenCanvasRenderingContext2D | CanvasRenderingContext2D,
   sprite: VideoSprite,
   currentFrame: number,
   bitmap: Bitmap | undefined,
@@ -126,7 +126,7 @@ function drawSprite(
 }
 
 function drawShape(
-  context: OffscreenCanvasRenderingContext2D,
+  context: OffscreenCanvasRenderingContext2D | CanvasRenderingContext2D,
   shape: VideoFrameShape
 ): void {
   switch (shape.type) {
@@ -160,7 +160,7 @@ function drawShape(
 }
 
 function resetShapeStyles(
-  context: OffscreenCanvasRenderingContext2D,
+  context: OffscreenCanvasRenderingContext2D | CanvasRenderingContext2D,
   styles: VideoStyles | undefined
 ): void {
   if (styles === undefined) return;
@@ -188,7 +188,7 @@ function resetShapeStyles(
 }
 
 function drawBezier(
-  context: OffscreenCanvasRenderingContext2D,
+  context: OffscreenCanvasRenderingContext2D | CanvasRenderingContext2D,
   d: string | undefined,
   transform: Transform | undefined,
   styles: VideoStyles
@@ -228,7 +228,7 @@ function drawBezier(
 }
 
 function drawBezierElement(
-  context: OffscreenCanvasRenderingContext2D,
+  context: OffscreenCanvasRenderingContext2D | CanvasRenderingContext2D,
   currentPoint: CurrentPoint,
   method: string,
   args: string[]
@@ -408,7 +408,7 @@ function drawBezierElement(
 }
 
 function drawEllipse(
-  context: OffscreenCanvasRenderingContext2D,
+  context: OffscreenCanvasRenderingContext2D | CanvasRenderingContext2D,
   x: number,
   y: number,
   radiusX: number,
@@ -455,7 +455,7 @@ function drawEllipse(
 }
 
 function drawRect(
-  context: OffscreenCanvasRenderingContext2D,
+  context: OffscreenCanvasRenderingContext2D | CanvasRenderingContext2D,
   x: number,
   y: number,
   width: number,

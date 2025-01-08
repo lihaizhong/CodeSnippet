@@ -1,7 +1,7 @@
 declare const _default: {
     count: number;
     label(label: string): void;
-    time(label: string, callback: () => void): void;
+    time(label: string, callback: () => void, beforeCallback?: ((count: number) => void) | null, afterCallback?: ((count: number) => void) | null): void;
     clearTime(label: string): void;
     line(size?: number): void;
 };

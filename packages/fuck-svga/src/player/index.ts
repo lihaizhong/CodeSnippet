@@ -74,6 +74,8 @@ export class Player {
    */
   private fragmentEnd: number = 0;
 
+  private isDrawnFragment: boolean = false;
+
   /**
    * 设置配置项
    * @param options 可配置项
@@ -318,7 +320,8 @@ export class Player {
       this.animator!.setRange(endFrame, startFrame);
     }
 
-    let { frames, fps } = videoEntity;
+    let { frames, fps, sprites } = videoEntity;
+    const spriteCount = sprites.length;
     // 更新活动帧总数
     if (endFrame !== totalFrames) {
       frames = endFrame - startFrame;
@@ -326,28 +329,64 @@ export class Player {
       frames -= startFrame;
     }
 
-    // frames * (1 / fps) * 1000
-    this.animator!.duration = frames * 1000 / fps;
-    // (loopStartFrame - startFrame) * (1 / fps) * 100
-    this.animator!.loopStart =
+    this.animator!.setConfig(
+      /**
+       * 总帧数 / FPS，获取动画持续的时间
+       * duration = frames * (1 / fps) * 1000
+       */
+      (frames * 1000) / fps,
+      /**
+       * 每帧持续时间
+       */
+      1000 / fps,
+      /**
+       * loopStart = (loopStartFrame - startFrame) * (1 / fps) * 100
+       */
       loopStartFrame > startFrame
-        ? (loopStartFrame - startFrame) * 100 / fps
-        : 0;
-    this.animator!.loop = loop <= 0 ? Infinity : loop;
-    this.animator!.fillRule = +(fillMode === PLAYER_FILL_MODE.BACKWARDS);
-    this.animator!.onStart = () => {
-      this.clearRender();
-    };
-    this.animator!.onUpdate = (value: number) => {
-      this.drawFragmentFrame();
+        ? ((loopStartFrame - startFrame) * 100) / fps
+        : 0,
+      /**
+       * 循环次数
+       * loop
+       */
+      loop <= 0 ? Infinity : loop,
+      /**
+       * 顺序播放/倒序播放
+       * fillRule
+       */
+      +(fillMode === PLAYER_FILL_MODE.BACKWARDS)
+    );
+    this.animator!.onUpdate = (value: number, spendValue: number) => {
+      if (!this.isDrawnFragment) {
+        // **1.2**和**3**均为阔值，保证渲染尽快完成
+        const tmp = this.currentFrame === value ? Math.ceil(spriteCount * spendValue * 1.2) + 3 : spriteCount;
+
+        // 如果tmp小于结束片段，说明已经进入下一帧渲染，需要立即结束当前帧渲染
+        if (tmp > this.fragmentEnd) {
+          this.fragmentStart = this.fragmentEnd;
+          this.fragmentEnd = Math.min(tmp, spriteCount);
+          benchmark.time("draw", () => {
+            render(
+              this.ofsContext!,
+              this.bitmapsCache,
+              this.videoEntity!,
+              this.currentFrame,
+              this.fragmentStart,
+              this.fragmentEnd
+            );
+          });
+          this.isDrawnFragment = this.fragmentEnd === spriteCount;
+        }
+      }
 
       if (this.currentFrame === value) {
         return;
       }
 
       this.currentFrame = value;
-      this.render();
-      this.clearRender();
+      this.drawFrame();
+      this.fragmentEnd = 0;
+      this.isDrawnFragment = false;
       this.onProcess?.();
     };
 
@@ -366,15 +405,8 @@ export class Player {
     container!.height = height;
   }
 
-  private clearRender() {
-    if (this.videoEntity === undefined) {
-      throw new Error("Player VideoEntity undefined");
-    }
-
-    this.clearContainer();
-
+  private clearOfsCanvas() {
     const { container } = this.config;
-
     const { width = 0, height = 0 } = container as PlatformCanvas;
     let { ofsCanvas } = this;
 
@@ -387,30 +419,25 @@ export class Player {
     }
   }
 
-  private drawFragmentFrame(): void {
-    benchmark.time("draw", () => {
-      let { ofsContext, fragmentStart, fragmentEnd } = this;
-
-      render(
-        ofsContext!,
-        this.bitmapsCache,
-        this.videoEntity!,
-        this.currentFrame,
-        fragmentStart,
-        fragmentEnd
-      );
-    });
-  }
-
   /// ----------- 描绘一帧 -----------
-  private render(): void {
+  private drawFrame(): void {
     benchmark.time("render", () => {
-      const { container, context } = this.config
+      const { container, context } = this.config;
       const { width = 0, height = 0 } = container as PlatformCanvas;
       let { ofsContext } = this;
-
+      this.clearContainer();
       const imageData = ofsContext!.getImageData(0, 0, width, height);
       context!.putImageData(imageData, 0, 0, 0, 0, width, height);
+      this.clearOfsCanvas();
+    }, null, (count) => {
+      if (count < benchmark.count + 1) {
+        benchmark.line(20);
+      }
+
+      if (count < benchmark.count) {
+        console.log('render count', count)
+        benchmark.clearTime("draw");
+      }
     });
   }
 }

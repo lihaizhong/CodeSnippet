@@ -27,36 +27,55 @@ export class Animator {
   /**
    * 持续时间
    */
-  public duration: number = 0;
+  private duration: number = 0;
+  /**
+   * 每帧持续时间
+   */
+  private frameDuration: number = 0;
   /**
    * 循环播放开始帧
    */
-  public loopStart: number = 0;
+  private loopStart: number = 0;
+
+  private loopTotalTime: number = 0;
   /**
    * 循环次数
    * 可以设置为**Infinity**，默认是**1**
    */
-  public loop: number = 1;
+  private loop: number = 1;
   /**
    * 最后停留的目标模式，类似于**animation-fill-mode**
    */
-  public fillRule: number = 0;
+  private fillRule: number = 0;
 
   /* ---- 事件钩子 ---- */
   public onStart: () => void = noop;
-  public onUpdate: (currentValue: number) => void = noop;
+  public onUpdate: (currentValue: number, spendValue: number) => void = noop;
   public onEnd: () => void = noop;
 
   constructor(private readonly canvas: PlatformCanvas) {}
 
   private now(): number {
     // performance可以提供更高精度的时间测量，且不受系统时间的调整（如更改系统时间或同步时间）的影响
-    return performance?.now ? performance.now() : Date.now();
+    if (typeof performance !== "undefined") {
+      return performance.now()
+    }
+
+    return Date.now();
   }
 
   public setRange(startValue: number, endValue: number) {
     this.startValue = startValue;
     this.endValue = endValue;
+  }
+
+  public setConfig(duration: number, frameDuration: number, loopStart: number, loop: number, fillRule: number) {
+    this.duration = duration;
+    this.frameDuration = frameDuration;
+    this.loopStart = loopStart;
+    this.loop = loop;
+    this.fillRule = fillRule;
+    this.loopTotalTime = loopStart + (duration - loopStart) * loop
   }
 
   public start(): void {
@@ -92,10 +111,8 @@ export class Animator {
   }
 
   private doDeltaTime(deltaTime: number): void {
-    if (
-      deltaTime >=
-      this.loopStart + (this.duration - this.loopStart) * this.loop
-    ) {
+    // 运行时间 大于等于 总循环的时间
+    if (deltaTime >= this.loopTotalTime) {
       // 循环已结束
       this.currentFrication = this.fillRule === 1 ? 0.0 : 1.0;
       this.isRunning = false;
@@ -107,7 +124,7 @@ export class Animator {
               this.loopStart) /
             this.duration;
     }
-    this.onUpdate(this.animatedValue);
+    this.onUpdate(this.animatedValue, (deltaTime % this.frameDuration) / this.frameDuration);
     if (!this.isRunning) {
       this.onEnd();
     }
