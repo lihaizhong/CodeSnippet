@@ -46,6 +46,10 @@ git submodule update --init --recursive
 - [[翻译] ProtoBuf 官方文档（八）- （开发）教程](https://www.jianshu.com/p/ffc9a898552b)
 - [[翻译] ProtoBuf 官方文档（九）- （C++开发）教程](https://www.jianshu.com/p/d2bed3614259)
 
+### Canvas
+
+- [GITHUB awesome-canvas](https://github.com/chinaBerg/awesome-canvas)
+
 ### 反射技术
 
 - [JavaScript利用反射实现方法注入](https://www.cnblogs.com/jiujiubashiyi/p/17578718.html)
@@ -73,3 +77,7 @@ git submodule update --init --recursive
 ### SVGA
 
 - [protobuf优缺点及编码原理](https://www.cnblogs.com/niuben/p/14212711.html)
+
+### 海报绘制思路
+
+- [小程序canvas绘制海报全流程](https://developer.aliyun.com/article/1259392)
