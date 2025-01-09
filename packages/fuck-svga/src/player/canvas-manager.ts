@@ -10,21 +10,25 @@ import render from "./render";
 export default class CanvasManager {
   /**
    * 主屏的 Canvas 元素
+   * Main Screen
    */
-  private mainScreen: PlatformCanvas | null = null;
+  private ms: PlatformCanvas | null = null;
   /**
    * 主屏的 Context 对象
+   * Main Context
    */
-  private mainContext: CanvasRenderingContext2D | null = null;
+  private mc: CanvasRenderingContext2D | null = null;
   /**
    * 副屏的 Canvas 元素
+   * Secondary Screen
    */
-  private secondaryScreen: PlatformCanvas | PlatformOffscreenCanvas | null =
+  private ss: PlatformCanvas | PlatformOffscreenCanvas | null =
     null;
   /**
    * 副屏的 Context 对象
+   * Secondary Context
    */
-  private secondaryContext:
+  private sc:
     | CanvasRenderingContext2D
     | OffscreenCanvasRenderingContext2D
     | null = null;
@@ -41,8 +45,8 @@ export default class CanvasManager {
     const { canvas, ctx } = await getCanvas(selector, component);
     const { width, height } = canvas;
 
-    this.mainScreen = canvas;
-    this.mainContext = ctx;
+    this.ms = canvas;
+    this.mc = ctx;
 
     let ofsResult;
 
@@ -56,28 +60,28 @@ export default class CanvasManager {
       this.type = "ofscanvas";
     }
 
-    this.secondaryScreen = ofsResult.canvas;
-    this.secondaryContext = ofsResult.ctx;
+    this.ss = ofsResult.canvas;
+    this.sc = ofsResult.ctx;
   }
 
   public setConfig(options: { width: number; height: number }): void {
-    this.mainScreen!.width = options.width;
-    this.mainScreen!.height = options.height;
+    this.ms!.width = options.width;
+    this.ms!.height = options.height;
   }
 
   public getMainScreen(): PlatformCanvas {
-    return this.mainScreen!;
+    return this.ms!;
   }
 
   public clearMainScreen() {
-    const { width, height } = this.mainScreen!;
+    const { width, height } = this.ms!;
 
-    this.mainScreen!.width = width;
-    this.mainScreen!.height = height;
+    this.ms!.width = width;
+    this.ms!.height = height;
   }
 
   public clearSecondaryScreen() {
-    const { width, height } = this.mainScreen!;
+    const { width, height } = this.ms!;
 
     if (
       this.type === "ofscanvas" &&
@@ -86,21 +90,21 @@ export default class CanvasManager {
       navigator.userAgent.includes("Firefox")
     ) {
       const ofsResult = getOffscreenCanvas({ width, height });
-      this.secondaryScreen = ofsResult.canvas;
-      this.secondaryContext = ofsResult.ctx;
+      this.ss = ofsResult.canvas;
+      this.sc = ofsResult.ctx;
     } else {
-      this.secondaryScreen!.width = width;
-      this.secondaryScreen!.height = height;
+      this.ss!.width = width;
+      this.ss!.height = height;
     }
   }
 
   public destroy() {
     this.clearMainScreen();
     this.clearSecondaryScreen();
-    this.mainScreen = null;
-    this.mainContext = null;
-    this.secondaryScreen = null;
-    this.secondaryContext = null;
+    this.ms = null;
+    this.mc = null;
+    this.ss = null;
+    this.sc = null;
     this.type = undefined;
   }
 
@@ -112,7 +116,7 @@ export default class CanvasManager {
     end?: number
   ) {
     render(
-      this.secondaryContext!,
+      this.sc!,
       bitmapsCache,
       videoEntity,
       currentFrame,
@@ -122,22 +126,22 @@ export default class CanvasManager {
   }
 
   public stick() {
-    const { width, height } = this.mainScreen!;
+    const { width, height } = this.ms!;
 
     if (platform === SP.H5 || this.type === "canvas") {
-      this.mainContext!.drawImage(
-        this.secondaryScreen as CanvasImageSource,
+      this.mc!.drawImage(
+        this.ss as CanvasImageSource,
         0,
         0
       );
     } else if (this.type === "ofscanvas") {
-      const imageData = this.secondaryContext!.getImageData(
+      const imageData = this.sc!.getImageData(
         0,
         0,
         width,
         height
       );
-      this.mainContext!.putImageData(imageData, 0, 0);
+      this.mc!.putImageData(imageData, 0, 0);
     }
   }
 }

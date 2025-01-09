@@ -20,15 +20,16 @@ export class Player {
   /**
    * 动画当前帧数
    */
-  public currentFrame: number = 0;
+  public currFrame: number = 0;
   /**
    * 动画总帧数
    */
   public totalFrames: number = 0;
   /**
    * SVGA 数据源
+   * Video Entity
    */
-  public videoEntity: Video | undefined = undefined;
+  public ve: Video | undefined = undefined;
 
   /**
    * 当前配置项
@@ -48,7 +49,7 @@ export class Player {
 
   // private isBeIntersection = true;
   // private intersectionObserver: IntersectionObserver | null = null
-  private bitmapsCache: BitmapsCache = {};
+  private cache: BitmapsCache = {};
   /**
    * 配置是否准备完成
    */
@@ -56,11 +57,11 @@ export class Player {
   /**
    * 片段绘制开始位置
    */
-  private fragmentStart: number = 0;
+  private head: number = 0;
   /**
    * 片段绘制结束位置
    */
-  private fragmentEnd: number = 0;
+  private tail: number = 0;
 
   private isDrawnFragment: boolean = false;
 
@@ -139,17 +140,17 @@ export class Player {
       await this.setConfig(options, component);
     }
 
-    this.currentFrame = 0;
+    this.currFrame = 0;
     this.totalFrames = videoEntity.frames - 1;
-    this.videoEntity = videoEntity;
+    this.ve = videoEntity;
     benchmark.clearTime("render");
     benchmark.clearTime("draw");
 
-    if (this.videoEntity === undefined) {
+    if (this.ve === undefined) {
       return;
     }
 
-    const { images, size } = this.videoEntity;
+    const { images, size } = this.ve;
     const canvas = this.manager.getMainScreen();
 
     this.manager.setConfig(size);
@@ -162,7 +163,7 @@ export class Player {
     for (let key in images) {
       const image = images[key];
       const p = loadImage(canvas, image).then((img) => {
-        this.bitmapsCache[key] = img;
+        this.cache[key] = img;
       });
 
       imageArr.push(p);
@@ -203,9 +204,6 @@ export class Player {
     if (!this.isReady) {
       return;
     }
-    if (this.videoEntity === undefined) {
-      throw new Error("videoEntity undefined");
-    }
     this.manager.clearMainScreen();
     this.startAnimation();
     this.onStart?.();
@@ -241,7 +239,7 @@ export class Player {
       return;
     }
     this.animator!.stop();
-    this.currentFrame = 0;
+    this.currFrame = 0;
     this.manager.clearMainScreen();
     this.onStop?.();
   }
@@ -263,19 +261,19 @@ export class Player {
       this.animator!.stop();
       this.manager.destroy();
       this.animator = null;
-      this.videoEntity = undefined;
+      this.ve = undefined;
     }
   }
 
   private startAnimation(): void {
-    const { config, totalFrames, videoEntity } = this;
+    const { config, totalFrames, ve } = this;
     const { playMode, loopStartFrame, fillMode, loop } = config;
     let startFrame = config.startFrame > 0 ? config.startFrame : 0;
     let endFrame = config.endFrame > 0 ? config.endFrame : totalFrames;
 
     // 如果开始动画的当前帧是最后一帧，重置为第 0 帧
-    if (this.currentFrame === totalFrames) {
-      this.currentFrame = startFrame;
+    if (this.currFrame === totalFrames) {
+      this.currFrame = startFrame;
     }
 
     // 顺序播放/倒叙播放
@@ -285,7 +283,7 @@ export class Player {
       this.animator!.setRange(endFrame, startFrame);
     }
 
-    let { frames, fps, sprites } = videoEntity!;
+    let { frames, fps, sprites } = ve!;
     const spriteCount = sprites.length;
     // 更新活动帧总数
     if (endFrame !== totalFrames) {
@@ -325,28 +323,28 @@ export class Player {
       if (!this.isDrawnFragment) {
         // **1.2**和**3**均为阔值，保证渲染尽快完成
         const tmp =
-          this.currentFrame === value
+          this.currFrame === value
             ? Math.ceil(spriteCount * spendValue * 1.2) + 3
             : spriteCount;
 
         // 如果tmp小于结束片段，说明已经进入下一帧渲染，需要立即结束当前帧渲染
-        if (tmp > this.fragmentEnd) {
-          this.fragmentStart = this.fragmentEnd;
-          this.fragmentEnd = Math.min(tmp, spriteCount);
+        if (tmp > this.tail) {
+          this.head = this.tail;
+          this.tail = Math.min(tmp, spriteCount);
           benchmark.time(`draw`, () => {
             this.manager.draw(
-              this.bitmapsCache,
-              this.videoEntity!,
-              this.currentFrame,
-              this.fragmentStart,
-              this.fragmentEnd
+              this.cache,
+              this.ve!,
+              this.currFrame,
+              this.head,
+              this.tail
             );
           });
-          this.isDrawnFragment = this.fragmentEnd === spriteCount;
+          this.isDrawnFragment = this.tail === spriteCount;
         }
       }
 
-      if (this.currentFrame === value) {
+      if (this.currFrame === value) {
         return;
       }
 
@@ -367,8 +365,8 @@ export class Player {
       );
       this.manager.clearSecondaryScreen();
       this.onProcess?.();
-      this.currentFrame = value;
-      this.fragmentEnd = 0;
+      this.currFrame = value;
+      this.tail = 0;
       this.isDrawnFragment = false;
     };
 

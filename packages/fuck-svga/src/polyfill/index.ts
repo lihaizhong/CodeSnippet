@@ -4,3 +4,4 @@ export * from "./download";
 export * from "./loadImage";
 export * from "./platform";
 export * from "./animationFrame";
+export * from "./ratio";

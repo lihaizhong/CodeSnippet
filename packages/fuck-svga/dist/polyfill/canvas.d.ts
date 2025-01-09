@@ -10,11 +10,6 @@ export interface IGetCanvasResult {
     ctx: CanvasRenderingContext2D;
 }
 /**
- * 获取当前显示设备的物理像素分辨率与CSS 像素分辨率之比
- * @returns {number}
- */
-export declare function getDevicePixelRatio(): any;
-/**
  * 获取Canvas及其Context
  * @param selector
  * @param component

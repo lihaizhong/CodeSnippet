@@ -1,11 +1,12 @@
 import type { PlatformCanvas, PlatformOffscreenCanvas } from "../types";
 import bridge from "./bridge";
 import { platform, SP } from "./platform";
+import { pixelRatio } from "./ratio";
 
 /**
  * 创建离屏Canvas
  * @param options 离屏Canvas参数
- * @returns 
+ * @returns
  */
 export function createOffscreenCanvas(
   options: WechatMiniprogram.CreateOffscreenCanvasOption
@@ -44,30 +45,10 @@ export interface IGetCanvasResult {
 }
 
 /**
- * 获取当前显示设备的物理像素分辨率与CSS 像素分辨率之比
- * @returns {number}
- */
-export function getDevicePixelRatio() {
-  if (platform === SP.H5) {
-    return window.devicePixelRatio || 1;
-  }
-
-  if ("getWindowInfo" in bridge) {
-    const { pixelRatio } = (bridge as any).getWindowInfo();
-
-    return pixelRatio || 1;
-  }
-
-  const { pixelRatio } = (bridge as WechatMiniprogram.Wx).getSystemInfoSync();
-
-  return pixelRatio || 1;
-}
-
-/**
  * 获取Canvas及其Context
- * @param selector 
- * @param component 
- * @returns 
+ * @param selector
+ * @param component
+ * @returns
  */
 export function getCanvas(
   selector: string,
@@ -88,9 +69,8 @@ export function getCanvas(
         reject("canvas context not found.");
         return;
       }
-      const ratio = getDevicePixelRatio();
-      canvas!.width = width * ratio;
-      canvas!.height = height * ratio;
+      canvas!.width = width * pixelRatio;
+      canvas!.height = height * pixelRatio;
       resolve({ canvas, ctx });
     };
 
@@ -127,8 +107,8 @@ export interface IGetOffscreenCanvasResult {
 
 /**
  * 获取离屏Canvas及其Context
- * @param options 
- * @returns 
+ * @param options
+ * @returns
  */
 export function getOffscreenCanvas(
   options: WechatMiniprogram.CreateOffscreenCanvasOption

@@ -2,20 +2,24 @@ import { BitmapsCache, PlatformCanvas, Video } from "../types";
 export default class CanvasManager {
     /**
      * 主屏的 Canvas 元素
+     * Main Screen
      */
-    private mainScreen;
+    private ms;
     /**
      * 主屏的 Context 对象
+     * Main Context
      */
-    private mainContext;
+    private mc;
     /**
      * 副屏的 Canvas 元素
+     * Secondary Screen
      */
-    private secondaryScreen;
+    private ss;
     /**
      * 副屏的 Context 对象
+     * Secondary Context
      */
-    private secondaryContext;
+    private sc;
     /**
      * 副屏的 Canvas 类型
      */

@@ -28,19 +28,19 @@ function render(
   bitmapsCache: BitmapsCache,
   videoEntity: Video,
   currentFrame: number,
-  start?: number,
-  end?: number
+  head?: number,
+  tail?: number
 ): void {
   if (context === null) {
     throw new Error("Render Context cannot be null");
   }
 
-  if (start === end) {
+  if (head === tail) {
     return
   }
 
   const { replaceElements, dynamicElements } = videoEntity
-  const sprites = videoEntity.sprites.slice(start, end);
+  const sprites = videoEntity.sprites.slice(head, tail);
 
   sprites.forEach((sprite) => {
     const { imageKey } = sprite
