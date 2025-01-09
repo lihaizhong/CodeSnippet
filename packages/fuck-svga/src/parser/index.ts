@@ -1,6 +1,6 @@
 import { unzlibSync } from "fflate";
 import { MovieEntityReader } from "svga-protobuf";
-import download from "../adaptor/download";
+import download from "../polyfill/download";
 import { VideoEntity } from "./video-entity";
 import type { Video } from "../types";
 import benchmark from "test/benchmark";

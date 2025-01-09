@@ -2,6 +2,11 @@ import type { PlatformCanvas, PlatformOffscreenCanvas } from "../types";
 import bridge from "./bridge";
 import { platform, SP } from "./platform";
 
+/**
+ * 创建离屏Canvas
+ * @param options 离屏Canvas参数
+ * @returns 
+ */
 export function createOffscreenCanvas(
   options: WechatMiniprogram.CreateOffscreenCanvasOption
 ): PlatformOffscreenCanvas {
@@ -33,32 +38,37 @@ export function createOffscreenCanvas(
   });
 }
 
-export interface IGetOffscreenCanvasResult {
-  canvas: PlatformOffscreenCanvas;
-  ctx: OffscreenCanvasRenderingContext2D;
-}
-
 export interface IGetCanvasResult {
   canvas: PlatformCanvas;
   ctx: CanvasRenderingContext2D;
 }
 
+/**
+ * 获取当前显示设备的物理像素分辨率与CSS 像素分辨率之比
+ * @returns {number}
+ */
 export function getDevicePixelRatio() {
   if (platform === SP.H5) {
-    return window.devicePixelRatio;
+    return window.devicePixelRatio || 1;
   }
 
   if ("getWindowInfo" in bridge) {
     const { pixelRatio } = (bridge as any).getWindowInfo();
 
-    return pixelRatio;
+    return pixelRatio || 1;
   }
 
   const { pixelRatio } = (bridge as WechatMiniprogram.Wx).getSystemInfoSync();
 
-  return pixelRatio;
+  return pixelRatio || 1;
 }
 
+/**
+ * 获取Canvas及其Context
+ * @param selector 
+ * @param component 
+ * @returns 
+ */
 export function getCanvas(
   selector: string,
   component?: WechatMiniprogram.Component.TrivialInstance | null
@@ -115,6 +125,11 @@ export interface IGetOffscreenCanvasResult {
   ctx: OffscreenCanvasRenderingContext2D;
 }
 
+/**
+ * 获取离屏Canvas及其Context
+ * @param options 
+ * @returns 
+ */
 export function getOffscreenCanvas(
   options: WechatMiniprogram.CreateOffscreenCanvasOption
 ): IGetOffscreenCanvasResult {

@@ -10,6 +10,7 @@ export default class CanvasManager {
     getMainScreen(): PlatformCanvas;
     clearSecondaryScreen(): void;
     clearMainScreen(): void;
+    destroy(): void;
     draw(bitmapsCache: BitmapsCache, videoEntity: Video, currentFrame: number, start?: number, end?: number): void;
     stick(): void;
 }

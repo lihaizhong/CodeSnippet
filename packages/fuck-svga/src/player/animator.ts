@@ -1,5 +1,5 @@
 import type { PlatformCanvas } from "../types";
-import { startAnimationFrame } from "../adaptor";
+import { startAnimationFrame } from "../polyfill";
 
 const noop = () => {};
 
@@ -36,13 +36,15 @@ export class Animator {
    * 循环播放开始帧
    */
   private loopStart: number = 0;
-
+  /**
+   * 循环总时长
+   */
   private loopTotalTime: number = 0;
   /**
    * 循环次数
    * 可以设置为**Infinity**，默认是**1**
    */
-  private loop: number = 1;
+  // private loop: number = 1;
   /**
    * 最后停留的目标模式，类似于**animation-fill-mode**
    */
@@ -64,16 +66,28 @@ export class Animator {
     return Date.now();
   }
 
+  /**
+   * 设置动画开始帧和结束帧
+   * @param startValue 
+   * @param endValue 
+   */
   public setRange(startValue: number, endValue: number) {
     this.startValue = startValue;
     this.endValue = endValue;
   }
 
+  /**
+   * 设置动画的必要参数
+   * @param duration 
+   * @param frameDuration 
+   * @param loopStart 
+   * @param loop 
+   * @param fillRule 
+   */
   public setConfig(duration: number, frameDuration: number, loopStart: number, loop: number, fillRule: number) {
     this.duration = duration;
     this.frameDuration = frameDuration;
     this.loopStart = loopStart;
-    this.loop = loop;
     this.fillRule = fillRule;
     this.loopTotalTime = loopStart + (duration - loopStart) * loop
   }

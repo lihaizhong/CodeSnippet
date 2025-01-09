@@ -20,7 +20,7 @@ export declare class Player {
      * 当前配置项
      */
     readonly config: PlayerConfig;
-    private canvasManager;
+    private manager;
     private animator;
     private bitmapsCache;
     /**

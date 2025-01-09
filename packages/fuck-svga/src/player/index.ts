@@ -1,4 +1,4 @@
-import { loadImage } from "../adaptor";
+import { loadImage } from "../polyfill";
 import {
   PLAYER_FILL_MODE,
   PLAYER_PLAY_MODE,
@@ -43,7 +43,7 @@ export class Player {
     // isUseIntersectionObserver: false,
   });
 
-  private canvasManager: CanvasManager = new CanvasManager();
+  private manager: CanvasManager = new CanvasManager();
   private animator: Animator | null = null;
 
   // private isBeIntersection = true;
@@ -86,7 +86,7 @@ export class Player {
       }
     }
 
-    await this.canvasManager.register(config.container!, config.secondary, component);
+    await this.manager.register(config.container!, config.secondary, component);
     this.config.loop = config.loop ?? 0;
     this.config.fillMode = config.fillMode ?? PLAYER_FILL_MODE.FORWARDS;
     this.config.playMode = config.playMode ?? PLAYER_PLAY_MODE.FORWARDS;
@@ -97,7 +97,7 @@ export class Player {
     //   config.isUseIntersectionObserver ?? false;
     // 监听容器是否处于浏览器视窗内
     // this.setIntersectionObserver()
-    const canvas = this.canvasManager.getMainScreen();
+    const canvas = this.manager.getMainScreen();
     this.animator = new Animator(canvas);
     this.animator.onEnd = () => {
       this.onEnd?.();
@@ -143,7 +143,7 @@ export class Player {
     this.totalFrames = videoEntity.frames - 1;
     this.videoEntity = videoEntity;
     this.setSize();
-    this.canvasManager.clearSecondaryScreen();
+    this.manager.clearSecondaryScreen();
     benchmark.clearTime("render");
 
     if (this.videoEntity === undefined) {
@@ -151,7 +151,7 @@ export class Player {
     }
 
     const { images } = this.videoEntity;
-    const canvas = this.canvasManager.getMainScreen();
+    const canvas = this.manager.getMainScreen();
 
     if (Object.keys(images).length === 0) {
       return;
@@ -205,7 +205,7 @@ export class Player {
     if (this.videoEntity === undefined) {
       throw new Error("videoEntity undefined");
     }
-    this.canvasManager.clearMainScreen();
+    this.manager.clearMainScreen();
     this.startAnimation();
     this.onStart?.();
   }
@@ -241,7 +241,7 @@ export class Player {
     }
     this.animator!.stop();
     this.currentFrame = 0;
-    this.canvasManager.clearMainScreen();
+    this.manager.clearMainScreen();
     this.onStop?.();
   }
 
@@ -250,7 +250,7 @@ export class Player {
    */
   public clear(): void {
     if (this.isReady) {
-      this.canvasManager.clearMainScreen();
+      this.manager.clearMainScreen();
     }
   }
 
@@ -260,7 +260,7 @@ export class Player {
   public destroy(): void {
     if (this.isReady) {
       this.animator!.stop();
-      this.canvasManager.destroy();
+      this.manager.destroy();
       this.animator = null;
       this.videoEntity = undefined;
     }
@@ -333,7 +333,7 @@ export class Player {
           this.fragmentStart = this.fragmentEnd;
           this.fragmentEnd = Math.min(tmp, spriteCount);
           benchmark.time("draw", () => {
-            this.canvasManager.draw(
+            this.manager.draw(
               this.bitmapsCache,
               this.videoEntity!,
               this.currentFrame,
@@ -349,10 +349,10 @@ export class Player {
         return;
       }
 
-      this.canvasManager.clearMainScreen();
+      this.manager.clearMainScreen();
       benchmark.time(
         "render",
-        () => this.canvasManager.stick(),
+        () => this.manager.stick(),
         null,
         (count) => {
           benchmark.line(20);
@@ -360,7 +360,7 @@ export class Player {
           benchmark.clearTime("draw");
         }
       );
-      this.canvasManager.clearSecondaryScreen();
+      this.manager.clearSecondaryScreen();
       this.onProcess?.();
       this.currentFrame = value;
       this.fragmentEnd = 0;
@@ -372,6 +372,6 @@ export class Player {
 
   private setSize(): void {
     const { width, height } = this.videoEntity!.size;
-    this.canvasManager.setSize(width, height);
+    this.manager.setSize(width, height);
   }
 }

@@ -33,12 +33,14 @@ export declare class Animator {
      * 循环播放开始帧
      */
     private loopStart;
+    /**
+     * 循环总时长
+     */
     private loopTotalTime;
     /**
      * 循环次数
      * 可以设置为**Infinity**，默认是**1**
      */
-    private loop;
     /**
      * 最后停留的目标模式，类似于**animation-fill-mode**
      */
@@ -48,7 +50,20 @@ export declare class Animator {
     onEnd: () => void;
     constructor(canvas: PlatformCanvas);
     private now;
+    /**
+     * 设置动画开始帧和结束帧
+     * @param startValue
+     * @param endValue
+     */
     setRange(startValue: number, endValue: number): void;
+    /**
+     * 设置动画的必要参数
+     * @param duration
+     * @param frameDuration
+     * @param loopStart
+     * @param loop
+     * @param fillRule
+     */
     setConfig(duration: number, frameDuration: number, loopStart: number, loop: number, fillRule: number): void;
     start(): void;
     stop(): void;

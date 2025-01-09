@@ -1,4 +1,4 @@
-import { getCanvas, getOffscreenCanvas, platform, SP } from "../adaptor";
+import { getCanvas, getOffscreenCanvas, platform, SP } from "../polyfill";
 import {
   BitmapsCache,
   PlatformCanvas,
@@ -61,10 +61,10 @@ export default class CanvasManager {
   public clearSecondaryScreen() {
     const { width, height } = this.mainScreen!;
 
-    // OffscreenCanvas 在 Firefox 浏览器无法被清理历史内容
     if (
       this.type === "ofscanvas" &&
       platform === SP.H5 &&
+      // OffscreenCanvas 在 Firefox 浏览器无法被清理历史内容
       navigator.userAgent.includes("Firefox")
     ) {
       const ofsResult = getOffscreenCanvas({ width, height });
@@ -111,24 +111,20 @@ export default class CanvasManager {
   public stick() {
     const { width, height } = this.mainScreen!;
 
-    switch (this.type) {
-      case "canvas":
-        this.mainContext!.drawImage(
-          this.secondaryScreen as CanvasImageSource,
-          0,
-          0
-        );
-        break;
-      case "ofscanvas":
-        const imageData = this.secondaryContext!.getImageData(
-          0,
-          0,
-          width,
-          height
-        );
-        this.mainContext!.putImageData(imageData, 0, 0);
-        break;
-      default:
+    if (platform === SP.H5 || this.type === 'canvas') {
+      this.mainContext!.drawImage(
+        this.secondaryScreen as CanvasImageSource,
+        0,
+        0
+      );
+    } else if (this.type === 'ofscanvas') {
+      const imageData = this.secondaryContext!.getImageData(
+        0,
+        0,
+        width,
+        height
+      );
+      this.mainContext!.putImageData(imageData, 0, 0);
     }
   }
 }
