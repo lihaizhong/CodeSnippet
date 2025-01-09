@@ -257,11 +257,11 @@ export interface PlayerConfig {
   /**
    * 播放动画的 Canvas 元素
    */
-  container: PlatformCanvas | null;
+  // container: PlatformCanvas | null;
   /**
    * 播放动画的 Context 对象
    */
-  context: CanvasRenderingContext2D | null;
+  // context: CanvasRenderingContext2D | null;
   /**
    * 循环次数，默认值 0（无限循环）
    */
@@ -294,5 +294,10 @@ export interface PlayerConfig {
 }
 
 export type PlayerConfigOptions = Partial<
-  Omit<PlayerConfig, "container" | "context"> & { container: string }
+  PlayerConfig & {
+    // 主屏
+    container: string;
+    // 副屏
+    secondary?: string;
+  }
 >;

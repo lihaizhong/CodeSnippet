@@ -1,1 +1,2 @@
-export declare function getBridge(): WechatMiniprogram.Wx | Window;
+declare let bridge: any;
+export default bridge;

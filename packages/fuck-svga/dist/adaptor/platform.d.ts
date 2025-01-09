@@ -7,12 +7,6 @@ export declare const SP: {
     ALIPAY: number;
     DOUYIN: number;
     H5: number;
-    UNKNOWN: number;
 };
-export declare const throwUnsupportedPlatform: () => Error;
-/**
- * 获取平台信息
- * @returns
- */
-export declare function getPlatform(): number;
-export declare const platform: number;
+declare let platform: number;
+export { platform };

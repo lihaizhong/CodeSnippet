@@ -1,9 +1,5 @@
-import { PlatformCanvas, PlatformOffscreenCanvas } from "../types";
-import {
-  platform,
-  SP,
-  throwUnsupportedPlatform,
-} from "./platform";
+import { PlatformCanvas } from "../types";
+import { platform, SP } from "./platform";
 
 export function startAnimationFrame(
   canvas: PlatformCanvas,
@@ -13,9 +9,5 @@ export function startAnimationFrame(
     return requestAnimationFrame(callback);
   }
 
-  if (platform !== SP.UNKNOWN) {
-    return (canvas as WechatMiniprogram.Canvas).requestAnimationFrame(callback);
-  }
-
-  throw throwUnsupportedPlatform();
+  return (canvas as WechatMiniprogram.Canvas).requestAnimationFrame(callback);
 }

@@ -1,17 +1,10 @@
 import type { PlatformCanvas, PlatformOffscreenCanvas } from "../types";
 import bridge from "./bridge";
-import { platform, SP, throwUnsupportedPlatform } from "./platform";
+import { platform, SP } from "./platform";
 
 export function createOffscreenCanvas(
   options: WechatMiniprogram.CreateOffscreenCanvasOption
 ): PlatformOffscreenCanvas {
-  if (platform === SP.WECHAT) {
-    return wx.createOffscreenCanvas({
-      ...options,
-      type: "2d",
-    });
-  }
-
   if (platform === SP.H5) {
     return new OffscreenCanvas(
       options.width as number,
@@ -34,12 +27,15 @@ export function createOffscreenCanvas(
     return canvas;
   }
 
-  throw throwUnsupportedPlatform();
+  return wx.createOffscreenCanvas({
+    ...options,
+    type: "2d",
+  });
 }
 
 export interface IGetOffscreenCanvasResult {
   canvas: PlatformOffscreenCanvas;
-  ctx: OffscreenRenderingContext;
+  ctx: OffscreenCanvasRenderingContext2D;
 }
 
 export interface IGetCanvasResult {
@@ -52,19 +48,15 @@ export function getDevicePixelRatio() {
     return window.devicePixelRatio;
   }
 
-  if (platform !== SP.UNKNOWN) {
-    if ("getWindowInfo" in bridge) {
-      const { pixelRatio } = (bridge as any).getWindowInfo();
-
-      return pixelRatio;
-    }
-
-    const { pixelRatio } = (bridge as WechatMiniprogram.Wx).getSystemInfoSync();
+  if ("getWindowInfo" in bridge) {
+    const { pixelRatio } = (bridge as any).getWindowInfo();
 
     return pixelRatio;
   }
 
-  throw throwUnsupportedPlatform();
+  const { pixelRatio } = (bridge as WechatMiniprogram.Wx).getSystemInfoSync();
+
+  return pixelRatio;
 }
 
 export function getCanvas(
@@ -96,11 +88,13 @@ export function getCanvas(
       const canvas = document.querySelector(selector) as HTMLCanvasElement;
       const { width, height } = canvas.style;
       initCanvas(canvas, parseFloat(width), parseFloat(height));
-    } else if (platform !== SP.UNKNOWN) {
+    } else {
       let query = (bridge as WechatMiniprogram.Wx).createSelectorQuery();
+
       if (component) {
         query = query.in(component);
       }
+
       query
         .select(selector)
         .fields({ node: true, size: true }, (res) => {
@@ -112,29 +106,20 @@ export function getCanvas(
           }
         })
         .exec();
-    } else {
-      reject(throwUnsupportedPlatform());
     }
   });
 }
 
-export interface IGetSecondaryScreenOptions {
-  width: number;
-  height: number;
-  component?: WechatMiniprogram.Component.TrivialInstance | null;
+export interface IGetOffscreenCanvasResult {
+  canvas: PlatformOffscreenCanvas;
+  ctx: OffscreenCanvasRenderingContext2D;
 }
 
-export function getSecondaryScreen(
-  selector: string | null,
-  options: IGetSecondaryScreenOptions
-): Promise<IGetCanvasResult | IGetOffscreenCanvasResult> {
-  if (typeof selector === "string" && selector !== "") {
-    return getCanvas(selector, options.component);
-  }
+export function getOffscreenCanvas(
+  options: WechatMiniprogram.CreateOffscreenCanvasOption
+): IGetOffscreenCanvasResult {
+  const canvas = createOffscreenCanvas(options);
+  const ctx = canvas.getContext("2d");
 
-  const { width, height } = options;
-  const ofsCanvas = createOffscreenCanvas({ width, height });
-  const ofsContext = ofsCanvas.getContext("2d");
-
-  return Promise.resolve({ canvas: ofsCanvas, ctx: ofsContext });
+  return { canvas, ctx };
 }

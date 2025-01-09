@@ -44,7 +44,7 @@ export function miniBtoa(string: string): string {
  * 对经过 Base64 编码的字符串进行解码
  * https://developer.mozilla.org/zh-CN/docs/Web/API/Window/atob
  * @param base64 base64字符串
- * @returns 
+ * @returns
  */
 export function miniAtob(base64: string): string {
   let string = String(base64).replace(/[\t\n\f\r ]+/g, "");
@@ -53,10 +53,10 @@ export function miniAtob(base64: string): string {
       'Failed to execute "atob" on "Window": The string to be decoded is not correctly encoded.'
     );
   string += "==".slice(2 - (string.length & 3));
-  let bitmap;
-  let result = "";
-  let r1;
-  let r2;
+  let bitmap,
+    result = "",
+    r1,
+    r2;
   for (let i = 0; i < string.length; ) {
     bitmap =
       (b64.indexOf(string.charAt(i++)) << 18) |
@@ -75,5 +75,6 @@ export function miniAtob(base64: string): string {
             bitmap & 255
           );
   }
+
   return result;
 }

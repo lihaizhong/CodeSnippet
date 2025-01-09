@@ -4,11 +4,7 @@ import type {
   PlatformOffscreenCanvas,
 } from "../types";
 import bridge from "./bridge";
-import {
-  platform,
-  SP,
-  throwUnsupportedPlatform,
-} from "./platform";
+import { platform, SP } from "./platform";
 
 /**
  * 将ArrayBuffer转为base64
@@ -46,18 +42,14 @@ function toBitmap(data: Uint8Array): Promise<ImageBitmap> {
  */
 function createImage(
   canvas: PlatformCanvas | PlatformOffscreenCanvas
-): WechatMiniprogram.Image | HTMLImageElement | null {
+): WechatMiniprogram.Image | HTMLImageElement {
   if (platform === SP.H5) {
     return new Image();
   }
 
-  if (platform !== SP.UNKNOWN) {
-    return (
-      canvas as WechatMiniprogram.Canvas | WechatMiniprogram.OffscreenCanvas
-    ).createImage();
-  }
-
-  return null;
+  return (
+    canvas as WechatMiniprogram.Canvas | WechatMiniprogram.OffscreenCanvas
+  ).createImage();
 }
 
 /**
@@ -95,20 +87,15 @@ export function loadImage(
   canvas: PlatformCanvas | PlatformOffscreenCanvas,
   data: Uint8Array | string
 ): Promise<PlatformImage | ImageBitmap> {
-  if (platform === SP.H5 && 'createImageBitmap' in window) {
+  if (platform === SP.H5 && "createImageBitmap" in window) {
     return toBitmap(data as Uint8Array);
   }
 
   return new Promise((resolve, reject) => {
     const img = createImage(canvas);
-
-    if (img) {
-      img.onload = () => resolve(img);
-      img.onerror = (error: Error) =>
-        reject(new Error(`[SVGA LOADING FAILURE]: ${error.message}`));
-      img.src = genImageSource(data as Uint8Array | string);
-    } else {
-      reject(throwUnsupportedPlatform());
-    }
+    img.onload = () => resolve(img);
+    img.onerror = (error: Error) =>
+      reject(new Error(`[SVGA LOADING FAILURE]: ${error.message}`));
+    img.src = genImageSource(data as Uint8Array | string);
   });
 }

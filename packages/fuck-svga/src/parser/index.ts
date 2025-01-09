@@ -37,6 +37,6 @@ export class Parser {
 
     benchmark.line()
     benchmark.label(url);
-    return Parser.parseVideoEntity(data);
+    return Parser.parseVideoEntity(data!);
   }
 }

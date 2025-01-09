@@ -21,6 +21,6 @@ export default {
     commonjs(),
     // eslint(),
     typescript(),
-    // terser()
+    terser()
   ]
 }

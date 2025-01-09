@@ -3,6 +3,12 @@
   height: 100vh;
 }
 
+.svga-secondary {
+  position: fixed;
+  left: -200vw;
+  top: -200vh;
+}
+
 .svga-error-popup {
   position: fixed;
   top: 50%;

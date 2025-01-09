@@ -1,27 +1,15 @@
-import {
-  platform,
-  SP,
-  throwUnsupportedPlatform,
-} from "./platform";
+import { platform, SP } from "./platform";
 
 let bridge: any = null;
 
 if (platform === SP.WECHAT) {
   bridge = wx;
-}
-
-if (platform === SP.H5) {
+} else if (platform === SP.H5) {
   bridge = window;
-}
-
-if (platform === SP.ALIPAY) {
+} else if (platform === SP.ALIPAY) {
   bridge = my;
-}
-
-if (platform === SP.DOUYIN) {
+} else if (platform === SP.DOUYIN) {
   bridge = tt;
 }
 
-throw throwUnsupportedPlatform();
-
-export default bridge
+export default bridge;

@@ -6,35 +6,22 @@ export const SP = {
   WECHAT: 1,
   ALIPAY: 2,
   DOUYIN: 3,
-  H5: 4,
-  UNKNOWN: 0,
+  H5: 4
 };
 
-export const throwUnsupportedPlatform = () => new Error("Unsupported platform");
+let platform: number
 
-/**
- * 获取平台信息
- * @returns
- */
-export function getPlatform() {
-  // FIXME：由于抖音场景支持wx对象，所以需要放在wx对象之前检查
-  if (typeof tt !== "undefined") {
-    return SP.DOUYIN;
-  }
-
-  if (typeof my !== "undefined") {
-    return SP.ALIPAY;
-  }
-
-  if (typeof wx !== "undefined") {
-    return SP.WECHAT;
-  }
-
-  if (typeof window !== "undefined") {
-    return SP.H5;
-  }
-
-  return SP.UNKNOWN;
+// FIXME：由于抖音场景支持wx对象，所以需要放在wx对象之前检查
+if (typeof tt !== "undefined") {
+  platform = SP.DOUYIN;
+} else if (typeof my !== "undefined") {
+  platform = SP.ALIPAY;
+} else if (typeof wx !== "undefined") {
+  platform = SP.WECHAT;
+} else if (typeof window !== "undefined") {
+  platform = SP.H5;
+} else {
+  throw new Error("Unsupported platform");
 }
 
-export const platform = getPlatform();
+export { platform };

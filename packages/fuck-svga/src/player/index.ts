@@ -1,10 +1,4 @@
-import {
-  createOffscreenCanvas,
-  getCanvas,
-  loadImage,
-  platform,
-  SP,
-} from "../adaptor";
+import { loadImage } from "../adaptor";
 import {
   PLAYER_FILL_MODE,
   PLAYER_PLAY_MODE,
@@ -12,12 +6,10 @@ import {
   Video,
   BitmapsCache,
   PlayerConfig,
-  PlatformCanvas,
-  PlatformOffscreenCanvas,
 } from "../types";
 import { Animator } from "./animator";
-import render from "./render";
 import benchmark from "../test/benchmark";
+import CanvasManager from "./canvas-manager";
 
 type EventCallback = undefined | (() => void);
 
@@ -42,8 +34,6 @@ export class Player {
    * 当前配置项
    */
   public readonly config: PlayerConfig = Object.create({
-    container: null,
-    context: null,
     loop: 0,
     fillMode: PLAYER_FILL_MODE.FORWARDS,
     playMode: PLAYER_PLAY_MODE.FORWARDS,
@@ -53,10 +43,8 @@ export class Player {
     // isUseIntersectionObserver: false,
   });
 
-  private readonly selector: string = "#svga-board";
+  private canvasManager: CanvasManager = new CanvasManager();
   private animator: Animator | null = null;
-  private ofsCanvas: PlatformOffscreenCanvas | null = null;
-  private ofsContext: OffscreenCanvasRenderingContext2D | null = null;
 
   // private isBeIntersection = true;
   // private intersectionObserver: IntersectionObserver | null = null
@@ -94,17 +82,11 @@ export class Player {
 
     if (config.startFrame !== undefined && config.endFrame !== undefined) {
       if (config.startFrame > config.endFrame) {
-        throw new Error("StartFrame should > EndFrame");
+        throw new Error("[SvgaError] StartFrame should > EndFrame");
       }
     }
 
-    const result = await getCanvas(
-      config.container || this.selector,
-      component
-    );
-
-    this.config.container = result.canvas;
-    this.config.context = result.ctx;
+    await this.canvasManager.register(config.container!, config.secondary, component);
     this.config.loop = config.loop ?? 0;
     this.config.fillMode = config.fillMode ?? PLAYER_FILL_MODE.FORWARDS;
     this.config.playMode = config.playMode ?? PLAYER_PLAY_MODE.FORWARDS;
@@ -115,12 +97,8 @@ export class Player {
     //   config.isUseIntersectionObserver ?? false;
     // 监听容器是否处于浏览器视窗内
     // this.setIntersectionObserver()
-    this.ofsCanvas = createOffscreenCanvas({
-      width: result.canvas.width,
-      height: result.canvas.height,
-    });
-    this.ofsContext = this.ofsCanvas.getContext("2d");
-    this.animator = new Animator(result.canvas);
+    const canvas = this.canvasManager.getMainScreen();
+    this.animator = new Animator(canvas);
     this.animator.onEnd = () => {
       this.onEnd?.();
     };
@@ -153,6 +131,10 @@ export class Player {
     options: string | PlayerConfigOptions,
     component?: WechatMiniprogram.Component.TrivialInstance | null
   ): Promise<void | void[]> {
+    if (videoEntity === undefined) {
+      throw new Error("videoEntity undefined");
+    }
+
     if (options) {
       await this.setConfig(options, component);
     }
@@ -160,8 +142,8 @@ export class Player {
     this.currentFrame = 0;
     this.totalFrames = videoEntity.frames - 1;
     this.videoEntity = videoEntity;
-    this.clearContainer();
     this.setSize();
+    this.canvasManager.clearSecondaryScreen();
     benchmark.clearTime("render");
 
     if (this.videoEntity === undefined) {
@@ -169,6 +151,7 @@ export class Player {
     }
 
     const { images } = this.videoEntity;
+    const canvas = this.canvasManager.getMainScreen();
 
     if (Object.keys(images).length === 0) {
       return;
@@ -177,7 +160,7 @@ export class Player {
     let imageArr: Promise<void>[] = [];
     for (let key in images) {
       const image = images[key];
-      const p = loadImage(this.ofsCanvas!, image).then((img) => {
+      const p = loadImage(canvas, image).then((img) => {
         this.bitmapsCache[key] = img;
       });
 
@@ -212,19 +195,6 @@ export class Player {
    */
   public onEnd: EventCallback;
 
-  private clearContainer(): void {
-    if (!this.isReady) {
-      return;
-    }
-
-    const { container } = this.config;
-
-    if (container !== null) {
-      const { width } = container;
-      container.width = width;
-    }
-  }
-
   /**
    * 开始播放
    */
@@ -235,7 +205,7 @@ export class Player {
     if (this.videoEntity === undefined) {
       throw new Error("videoEntity undefined");
     }
-    this.clearContainer();
+    this.canvasManager.clearMainScreen();
     this.startAnimation();
     this.onStart?.();
   }
@@ -271,7 +241,7 @@ export class Player {
     }
     this.animator!.stop();
     this.currentFrame = 0;
-    this.clearContainer();
+    this.canvasManager.clearMainScreen();
     this.onStop?.();
   }
 
@@ -280,7 +250,7 @@ export class Player {
    */
   public clear(): void {
     if (this.isReady) {
-      this.clearContainer();
+      this.canvasManager.clearMainScreen();
     }
   }
 
@@ -290,19 +260,13 @@ export class Player {
   public destroy(): void {
     if (this.isReady) {
       this.animator!.stop();
-      this.clearContainer();
-
+      this.canvasManager.destroy();
       this.animator = null;
       this.videoEntity = undefined;
-      this.ofsCanvas = null;
-      this.ofsContext = null;
     }
   }
 
   private startAnimation(): void {
-    if (this.videoEntity === undefined)
-      throw new Error("videoEntity undefined");
-
     const { config, totalFrames, videoEntity } = this;
     const { playMode, loopStartFrame, fillMode, loop } = config;
     let startFrame = config.startFrame > 0 ? config.startFrame : 0;
@@ -320,7 +284,7 @@ export class Player {
       this.animator!.setRange(endFrame, startFrame);
     }
 
-    let { frames, fps, sprites } = videoEntity;
+    let { frames, fps, sprites } = videoEntity!;
     const spriteCount = sprites.length;
     // 更新活动帧总数
     if (endFrame !== totalFrames) {
@@ -359,15 +323,17 @@ export class Player {
     this.animator!.onUpdate = (value: number, spendValue: number) => {
       if (!this.isDrawnFragment) {
         // **1.2**和**3**均为阔值，保证渲染尽快完成
-        const tmp = this.currentFrame === value ? Math.ceil(spriteCount * spendValue * 1.2) + 3 : spriteCount;
+        const tmp =
+          this.currentFrame === value
+            ? Math.ceil(spriteCount * spendValue * 1.2) + 3
+            : spriteCount;
 
         // 如果tmp小于结束片段，说明已经进入下一帧渲染，需要立即结束当前帧渲染
         if (tmp > this.fragmentEnd) {
           this.fragmentStart = this.fragmentEnd;
           this.fragmentEnd = Math.min(tmp, spriteCount);
           benchmark.time("draw", () => {
-            render(
-              this.ofsContext!,
+            this.canvasManager.draw(
               this.bitmapsCache,
               this.videoEntity!,
               this.currentFrame,
@@ -383,9 +349,18 @@ export class Player {
         return;
       }
 
-      this.clearContainer();
-      this.drawFrame();
-      this.clearOfsCanvas();
+      this.canvasManager.clearMainScreen();
+      benchmark.time(
+        "render",
+        () => this.canvasManager.stick(),
+        null,
+        (count) => {
+          benchmark.line(20);
+          console.log("render count", count);
+          benchmark.clearTime("draw");
+        }
+      );
+      this.canvasManager.clearSecondaryScreen();
       this.onProcess?.();
       this.currentFrame = value;
       this.fragmentEnd = 0;
@@ -396,48 +371,7 @@ export class Player {
   }
 
   private setSize(): void {
-    if (this.videoEntity === undefined) {
-      throw new Error("videoEntity undefined");
-    }
-
-    const { container } = this.config;
-    const { width, height } = this.videoEntity.size;
-
-    container!.width = width;
-    container!.height = height;
-  }
-
-  private clearOfsCanvas() {
-    const { container } = this.config;
-    const { width = 0, height = 0 } = container as PlatformCanvas;
-    let { ofsCanvas } = this;
-
-    // OffscreenCanvas 在 Firefox 浏览器无法被清理历史内容
-    if (platform === SP.H5 && navigator.userAgent.includes("Firefox")) {
-      ofsCanvas = createOffscreenCanvas({ width, height });
-    } else {
-      ofsCanvas!.width = width;
-      ofsCanvas!.height = height;
-    }
-  }
-
-  /// ----------- 描绘一帧 -----------
-  private drawFrame(): void {
-    benchmark.time("render", () => {
-      const { container, context } = this.config;
-      const { width = 0, height = 0 } = container as PlatformCanvas;
-      let { ofsContext } = this;
-      const imageData = ofsContext!.getImageData(0, 0, width, height);
-      context!.putImageData(imageData, 0, 0, 0, 0, width, height);
-    }, null, (count) => {
-      if (count < benchmark.count + 1) {
-        benchmark.line(20);
-      }
-
-      if (count < benchmark.count) {
-        console.log('render count', count)
-        benchmark.clearTime("draw");
-      }
-    });
+    const { width, height } = this.videoEntity!.size;
+    this.canvasManager.setSize(width, height);
   }
 }

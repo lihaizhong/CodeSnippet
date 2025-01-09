@@ -1,9 +1,5 @@
 import bridge from "./bridge";
-import {
-  platform,
-  SP,
-  throwUnsupportedPlatform,
-} from "./platform";
+import { platform, SP } from "./platform";
 
 /**
  * 读取远程文件
@@ -27,23 +23,19 @@ function readRemoteFile(url: string): Promise<ArrayBuffer> {
   }
 
   // 小程序环境
-  if (platform !== SP.UNKNOWN) {
-    return new Promise((resolve, reject) => {
-      bridge.request({
-        url,
-        // @ts-ignore 支付宝小程序必须有该字段
-        dataType: 'arraybuffer',
-        responseType: "arraybuffer",
-        enableCache: true,
-        success(res: any) {
-          resolve(res.data as ArrayBuffer);
-        },
-        fail: reject,
-      });
+  return new Promise((resolve, reject) => {
+    bridge.request({
+      url,
+      // @ts-ignore 支付宝小程序必须有该字段
+      dataType: "arraybuffer",
+      responseType: "arraybuffer",
+      enableCache: true,
+      success(res: any) {
+        resolve(res.data as ArrayBuffer);
+      },
+      fail: reject,
     });
-  }
-
-  return Promise.reject(throwUnsupportedPlatform());
+  });
 }
 
 /**
@@ -66,7 +58,7 @@ function readLocalFile(url: string): Promise<ArrayBuffer> {
  * @param url 文件资源地址
  * @returns
  */
-export default function download(url: string): Promise<ArrayBuffer> {
+export default function download(url: string): Promise<ArrayBuffer | null> {
   // 读取远程文件
   if (/^http(s):\/\//.test(url)) {
     return readRemoteFile(url);
@@ -77,5 +69,5 @@ export default function download(url: string): Promise<ArrayBuffer> {
     return readLocalFile(url);
   }
 
-  return Promise.reject(throwUnsupportedPlatform());
+  return Promise.resolve(null);
 }

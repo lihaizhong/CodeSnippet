@@ -20,10 +20,8 @@ export declare class Player {
      * 当前配置项
      */
     readonly config: PlayerConfig;
-    private readonly selector;
+    private canvasManager;
     private animator;
-    private ofsCanvas;
-    private ofsContext;
     private bitmapsCache;
     /**
      * 配置是否准备完成
@@ -73,7 +71,6 @@ export declare class Player {
      * 播放结束事件回调
      */
     onEnd: EventCallback;
-    private clearContainer;
     /**
      * 开始播放
      */
@@ -100,7 +97,5 @@ export declare class Player {
     destroy(): void;
     private startAnimation;
     private setSize;
-    private clearOfsCanvas;
-    private drawFrame;
 }
 export {};
