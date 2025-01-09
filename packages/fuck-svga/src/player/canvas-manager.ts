@@ -49,9 +49,9 @@ export default class CanvasManager {
     this.secondaryContext = ofsResult.ctx;
   }
 
-  public setSize(width: number, height: number): void {
-    this.mainScreen!.width = width;
-    this.mainScreen!.height = height;
+  public setConfig(options: { width: number, height: number }): void {
+    this.mainScreen!.width = options.width;
+    this.mainScreen!.height = options.height;
   }
 
   public getMainScreen(): PlatformCanvas {
@@ -78,7 +78,9 @@ export default class CanvasManager {
 
   public clearMainScreen() {
     const { width, height } = this.mainScreen!;
-    this.setSize(width, height);
+
+    this.mainScreen!.width = width;
+    this.mainScreen!.height = height;
   }
 
   public destroy() {

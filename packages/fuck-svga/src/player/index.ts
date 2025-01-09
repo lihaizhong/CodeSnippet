@@ -142,17 +142,17 @@ export class Player {
     this.currentFrame = 0;
     this.totalFrames = videoEntity.frames - 1;
     this.videoEntity = videoEntity;
-    this.setSize();
-    this.manager.clearSecondaryScreen();
     benchmark.clearTime("render");
 
     if (this.videoEntity === undefined) {
       return;
     }
 
-    const { images } = this.videoEntity;
+    const { images, size } = this.videoEntity;
     const canvas = this.manager.getMainScreen();
 
+    this.manager.setConfig(size);
+    this.manager.clearSecondaryScreen();
     if (Object.keys(images).length === 0) {
       return;
     }
@@ -368,10 +368,5 @@ export class Player {
     };
 
     this.animator!.start();
-  }
-
-  private setSize(): void {
-    const { width, height } = this.videoEntity!.size;
-    this.manager.setSize(width, height);
   }
 }
