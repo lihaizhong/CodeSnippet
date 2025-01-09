@@ -1,6 +1,7 @@
-const now = () => (typeof performance !== 'undefined' ? performance.now() : Date.now());
+// const now = () => (typeof performance !== 'undefined' ? performance.now() : Date.now());
 const stopwatch = {
-  a: {} as Record<string, number>,
+  // a: {} as Record<string, number>,
+  l: {} as Record<string, boolean>,
   t: {} as Record<string, number>,
   time(label: string): void {
     // stopwatch.a[label] = now();
@@ -18,6 +19,9 @@ const stopwatch = {
   clearTime(label: string): void {
     delete stopwatch.t[label];
   },
+  unlock(label: string): void {
+    delete stopwatch.l[label];
+  }
 };
 
 export default {
@@ -37,7 +41,7 @@ export default {
       stopwatch.t[label]++;
     }
 
-    if (this.count !== 0 && stopwatch.t[label] > this.count) {
+    if (stopwatch.l[label] || (this.count !== 0 && stopwatch.t[label] > this.count)) {
       callback();
     } else {
       beforeCallback?.(stopwatch.t[label]);
@@ -49,6 +53,9 @@ export default {
   },
   clearTime(label: string) {
     stopwatch.clearTime(label);
+  },
+  lockTime(label: string) {
+    stopwatch.l[label] = true;
   },
   line(size: number = 40) {
     console.log("-".repeat(size));

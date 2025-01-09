@@ -96,6 +96,5 @@ export declare class Player {
      */
     destroy(): void;
     private startAnimation;
-    private setSize;
 }
 export {};

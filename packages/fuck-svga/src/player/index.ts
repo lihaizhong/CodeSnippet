@@ -143,6 +143,7 @@ export class Player {
     this.totalFrames = videoEntity.frames - 1;
     this.videoEntity = videoEntity;
     benchmark.clearTime("render");
+    benchmark.clearTime("draw");
 
     if (this.videoEntity === undefined) {
       return;
@@ -332,7 +333,7 @@ export class Player {
         if (tmp > this.fragmentEnd) {
           this.fragmentStart = this.fragmentEnd;
           this.fragmentEnd = Math.min(tmp, spriteCount);
-          benchmark.time("draw", () => {
+          benchmark.time(`draw`, () => {
             this.manager.draw(
               this.bitmapsCache,
               this.videoEntity!,
@@ -355,9 +356,13 @@ export class Player {
         () => this.manager.stick(),
         null,
         (count) => {
-          benchmark.line(20);
           console.log("render count", count);
-          benchmark.clearTime("draw");
+          benchmark.line(20);
+          if (count < benchmark.count) {
+            benchmark.clearTime("draw");
+          } else {
+            benchmark.lockTime('draw');
+          }
         }
       );
       this.manager.clearSecondaryScreen();
