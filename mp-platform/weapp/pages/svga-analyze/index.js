@@ -12,8 +12,8 @@ Page({
   },
 
   onLoad() {
-    // const { url } = getOneAtRandom();
-    const url = svgaSources[40];
+    const { url } = getOneAtRandom();
+    // const url = svgaSources[40];
 
     // 测试svga解析
     wx.request({

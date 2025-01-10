@@ -1101,18 +1101,15 @@ function render(context, bitmapsCache, videoEntity, currentFrame, head, tail) {
     if (context === null) {
         throw new Error("Render Context cannot be null");
     }
-    if (head === tail) {
-        return;
-    }
-    const { replaceElements, dynamicElements } = videoEntity;
-    const sprites = videoEntity.sprites.slice(head, tail);
-    sprites.forEach((sprite) => {
+    const { sprites, replaceElements, dynamicElements } = videoEntity;
+    for (let i = head; i < tail; i++) {
+        const sprite = sprites[i];
         const { imageKey } = sprite;
         const bitmap = bitmapsCache.get(imageKey);
         const replaceElement = replaceElements[imageKey];
         const dynamicElement = dynamicElements[imageKey];
         drawSprite(context, sprite, currentFrame, bitmap, replaceElement, dynamicElement);
-    });
+    }
 }
 function drawSprite(context, sprite, currentFrame, bitmap, replaceElement, dynamicElement) {
     const frame = sprite.frames[currentFrame];
@@ -1121,22 +1118,19 @@ function drawSprite(context, sprite, currentFrame, bitmap, replaceElement, dynam
     context.save();
     context.globalAlpha = frame.alpha;
     context.transform(frame.transform?.a ?? 1, frame.transform?.b ?? 0, frame.transform?.c ?? 0, frame.transform?.d ?? 1, frame.transform?.tx ?? 0, frame.transform?.ty ?? 0);
-    if (bitmap !== undefined) {
-        if (frame.maskPath !== null) {
+    if (bitmap) {
+        if (frame.maskPath) {
             drawBezier(context, frame.maskPath.d, frame.maskPath.transform, frame.maskPath.styles);
             context.clip();
         }
-        if (replaceElement !== undefined) {
-            context.drawImage(replaceElement, 0, 0, frame.layout.width, frame.layout.height);
-        }
-        else {
-            context.drawImage(bitmap, 0, 0, frame.layout.width, frame.layout.height);
-        }
+        context.drawImage((replaceElement || bitmap), 0, 0, frame.layout.width, frame.layout.height);
     }
-    if (dynamicElement !== undefined) {
+    if (dynamicElement) {
         context.drawImage(dynamicElement, (frame.layout.width - dynamicElement.width) / 2, (frame.layout.height - dynamicElement.height) / 2);
     }
-    frame.shapes.forEach((shape) => drawShape(context, shape));
+    for (let i = 0; i < frame.shapes.length; i++) {
+        drawShape(context, frame.shapes[i]);
+    }
     context.restore();
 }
 function drawShape(context, shape) {
@@ -1153,55 +1147,55 @@ function drawShape(context, shape) {
     }
 }
 function resetShapeStyles(context, styles) {
-    if (styles === undefined)
+    if (!styles) {
         return;
-    if (styles.stroke !== null) {
-        context.strokeStyle = styles.stroke;
     }
-    else {
-        context.strokeStyle = "transparent";
-    }
-    if (styles.strokeWidth !== null && styles.strokeWidth > 0)
+    context.strokeStyle = styles.stroke || "transparent";
+    if (styles.strokeWidth > 0) {
         context.lineWidth = styles.strokeWidth;
-    if (styles.miterLimit !== null && styles.miterLimit > 0)
+    }
+    if (styles.miterLimit > 0) {
         context.miterLimit = styles.miterLimit;
-    if (styles.lineCap !== null)
+    }
+    if (styles.lineCap) {
         context.lineCap = styles.lineCap;
-    if (styles.lineJoin !== null)
+    }
+    if (styles.lineJoin) {
         context.lineJoin = styles.lineJoin;
-    if (styles.fill !== null) {
-        context.fillStyle = styles.fill;
     }
-    else {
-        context.fillStyle = "transparent";
-    }
-    if (styles.lineDash !== null)
+    context.fillStyle = styles.fill || "transparent";
+    if (styles.lineDash) {
         context.setLineDash(styles.lineDash);
+    }
 }
 function drawBezier(context, d, transform, styles) {
     context.save();
     resetShapeStyles(context, styles);
-    if (transform !== undefined) {
+    if (transform) {
         context.transform(transform.a, transform.b, transform.c, transform.d, transform.tx, transform.ty);
     }
     const currentPoint = { x: 0, y: 0, x1: 0, y1: 0, x2: 0, y2: 0 };
     context.beginPath();
-    if (d !== undefined) {
-        d = d.replace(/([a-zA-Z])/g, "|||$1 ").replace(/,/g, " ");
-        d.split("|||").forEach((segment) => {
-            if (segment.length === 0)
-                return;
+    if (d) {
+        const segments = d
+            .replace(/([a-zA-Z])/g, "|||$1 ")
+            .replace(/,/g, " ")
+            .split("|||");
+        for (let i = 0; i < segments.length; i++) {
+            const segment = segments[i];
+            if (segment.length === 0) {
+                continue;
+            }
             const firstLetter = segment.substring(0, 1);
             if (validMethods.includes(firstLetter)) {
-                const args = segment.substr(1).trim().split(" ");
-                drawBezierElement(context, currentPoint, firstLetter, args);
+                drawBezierElement(context, currentPoint, firstLetter, segment.substring(1).trim().split(" "));
             }
-        });
+        }
     }
-    if (styles.fill !== null) {
+    if (styles.fill) {
         context.fill();
     }
-    if (styles.stroke !== null) {
+    if (styles.stroke) {
         context.stroke();
     }
     context.restore();
@@ -1331,7 +1325,7 @@ function drawBezierElement(context, currentPoint, method, args) {
 function drawEllipse(context, x, y, radiusX, radiusY, transform, styles) {
     context.save();
     resetShapeStyles(context, styles);
-    if (transform !== undefined) {
+    if (transform) {
         context.transform(transform.a, transform.b, transform.c, transform.d, transform.tx, transform.ty);
     }
     x = x - radiusX;
@@ -1351,10 +1345,10 @@ function drawEllipse(context, x, y, radiusX, radiusY, transform, styles) {
     context.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
     context.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
     context.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
-    if (styles.fill !== null) {
+    if (styles.fill) {
         context.fill();
     }
-    if (styles.stroke !== null) {
+    if (styles.stroke) {
         context.stroke();
     }
     context.restore();
@@ -1362,7 +1356,7 @@ function drawEllipse(context, x, y, radiusX, radiusY, transform, styles) {
 function drawRect(context, x, y, width, height, cornerRadius, transform, styles) {
     context.save();
     resetShapeStyles(context, styles);
-    if (transform !== undefined) {
+    if (transform) {
         context.transform(transform.a, transform.b, transform.c, transform.d, transform.tx, transform.ty);
     }
     let radius = cornerRadius;
@@ -1379,10 +1373,10 @@ function drawRect(context, x, y, width, height, cornerRadius, transform, styles)
     context.arcTo(x, y + height, x, y, radius);
     context.arcTo(x, y, x + width, y, radius);
     context.closePath();
-    if (styles.fill !== null) {
+    if (styles.fill) {
         context.fill();
     }
-    if (styles.stroke !== null) {
+    if (styles.stroke) {
         context.stroke();
     }
     context.restore();
