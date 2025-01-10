@@ -1,3 +1,5 @@
+const app = getApp();
+
 Page({
   data: {
     btnList: [
@@ -6,7 +8,7 @@ Page({
         path: "/pages/svga/index",
       },
       {
-        text: "跳转表单",
+        text: "跳转Webview",
         path: "/pages/webview/index",
       },
       {
@@ -15,12 +17,11 @@ Page({
       },
     ],
   },
-
   handleNavigateTo(e) {
     const { url } = e.currentTarget.dataset;
 
     if (url) {
-      my.navigateTo({ url });
+      wx.navigateTo({ url });
     } else {
       console.error("未获取到跳转路径", e);
     }

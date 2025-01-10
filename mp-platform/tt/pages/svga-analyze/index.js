@@ -15,7 +15,7 @@ Page({
     const { url } = getOneAtRandom();
 
     // 测试svga解析
-    wx.request({
+    tt.request({
       url,
       responseType: "arraybuffer",
       enableCache: true,
@@ -32,7 +32,7 @@ Page({
 
         console.log("movieData", movieData);
 
-        const windowInfo = wx.getWindowInfo();
+        const systemInfo = tt.getSystemInfoSync();
         const images = [];
         const { viewBoxHeight, viewBoxWidth } = movieData.params;
         Object.keys(movieData.images).forEach((key) => {
@@ -42,7 +42,7 @@ Page({
             data.byteOffset + data.byteLength
           );
           images.push(
-            `data:image/png;base64,${wx.arrayBufferToBase64(ab)}`
+            `data:image/png;base64,${tt.arrayBufferToBase64(ab)}`
               .replace(/[\r\n]/g, "")
               .replace(" ", "")
           );
@@ -50,8 +50,8 @@ Page({
         this.setData({
           images,
           params: {
-            width: windowInfo.screenWidth,
-            height: viewBoxHeight * (windowInfo.screenWidth / viewBoxWidth),
+            width: systemInfo.screenWidth,
+            height: viewBoxHeight * (systemInfo.screenWidth / viewBoxWidth),
           },
         });
       },

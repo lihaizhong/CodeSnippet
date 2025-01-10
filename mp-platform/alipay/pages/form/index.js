@@ -1,7 +1,7 @@
 Page({
   data: {
     focus: false,
-    inputValue: '',
+    inputValue: "",
   },
 
   bindButtonTap() {
@@ -28,38 +28,38 @@ Page({
   },
 
   bindHideKeyboard(e) {
-    if (e.detail.value === '123') {
+    if (e.detail.value === "123") {
       // 收起键盘
       my.hideKeyboard();
     }
   },
 
   handleSearch(e) {
-    console.log('search', e.detail.value);
+    console.log("search", e.detail.value);
     this.setData({
       search: e.detail.value,
     });
   },
   doneSearch() {
-    console.log('doneSearch', this.data.search);
+    console.log("doneSearch", this.data.search);
     my.hideKeyboard();
   },
   clearSearch() {
-    console.log('clear search', this.data.search);
+    console.log("clear search", this.data.search);
     this.setData({
-      search: '',
+      search: "",
     });
   },
   handleNickNameFocus(e) {
-    console.log('nickname focus', e)
+    console.log("nickname focus", e);
   },
   handleNickNameInput(e) {
-    console.log('nickname input', e)
+    console.log("nickname input", e);
   },
   handleNickNameBlur(e) {
-    console.log('nickname blur', e)
+    console.log("nickname blur", e);
   },
   handleNickNameConfirm(e) {
-    console.log('nickname confirm', e)
-  }
+    console.log("nickname confirm", e);
+  },
 });

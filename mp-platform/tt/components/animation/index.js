@@ -53,7 +53,7 @@ Component({
         }
 
         this.setData({ message: "准备下载资源" });
-        // wx.showLoading();
+        // tt.showLoading();
         const videoItem = await parser.load(this.properties.url);
         this.setData({ message: "下载资源成功" });
         await player.mount(
@@ -65,12 +65,12 @@ Component({
           this
         );
         this.setData({ message: "资源装载成功" });
-        // wx.hideLoading();
+        // tt.hideLoading();
         this.setData({ message: "准备开始播放" });
         player.start();
         this.setData({ message: "" });
       } catch (ex) {
-        // wx.hideLoading();
+        // tt.hideLoading();
         console.error("svga初始化失败！", ex);
         this.setData({ message: ex.message + "\n" + ex.stack });
       }

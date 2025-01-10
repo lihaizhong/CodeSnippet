@@ -9,7 +9,7 @@ Component({
   options: {
     lifetimes: true,
     observers: true,
-    virtualHost: false
+    virtualHost: false,
   },
 
   props: {
@@ -46,7 +46,7 @@ Component({
   methods: {
     async initialize() {
       try {
-        this.setData({ message: "实例创建中" })
+        this.setData({ message: "实例创建中" });
         if (!(parser instanceof Parser)) {
           parser = new Parser();
         }
@@ -57,23 +57,27 @@ Component({
           player = new Player();
         }
 
-        this.setData({ message: "准备下载资源" })
+        this.setData({ message: "准备下载资源" });
         // my.showLoading();
         const videoItem = await parser.load(this.props.url);
-        this.setData({ message: "下载资源成功" })
-        await player.mount(videoItem, {
-          container: "#palette",
-          secondary: "#secondary"
-        }, this);
-        this.setData({ message: "资源装载成功" })
+        this.setData({ message: "下载资源成功" });
+        await player.mount(
+          videoItem,
+          {
+            container: "#palette",
+            secondary: "#secondary",
+          },
+          this
+        );
+        this.setData({ message: "资源装载成功" });
         // my.hideLoading();
-        this.setData({ message: "准备开始播放" })
+        this.setData({ message: "准备开始播放" });
         player.start();
-        this.setData({ message: "" })
+        this.setData({ message: "" });
       } catch (ex) {
         // my.hideLoading();
         console.error("svga初始化失败！", ex);
-        this.setData({ message: ex.message + '\n' + ex.stack })
+        this.setData({ message: ex.message + "\n" + ex.stack });
       }
     },
     stop() {
