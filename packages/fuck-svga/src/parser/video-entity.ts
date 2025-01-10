@@ -1,4 +1,4 @@
-import type { MovieEntity } from "svga-protobuf";
+import type { MovieEntity } from "fuck-protobuf";
 import {
   Video,
   RawImages,

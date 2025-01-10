@@ -25,6 +25,6 @@
   },
   "dependencies": {
     "@rollup/plugin-terser": "^0.4.4",
-    "svga-protobuf": "workspace:^"
+    "fuck-protobuf": "workspace:^"
   }
 }

@@ -21,49 +21,7 @@ importers:
         specifier: ^14.2.4
         version: 14.2.4
 
-  packages/fuck-svga:
-    dependencies:
-      '@rollup/plugin-terser':
-        specifier: ^0.4.4
-        version: 0.4.4(rollup@4.30.0)
-      svga-protobuf:
-        specifier: workspace:^
-        version: link:../svga-protobuf
-    devDependencies:
-      '@rollup/plugin-commonjs':
-        specifier: ^28.0.2
-        version: 28.0.2(rollup@4.30.0)
-      '@rollup/plugin-json':
-        specifier: ^6.1.0
-        version: 6.1.0(rollup@4.30.0)
-      '@rollup/plugin-node-resolve':
-        specifier: ^16.0.0
-        version: 16.0.0(rollup@4.30.0)
-      '@rollup/plugin-typescript':
-        specifier: ^12.1.2
-        version: 12.1.2(rollup@4.30.0)(tslib@2.8.1)(typescript@5.7.2)
-      '@types/wechat-miniprogram':
-        specifier: ^3.4.8
-        version: 3.4.8
-      fflate:
-        specifier: ^0.8.2
-        version: 0.8.2
-      rimraf:
-        specifier: ^6.0.1
-        version: 6.0.1
-      rollup:
-        specifier: ^4.30.0
-        version: 4.30.0
-      tslib:
-        specifier: ^2.8.1
-        version: 2.8.1
-      typescript:
-        specifier: ^5.7.2
-        version: 5.7.2
-
-  packages/platform-utils: {}
-
-  packages/svga-protobuf:
+  packages/fuck-protobuf:
     dependencies:
       '@protobufjs/aspromise':
         specifier: ^1.1.2
@@ -114,6 +72,48 @@ importers:
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
+
+  packages/fuck-svga:
+    dependencies:
+      '@rollup/plugin-terser':
+        specifier: ^0.4.4
+        version: 0.4.4(rollup@4.30.0)
+      fuck-protobuf:
+        specifier: workspace:^
+        version: link:../fuck-protobuf
+    devDependencies:
+      '@rollup/plugin-commonjs':
+        specifier: ^28.0.2
+        version: 28.0.2(rollup@4.30.0)
+      '@rollup/plugin-json':
+        specifier: ^6.1.0
+        version: 6.1.0(rollup@4.30.0)
+      '@rollup/plugin-node-resolve':
+        specifier: ^16.0.0
+        version: 16.0.0(rollup@4.30.0)
+      '@rollup/plugin-typescript':
+        specifier: ^12.1.2
+        version: 12.1.2(rollup@4.30.0)(tslib@2.8.1)(typescript@5.7.2)
+      '@types/wechat-miniprogram':
+        specifier: ^3.4.8
+        version: 3.4.8
+      fflate:
+        specifier: ^0.8.2
+        version: 0.8.2
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.0.1
+      rollup:
+        specifier: ^4.30.0
+        version: 4.30.0
+      tslib:
+        specifier: ^2.8.1
+        version: 2.8.1
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
+
+  packages/platform-utils: {}
 
 packages:
 

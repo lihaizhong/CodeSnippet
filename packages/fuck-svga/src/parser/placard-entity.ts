@@ -1,4 +1,4 @@
-import { MovieEntity } from "svga-protobuf";
+import type { MovieEntity } from "fuck-protobuf";
 import { VideoEntity } from "./video-entity";
 
 export class PlacardEntity extends VideoEntity {
