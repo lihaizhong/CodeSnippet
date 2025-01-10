@@ -35,8 +35,8 @@ export class Parser {
   async load(url: string): Promise<Video> {
     const data = await download(url);
 
-    benchmark.line()
     benchmark.label(url);
+    benchmark.line()
     return Parser.parseVideoEntity(data!);
   }
 }

@@ -6,43 +6,37 @@ export declare class Animator {
      */
     private isRunning;
     /**
-     * 开始时间
+     * 动画开始时间
      */
     private startTime;
     /**
-     * 当前动画已播放完的帧
+     * 本轮动画已消耗的时间比例
      */
     private currentFrication;
     /**
-     * 开始帧
+     * 动画开始帧
      */
     private startValue;
     /**
-     * 结束帧
+     * 动画结束帧
      */
     private endValue;
     /**
-     * 持续时间
+     * 动画持续时间
      */
     private duration;
     /**
-     * 每帧持续时间
-     */
-    private frameDuration;
-    /**
-     * 循环播放开始帧
+     * 循环播放开始帧与动画开始帧之间的时间偏差
      */
     private loopStart;
     /**
-     * 循环总时长
+     * 循环持续时间
      */
-    private loopTotalTime;
-    /**
-     * 循环次数
-     * 可以设置为**Infinity**，默认是**1**
-     */
+    private loopDuration;
     /**
      * 最后停留的目标模式，类似于**animation-fill-mode**
+     * 0: 倒序播放
+     * 1: 正序播放
      */
     private fillRule;
     onStart: () => void;
@@ -64,10 +58,9 @@ export declare class Animator {
      * @param loop
      * @param fillRule
      */
-    setConfig(duration: number, frameDuration: number, loopStart: number, loop: number, fillRule: number): void;
+    setConfig(duration: number, loopStart: number, loop: number, fillRule: number): void;
     start(): void;
     stop(): void;
-    private get animatedValue();
     private doFrame;
     private doDeltaTime;
 }

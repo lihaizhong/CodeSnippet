@@ -251,7 +251,8 @@ export class Player {
 
   private startAnimation(): void {
     const { config, entity } = this;
-    const { playMode, loopStartFrame, startFrame, endFrame, fillMode, loop } = config;
+    const { playMode, loopStartFrame, startFrame, endFrame, fillMode, loop } =
+      config;
     let { frames, fps, sprites } = entity!;
     const spriteCount = sprites.length;
     const lastFrame = frames - 1;
@@ -277,31 +278,16 @@ export class Player {
       frames -= startFrame;
     }
 
+    // 每帧持续的时间
+    const frameDuration = 1000 / fps;
     this.animator!.setConfig(
-      /**
-       * 总帧数 / FPS，获取动画持续的时间
-       * duration = frames * (1 / fps) * 1000
-       */
-      (frames * 1000) / fps,
-      /**
-       * 每帧持续时间
-       */
-      1000 / fps,
-      /**
-       * loopStart = (loopStartFrame - startFrame) * (1 / fps) * 1000
-       */
+      // duration = frames * (1 / fps) * 1000
+      frames * frameDuration,
+      // loopStart = (loopStartFrame - startFrame) * (1 / fps) * 1000
       loopStartFrame > startFrame
-        ? ((loopStartFrame - startFrame) * 1000) / fps
+        ? (loopStartFrame - startFrame) * frameDuration
         : 0,
-      /**
-       * 循环次数
-       * loop
-       */
       loop <= 0 ? Infinity : loop,
-      /**
-       * 顺序播放/倒序播放
-       * fillRule
-       */
       +(fillMode === PLAYER_FILL_MODE.BACKWARDS)
     );
     this.animator!.onUpdate = (value: number, spendValue: number) => {
@@ -311,7 +297,7 @@ export class Player {
       if (this.tail !== spriteCount) {
         // 1.2和3均为阔值，保证渲染尽快完成
         const tmp = hasRemained
-          ? Math.min(Math.ceil(spriteCount * spendValue * 1.2) + 3, spriteCount)
+          ? Math.min(~~(spriteCount * spendValue * 1.2) + 3, spriteCount)
           : spriteCount;
 
         if (tmp > this.tail) {
