@@ -145,6 +145,7 @@ export class Player {
     this.ve = videoEntity;
     benchmark.clearTime("render");
     benchmark.clearTime("draw");
+    benchmark.unlockTime('draw');
 
     if (this.ve === undefined) {
       return;

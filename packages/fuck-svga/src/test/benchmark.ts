@@ -3,25 +3,34 @@ const stopwatch = {
   // a: {} as Record<string, number>,
   l: {} as Record<string, boolean>,
   t: {} as Record<string, number>,
+  increment(label: string) {
+    if (stopwatch.t[label] === undefined) {
+      stopwatch.t[label] = 0;
+    }
+
+    stopwatch.t[label]++;
+  },
+  getCount(label: string): number {
+    return stopwatch.t[label] || 0;
+  },
   time(label: string): void {
-    // stopwatch.a[label] = now();
     console.time(label);
   },
   timeEnd(label: string): void {
-    // const t = stopwatch.a[label];
-
-    // delete stopwatch.a[label];
-    // if (typeof t === "number") {
-    //   console.log(`${label}: `, now() - t);
-    // }
     console.timeEnd(label);
   },
   clearTime(label: string): void {
     delete stopwatch.t[label];
   },
+  isLock(label: string) {
+    return !!stopwatch.l[label];
+  },
+  lock(label: string) {
+    stopwatch.l[label] = true;
+  },
   unlock(label: string): void {
     delete stopwatch.l[label];
-  }
+  },
 };
 
 export default {
@@ -35,27 +44,27 @@ export default {
     beforeCallback?: ((count: number) => void) | null,
     afterCallback?: ((count: number) => void) | null
   ): void {
-    if (stopwatch.t[label] === undefined) {
-      stopwatch.t[label] = 1;
-    } else {
-      stopwatch.t[label]++;
-    }
+    stopwatch.increment(label);
 
-    if (stopwatch.l[label] || (this.count !== 0 && stopwatch.t[label] > this.count)) {
+    const count = stopwatch.getCount(label);
+    if (stopwatch.isLock(label) || (this.count !== 0 && count > this.count)) {
       callback();
     } else {
-      beforeCallback?.(stopwatch.t[label]);
+      beforeCallback?.(count);
       stopwatch.time(label);
       callback();
       stopwatch.timeEnd(label);
-      afterCallback?.(stopwatch.t[label]);
+      afterCallback?.(count);
     }
   },
   clearTime(label: string) {
     stopwatch.clearTime(label);
   },
   lockTime(label: string) {
-    stopwatch.l[label] = true;
+    stopwatch.lock(label);
+  },
+  unlockTime(label: string) {
+    stopwatch.unlock(label);
   },
   line(size: number = 40) {
     console.log("-".repeat(size));

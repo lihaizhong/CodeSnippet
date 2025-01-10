@@ -1,7 +1,7 @@
 import type { PlatformCanvas, PlatformOffscreenCanvas } from "../types";
 import bridge from "./bridge";
 import { platform, SP } from "./platform";
-import { pixelRatio } from "./ratio";
+import { dpr } from "./ratio";
 
 /**
  * 创建离屏Canvas
@@ -69,8 +69,9 @@ export function getCanvas(
         reject("canvas context not found.");
         return;
       }
-      canvas!.width = width * pixelRatio;
-      canvas!.height = height * pixelRatio;
+      canvas!.width = width * dpr;
+      canvas!.height = height * dpr;
+      ctx.scale(dpr, dpr);
       resolve({ canvas, ctx });
     };
 
