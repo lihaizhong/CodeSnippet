@@ -65,7 +65,7 @@ export default class Brush {
     } else {
       ofsResult = getOffscreenCanvas({ width, height });
       this.type = "ofscanvas";
-      this.renderType = platform === SP.H5 ? "draw" : "put";
+      this.renderType = platform === SP.H5 || platform === SP.DOUYIN ? "draw" : "put";
     }
 
     this.ss = ofsResult.canvas;
