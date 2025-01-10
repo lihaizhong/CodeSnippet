@@ -44,6 +44,10 @@ Page({
   },
 
   onLoad() {
-    this.handleSwitchAtRandom();
+    // this.handleSwitchAtRandom();
+    this.setData({
+      current: 40,
+      url: svgaSources[40]
+    })
   },
 });

@@ -9,10 +9,6 @@ export declare class Player {
      */
     currFrame: number;
     /**
-     * 动画最后帧数
-     */
-    lastFrame: number;
-    /**
      * SVGA 数据源
      * Video Entity
      */

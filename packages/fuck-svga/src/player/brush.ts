@@ -22,8 +22,7 @@ export default class Brush {
    * 副屏的 Canvas 元素
    * Secondary Screen
    */
-  private ss: PlatformCanvas | PlatformOffscreenCanvas | null =
-    null;
+  private ss: PlatformCanvas | PlatformOffscreenCanvas | null = null;
   /**
    * 副屏的 Context 对象
    * Secondary Context
@@ -36,6 +35,10 @@ export default class Brush {
    * 副屏的 Canvas 类型
    */
   private type?: "canvas" | "ofscanvas";
+  /**
+   * 渲染方式
+   */
+  private renderType?: "put" | "draw";
 
   public async register(
     selector: string,
@@ -48,16 +51,21 @@ export default class Brush {
     this.ms = canvas;
     this.mc = ctx;
 
-    let ofsResult;
+    // if (platform === SP.DOUYIN) {
+    //   return;
+    // }
 
+    let ofsResult;
     if (typeof ofsSelector === "string" && ofsSelector !== "") {
       ofsResult = await getCanvas(ofsSelector, component);
       ofsResult.canvas.width = width;
       ofsResult.canvas.height = height;
       this.type = "canvas";
+      this.renderType = platform === SP.DOUYIN ? "put" : "draw";
     } else {
       ofsResult = getOffscreenCanvas({ width, height });
       this.type = "ofscanvas";
+      this.renderType = platform === SP.H5 ? "draw" : "put";
     }
 
     this.ss = ofsResult.canvas;
@@ -81,6 +89,10 @@ export default class Brush {
   }
 
   public clearS() {
+    // if (platform === SP.DOUYIN) {
+    //   return;
+    // }
+
     const { width, height } = this.ms!;
 
     if (
@@ -89,9 +101,7 @@ export default class Brush {
       // OffscreenCanvas 在 Firefox 浏览器无法被清理历史内容
       navigator.userAgent.includes("Firefox")
     ) {
-      const ofsResult = getOffscreenCanvas({ width, height });
-      this.ss = ofsResult.canvas;
-      this.sc = ofsResult.ctx;
+      this.sc!.clearRect(0, 0, width, height);
     } else {
       this.ss!.width = width;
       this.ss!.height = height;
@@ -106,6 +116,7 @@ export default class Brush {
     this.ss = null;
     this.sc = null;
     this.type = undefined;
+    this.renderType = undefined;
   }
 
   public draw(
@@ -115,33 +126,21 @@ export default class Brush {
     start: number,
     end: number
   ) {
-    render(
-      this.sc!,
-      bitmapsCache,
-      videoEntity,
-      currentFrame,
-      start,
-      end
-    );
+    render(this.sc!, bitmapsCache, videoEntity, currentFrame, start, end);
   }
 
   public stick() {
     const { width, height } = this.ms!;
 
-    if (platform === SP.H5 || this.type === "canvas") {
-      this.mc!.drawImage(
-        this.ss as CanvasImageSource,
-        0,
-        0
-      );
-    } else if (this.type === "ofscanvas") {
-      const imageData = this.sc!.getImageData(
-        0,
-        0,
-        width,
-        height
-      );
-      this.mc!.putImageData(imageData, 0, 0);
+    switch (this.renderType) {
+      case "draw":
+        this.mc!.drawImage(this.ss as CanvasImageSource, 0, 0, width, height);
+        break;
+      case "put":
+        const imageData = this.sc!.getImageData(0, 0, width, height);
+        this.mc!.putImageData(imageData, 0, 0, 0, 0, width, height);
+        break;
+      default:
     }
   }
 }

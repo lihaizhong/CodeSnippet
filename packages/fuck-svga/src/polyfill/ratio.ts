@@ -8,13 +8,9 @@ let dpr: number = 1;
 
 if (platform === SP.H5) {
   dpr = window.devicePixelRatio;
-}
-
-if ("getWindowInfo" in bridge) {
+} else if ("getWindowInfo" in bridge) {
   dpr = (bridge as any).getWindowInfo().pixelRatio;
-}
-
-if ("getSystemInfoSync" in bridge) {
+} else if ("getSystemInfoSync" in bridge) {
   dpr = (bridge as WechatMiniprogram.Wx).getSystemInfoSync().pixelRatio;
 }
 

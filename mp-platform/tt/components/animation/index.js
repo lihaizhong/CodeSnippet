@@ -60,7 +60,7 @@ Component({
           videoItem,
           {
             container: "#palette",
-            secondary: "#secondary",
+            // secondary: "#secondary",
           },
           this
         );

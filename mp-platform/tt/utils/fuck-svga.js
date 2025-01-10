@@ -1417,22 +1417,27 @@ class Brush {
      * 副屏的 Canvas 类型
      */
     type;
-    cache = new Map();
+    renderType;
     async register(selector, ofsSelector, component) {
         const { canvas, ctx } = await getCanvas(selector, component);
         const { width, height } = canvas;
         this.ms = canvas;
         this.mc = ctx;
+        // if (platform === SP.DOUYIN) {
+        //   return;
+        // }
         let ofsResult;
         if (typeof ofsSelector === "string" && ofsSelector !== "") {
             ofsResult = await getCanvas(ofsSelector, component);
             ofsResult.canvas.width = width;
             ofsResult.canvas.height = height;
             this.type = "canvas";
+            this.renderType = platform === SP.DOUYIN ? "put" : "draw";
         }
         else {
             ofsResult = getOffscreenCanvas({ width, height });
             this.type = "ofscanvas";
+            this.renderType = platform === SP.H5 ? "draw" : "put";
         }
         this.ss = ofsResult.canvas;
         this.sc = ofsResult.ctx;
@@ -1440,7 +1445,6 @@ class Brush {
     setConfig(options) {
         this.ms.width = options.width;
         this.ms.height = options.height;
-        this.cache.clear();
     }
     getM() {
         return this.ms;
@@ -1451,14 +1455,15 @@ class Brush {
         this.ms.height = height;
     }
     clearS() {
+        // if (platform === SP.DOUYIN) {
+        //   return;
+        // }
         const { width, height } = this.ms;
         if (this.type === "ofscanvas" &&
             platform === SP.H5 &&
             // OffscreenCanvas 在 Firefox 浏览器无法被清理历史内容
             navigator.userAgent.includes("Firefox")) {
-            const ofsResult = getOffscreenCanvas({ width, height });
-            this.ss = ofsResult.canvas;
-            this.sc = ofsResult.ctx;
+            this.sc.clearRect(0, 0, width, height);
         }
         else {
             this.ss.width = width;
@@ -1473,35 +1478,21 @@ class Brush {
         this.ss = null;
         this.sc = null;
         this.type = undefined;
+        this.renderType = undefined;
     }
     draw(bitmapsCache, videoEntity, currentFrame, start, end) {
         render(this.sc, bitmapsCache, videoEntity, currentFrame, start, end);
     }
-    save(currentFrame) {
-        if (platform === SP.DOUYIN) {
-            const image = this.ss.toDataURL("2d", 1);
-            loadImage(this.ms, image).then((img) => {
-                console.log('set', currentFrame);
-                this.cache.set(currentFrame, img);
-            });
-        }
-    }
-    stick(currentFrame) {
+    stick() {
         const { width, height } = this.ms;
-        if (platform === SP.H5 || this.type === "canvas") {
-            if (platform === SP.DOUYIN) {
-                console.log('get', currentFrame, this.cache.has(currentFrame));
-                if (this.cache.has(currentFrame)) {
-                    this.mc.drawImage(this.cache.get(currentFrame), 0, 0);
-                }
-            }
-            else {
-                this.mc.drawImage(this.ss, 0, 0);
-            }
-        }
-        else if (this.type === "ofscanvas") {
-            const imageData = this.sc.getImageData(0, 0, width, height);
-            this.mc.putImageData(imageData, 0, 0);
+        switch (this.renderType) {
+            case "draw":
+                this.mc.drawImage(this.ss, 0, 0, width, height);
+                break;
+            case "put":
+                const imageData = this.sc.getImageData(0, 0, width, height);
+                this.mc.putImageData(imageData, 0, 0, 0, 0, width, height);
+                break;
         }
     }
 }
@@ -1514,10 +1505,6 @@ class Player {
      * 动画当前帧数
      */
     currFrame = 0;
-    /**
-     * 动画最后帧数
-     */
-    lastFrame = 0;
     /**
      * SVGA 数据源
      * Video Entity
@@ -1613,7 +1600,6 @@ class Player {
             await this.setConfig(options, component);
         }
         this.currFrame = 0;
-        this.lastFrame = videoEntity.frames - 1;
         this.entity = videoEntity;
         benchmark.clearTime("render");
         benchmark.clearTime("draw");
@@ -1708,12 +1694,17 @@ class Player {
         this.animator = null;
         this.entity = undefined;
     }
+    getValidFrame(value, defaultValue) {
+        return value > 0 ? value : defaultValue;
+    }
     startAnimation() {
-        const { config, lastFrame, entity } = this;
+        const { config, entity } = this;
         const { playMode, loopStartFrame, fillMode, loop } = config;
-        let startFrame = Math.min(Math.abs(config.startFrame), 0);
-        let endFrame = Math.max(config.endFrame, lastFrame);
-        // 如果开始动画的当前帧是最后一帧，重置为第 0 帧
+        let { frames, fps } = entity;
+        const lastFrame = frames - 1;
+        const startFrame = this.getValidFrame(config.startFrame, 0);
+        const endFrame = this.getValidFrame(config.endFrame, lastFrame);
+        // 如果开始动画的当前帧是最后一帧，重置为开始帧
         if (this.currFrame === lastFrame) {
             this.currFrame = startFrame;
         }
@@ -1724,8 +1715,6 @@ class Player {
         else {
             this.animator.setRange(endFrame, startFrame);
         }
-        let { frames, fps, sprites } = entity;
-        const spriteCount = sprites.length;
         // 更新活动帧总数
         if (endFrame !== lastFrame) {
             frames = endFrame - startFrame;
@@ -1763,11 +1752,11 @@ class Player {
             // 是否还有剩余时间
             const hasRemained = this.currFrame === value;
             // 尾帧如果封顶，则无需继续绘制
-            if (this.tail !== spriteCount) {
+            if (this.tail !== frames) {
                 // 1.2和3均为阔值，保证渲染尽快完成
                 const tmp = hasRemained
-                    ? Math.min(Math.ceil(spriteCount * spendValue * 1.2) + 3, spriteCount)
-                    : spriteCount;
+                    ? Math.min(Math.ceil(frames * spendValue * 1.2) + 3, frames)
+                    : frames;
                 if (tmp > this.tail) {
                     this.head = this.tail;
                     this.tail = tmp;
@@ -1775,15 +1764,12 @@ class Player {
                         this.brush.draw(this.cache, this.entity, this.currFrame, this.head, this.tail);
                     });
                 }
-                if (this.tail === spriteCount) {
-                    this.brush.save(this.currFrame);
-                }
             }
             if (hasRemained) {
                 return;
             }
             this.brush.clearM();
-            benchmark.time("render", () => this.brush.stick(this.currFrame), null, (count) => {
+            benchmark.time("render", () => this.brush.stick(), null, (count) => {
                 console.log("render count", count);
                 benchmark.line(20);
                 if (count < benchmark.count) {

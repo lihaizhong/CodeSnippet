@@ -22,10 +22,6 @@ export class Player {
    */
   public currFrame: number = 0;
   /**
-   * 动画最后帧数
-   */
-  public lastFrame: number = 0;
-  /**
    * SVGA 数据源
    * Video Entity
    */
@@ -77,8 +73,16 @@ export class Player {
 
     const { startFrame, endFrame } = config;
     if (startFrame !== undefined && endFrame !== undefined) {
+      // if (startFrame < 0) {
+      //   throw new Error("StartFrame should greater then zero");
+      // }
+
+      // if (endFrame < 0) {
+      //   throw new Error("EndFrame should greater then zero");
+      // }
+
       if (startFrame > endFrame) {
-        throw new Error("[SvgaError] StartFrame should > EndFrame");
+        throw new Error("StartFrame should greater than EndFrame");
       }
     }
 
@@ -137,7 +141,6 @@ export class Player {
     }
 
     this.currFrame = 0;
-    this.lastFrame = videoEntity.frames - 1;
     this.entity = videoEntity;
     benchmark.clearTime("render");
     benchmark.clearTime("draw");
@@ -247,29 +250,30 @@ export class Player {
   }
 
   private startAnimation(): void {
-    const { config, lastFrame, entity } = this;
-    const { playMode, loopStartFrame, fillMode, loop } = config;
-    let startFrame = Math.min(Math.abs(config.startFrame), 0);
-    let endFrame = Math.max(config.endFrame, lastFrame);
+    const { config, entity } = this;
+    const { playMode, loopStartFrame, startFrame, endFrame, fillMode, loop } = config;
+    let { frames, fps, sprites } = entity!;
+    const spriteCount = sprites.length;
+    const lastFrame = frames - 1;
+    const start = startFrame > 0 ? startFrame : 0;
+    const end = endFrame > 0 ? endFrame : lastFrame;
 
-    // 如果开始动画的当前帧是最后一帧，重置为第 0 帧
+    // 如果开始动画的当前帧是最后一帧，重置为开始帧
     if (this.currFrame === lastFrame) {
-      this.currFrame = startFrame;
+      this.currFrame = start;
     }
 
     // 顺序播放/倒叙播放
     if (playMode === PLAYER_PLAY_MODE.FORWARDS) {
-      this.animator!.setRange(startFrame, endFrame);
+      this.animator!.setRange(start, end);
     } else {
-      this.animator!.setRange(endFrame, startFrame);
+      this.animator!.setRange(end, start);
     }
 
-    let { frames, fps, sprites } = entity!;
-    const spriteCount = sprites.length;
     // 更新活动帧总数
-    if (endFrame !== lastFrame) {
+    if (endFrame > 0 && endFrame > startFrame) {
       frames = endFrame - startFrame;
-    } else if (startFrame !== 0) {
+    } else if (endFrame <= 0 && startFrame > 0) {
       frames -= startFrame;
     }
 
@@ -284,10 +288,10 @@ export class Player {
        */
       1000 / fps,
       /**
-       * loopStart = (loopStartFrame - startFrame) * (1 / fps) * 100
+       * loopStart = (loopStartFrame - startFrame) * (1 / fps) * 1000
        */
       loopStartFrame > startFrame
-        ? ((loopStartFrame - startFrame) * 100) / fps
+        ? ((loopStartFrame - startFrame) * 1000) / fps
         : 0,
       /**
        * 循环次数

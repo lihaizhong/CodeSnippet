@@ -1,6 +1,6 @@
 import { unzlibSync } from "fflate";
 import { MovieEntityReader } from "../../utils/svga-protobuf";
-import { getOneAtRandom } from "../../utils/constants";
+import { getOneAtRandom, svgaSources } from "../../utils/constants";
 
 Page({
   data: {
@@ -12,7 +12,8 @@ Page({
   },
 
   onLoad() {
-    const { url } = getOneAtRandom();
+    // const { url } = getOneAtRandom();
+    const url = svgaSources[40];
 
     // 测试svga解析
     wx.request({

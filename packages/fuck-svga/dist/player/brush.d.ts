@@ -24,6 +24,10 @@ export default class Brush {
      * 副屏的 Canvas 类型
      */
     private type?;
+    /**
+     * 渲染方式
+     */
+    private renderType?;
     register(selector: string, ofsSelector?: string, component?: WechatMiniprogram.Component.TrivialInstance | null): Promise<void>;
     setConfig(options: {
         width: number;
