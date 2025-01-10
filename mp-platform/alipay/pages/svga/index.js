@@ -1,11 +1,15 @@
-import { getOneAtRandom } from "./actions";
-import { svgaSources } from "../../utils/constants";
+import { svgaSources, getOneAtRandom } from "../../utils/constants";
 
 Page({
   data: {
     url: "",
     current: 0,
   },
+
+  onLoad() {
+    this.handleSwitchAtRandom();
+  },
+
   handleSwitchAtRandom() {
     const { ranIndex, url } = getOneAtRandom();
 
@@ -14,7 +18,6 @@ Page({
       current: ranIndex,
     });
   },
-
   handleSwitchPrev() {
     const { current } = this.data;
     let prev = current - 1;
@@ -28,7 +31,6 @@ Page({
       current: prev,
     });
   },
-
   handleSwitchNext() {
     const { current } = this.data;
     let next = current + 1;
@@ -42,8 +44,4 @@ Page({
       current: next,
     });
   },
-
-  onLoad() {
-    this.handleSwitchAtRandom()
-  }
 });

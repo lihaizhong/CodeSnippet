@@ -1,6 +1,6 @@
 {
   "navigationBarTitleText": "SVGA动画",
   "usingComponents": {
-    "svga-player": "/components/svga-player/index"
+    "fuck-animation": "/components/animation/index"
   }
 }

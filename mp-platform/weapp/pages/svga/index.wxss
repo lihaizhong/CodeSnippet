@@ -5,9 +5,8 @@ page {
   background: #111;
 }
 
-.scroll-area {
-  flex: 1;
-  overflow-y: hidden;
+.animation {
+  margin: 0 auto;
 }
 
 .footer {

@@ -61,7 +61,7 @@ Component({
           secondary: "#secondary"
         }, this);
         this.setData({ message: "资源装载成功" })
-        wx.hideLoading();
+        // wx.hideLoading();
         this.setData({ message: "准备开始播放" })
         player.start();
         this.setData({ message: "" })

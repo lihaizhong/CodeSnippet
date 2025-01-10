@@ -4,12 +4,12 @@ import {
   PLAYER_PLAY_MODE,
   PlayerConfigOptions,
   Video,
-  BitmapsCache,
   PlayerConfig,
+  Bitmap,
 } from "../types";
 import { Animator } from "./animator";
 import benchmark from "../test/benchmark";
-import CanvasManager from "./canvas-manager";
+import Brush from "./brush";
 
 type EventCallback = undefined | (() => void);
 
@@ -22,14 +22,14 @@ export class Player {
    */
   public currFrame: number = 0;
   /**
-   * 动画总帧数
+   * 动画最后帧数
    */
-  public totalFrames: number = 0;
+  public lastFrame: number = 0;
   /**
    * SVGA 数据源
    * Video Entity
    */
-  public ve: Video | undefined = undefined;
+  public entity: Video | undefined = undefined;
 
   /**
    * 当前配置项
@@ -44,16 +44,12 @@ export class Player {
     // isUseIntersectionObserver: false,
   });
 
-  private manager: CanvasManager = new CanvasManager();
+  private brush = new Brush();
   private animator: Animator | null = null;
 
   // private isBeIntersection = true;
   // private intersectionObserver: IntersectionObserver | null = null
-  private cache: BitmapsCache = {};
-  /**
-   * 配置是否准备完成
-   */
-  private isReady: boolean = false;
+  private cache: Map<string, Bitmap> = new Map();
   /**
    * 片段绘制开始位置
    */
@@ -62,8 +58,6 @@ export class Player {
    * 片段绘制结束位置
    */
   private tail: number = 0;
-
-  private isDrawnFragment: boolean = false;
 
   /**
    * 设置配置项
@@ -81,29 +75,31 @@ export class Player {
       config = options;
     }
 
-    if (config.startFrame !== undefined && config.endFrame !== undefined) {
-      if (config.startFrame > config.endFrame) {
+    const { startFrame, endFrame } = config;
+    if (startFrame !== undefined && endFrame !== undefined) {
+      if (startFrame > endFrame) {
         throw new Error("[SvgaError] StartFrame should > EndFrame");
       }
     }
 
-    await this.manager.register(config.container!, config.secondary, component);
-    this.config.loop = config.loop ?? 0;
-    this.config.fillMode = config.fillMode ?? PLAYER_FILL_MODE.FORWARDS;
-    this.config.playMode = config.playMode ?? PLAYER_PLAY_MODE.FORWARDS;
-    this.config.startFrame = config.startFrame ?? 0;
-    this.config.endFrame = config.endFrame ?? 0;
-    this.config.loopStartFrame = config.loopStartFrame ?? 0;
+    Object.assign(this.config, {
+      loop: config.loop ?? 0,
+      fillMode: config.fillMode ?? PLAYER_FILL_MODE.FORWARDS,
+      playMode: config.playMode ?? PLAYER_PLAY_MODE.FORWARDS,
+      startFrame: startFrame ?? 0,
+      endFrame: endFrame ?? 0,
+      loopStartFrame: config.loopStartFrame ?? 0,
+    });
+    await this.brush.register(config.container, config.secondary, component);
     // this.config.isUseIntersectionObserver =
     //   config.isUseIntersectionObserver ?? false;
     // 监听容器是否处于浏览器视窗内
     // this.setIntersectionObserver()
-    const canvas = this.manager.getMainScreen();
+    const canvas = this.brush.getM();
     this.animator = new Animator(canvas);
     this.animator.onEnd = () => {
       this.onEnd?.();
     };
-    this.isReady = true;
   }
 
   // private setIntersectionObserver (): void {
@@ -141,30 +137,30 @@ export class Player {
     }
 
     this.currFrame = 0;
-    this.totalFrames = videoEntity.frames - 1;
-    this.ve = videoEntity;
+    this.lastFrame = videoEntity.frames - 1;
+    this.entity = videoEntity;
     benchmark.clearTime("render");
     benchmark.clearTime("draw");
-    benchmark.unlockTime('draw');
+    benchmark.unlockTime("draw");
 
-    if (this.ve === undefined) {
+    if (videoEntity === undefined) {
       return;
     }
 
-    const { images, size } = this.ve;
-    const canvas = this.manager.getMainScreen();
+    const { images, size } = videoEntity;
+    const canvas = this.brush.getM();
 
-    this.manager.setConfig(size);
-    this.manager.clearSecondaryScreen();
+    this.brush.setConfig(size);
+    this.brush.clearS();
+    this.cache.clear();
     if (Object.keys(images).length === 0) {
       return;
     }
 
     let imageArr: Promise<void>[] = [];
     for (let key in images) {
-      const image = images[key];
-      const p = loadImage(canvas, image).then((img) => {
-        this.cache[key] = img;
+      const p = loadImage(canvas, images[key]).then((img) => {
+        this.cache.set(key, img);
       });
 
       imageArr.push(p);
@@ -202,10 +198,7 @@ export class Player {
    * 开始播放
    */
   public start(): void {
-    if (!this.isReady) {
-      return;
-    }
-    this.manager.clearMainScreen();
+    this.brush.clearM();
     this.startAnimation();
     this.onStart?.();
   }
@@ -214,9 +207,6 @@ export class Player {
    * 重新播放
    */
   public resume(): void {
-    if (!this.isReady) {
-      return;
-    }
     this.startAnimation();
     this.onResume?.();
   }
@@ -225,9 +215,6 @@ export class Player {
    * 暂停播放
    */
   public pause(): void {
-    if (!this.isReady) {
-      return;
-    }
     this.animator!.stop();
     this.onPause?.();
   }
@@ -236,12 +223,9 @@ export class Player {
    * 停止播放
    */
   public stop(): void {
-    if (!this.isReady) {
-      return;
-    }
     this.animator!.stop();
     this.currFrame = 0;
-    this.manager.clearMainScreen();
+    this.brush.clearM();
     this.onStop?.();
   }
 
@@ -249,31 +233,27 @@ export class Player {
    * 清理容器画布
    */
   public clear(): void {
-    if (this.isReady) {
-      this.manager.clearMainScreen();
-    }
+    this.brush.clearM();
   }
 
   /**
    * 销毁实例
    */
   public destroy(): void {
-    if (this.isReady) {
-      this.animator!.stop();
-      this.manager.destroy();
-      this.animator = null;
-      this.ve = undefined;
-    }
+    this.animator!.stop();
+    this.brush.destroy();
+    this.animator = null;
+    this.entity = undefined;
   }
 
   private startAnimation(): void {
-    const { config, totalFrames, ve } = this;
+    const { config, lastFrame, entity } = this;
     const { playMode, loopStartFrame, fillMode, loop } = config;
-    let startFrame = config.startFrame > 0 ? config.startFrame : 0;
-    let endFrame = config.endFrame > 0 ? config.endFrame : totalFrames;
+    let startFrame = Math.min(Math.abs(config.startFrame), 0);
+    let endFrame = Math.max(config.endFrame, lastFrame);
 
     // 如果开始动画的当前帧是最后一帧，重置为第 0 帧
-    if (this.currFrame === totalFrames) {
+    if (this.currFrame === lastFrame) {
       this.currFrame = startFrame;
     }
 
@@ -284,10 +264,10 @@ export class Player {
       this.animator!.setRange(endFrame, startFrame);
     }
 
-    let { frames, fps, sprites } = ve!;
+    let { frames, fps, sprites } = entity!;
     const spriteCount = sprites.length;
     // 更新活动帧总数
-    if (endFrame !== totalFrames) {
+    if (endFrame !== lastFrame) {
       frames = endFrame - startFrame;
     } else if (startFrame !== 0) {
       frames -= startFrame;
@@ -321,38 +301,38 @@ export class Player {
       +(fillMode === PLAYER_FILL_MODE.BACKWARDS)
     );
     this.animator!.onUpdate = (value: number, spendValue: number) => {
-      if (!this.isDrawnFragment) {
-        // **1.2**和**3**均为阔值，保证渲染尽快完成
-        const tmp =
-          this.currFrame === value
-            ? Math.ceil(spriteCount * spendValue * 1.2) + 3
-            : spriteCount;
+      // 是否还有剩余时间
+      const hasRemained = this.currFrame === value;
+      // 尾帧如果封顶，则无需继续绘制
+      if (this.tail !== spriteCount) {
+        // 1.2和3均为阔值，保证渲染尽快完成
+        const tmp = hasRemained
+          ? Math.min(Math.ceil(spriteCount * spendValue * 1.2) + 3, spriteCount)
+          : spriteCount;
 
-        // 如果tmp小于结束片段，说明已经进入下一帧渲染，需要立即结束当前帧渲染
         if (tmp > this.tail) {
           this.head = this.tail;
-          this.tail = Math.min(tmp, spriteCount);
+          this.tail = tmp;
           benchmark.time(`draw`, () => {
-            this.manager.draw(
+            this.brush.draw(
               this.cache,
-              this.ve!,
+              this.entity!,
               this.currFrame,
               this.head,
               this.tail
             );
           });
-          this.isDrawnFragment = this.tail === spriteCount;
         }
       }
 
-      if (this.currFrame === value) {
+      if (hasRemained) {
         return;
       }
 
-      this.manager.clearMainScreen();
+      this.brush.clearM();
       benchmark.time(
         "render",
-        () => this.manager.stick(),
+        () => this.brush.stick(),
         null,
         (count) => {
           console.log("render count", count);
@@ -360,15 +340,14 @@ export class Player {
           if (count < benchmark.count) {
             benchmark.clearTime("draw");
           } else {
-            benchmark.lockTime('draw');
+            benchmark.lockTime("draw");
           }
         }
       );
-      this.manager.clearSecondaryScreen();
+      this.brush.clearS();
       this.onProcess?.();
       this.currFrame = value;
       this.tail = 0;
-      this.isDrawnFragment = false;
     };
 
     this.animator!.start();

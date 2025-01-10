@@ -144,9 +144,6 @@ export interface VideoSprite {
     frames: VideoFrame[];
 }
 export type Bitmap = PlatformImage | PlatformOffscreenCanvas | ImageBitmap;
-export interface BitmapsCache {
-    [key: string]: Bitmap;
-}
 export type ReplaceElement = PlatformImage | ImageBitmap | PlatformCanvas | PlatformOffscreenCanvas;
 export interface ReplaceElements {
     [key: string]: ReplaceElement;
@@ -203,12 +200,6 @@ export declare const enum PLAYER_PLAY_MODE {
 }
 export interface PlayerConfig {
     /**
-     * 播放动画的 Canvas 元素
-     */
-    /**
-     * 播放动画的 Context 对象
-     */
-    /**
      * 循环次数，默认值 0（无限循环）
      */
     loop: number;
@@ -233,7 +224,13 @@ export interface PlayerConfig {
      */
     loopStartFrame: number;
 }
-export type PlayerConfigOptions = Partial<PlayerConfig & {
+export type PlayerConfigOptions = Partial<PlayerConfig> & {
+    /**
+     * 主屏，播放动画的 Canvas 元素
+     */
     container: string;
+    /**
+     * 副屏，播放动画的 Canvas 元素
+     */
     secondary?: string;
-}>;
+};

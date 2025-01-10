@@ -1,0 +1,7 @@
+<view class="page-container">
+  <swiper class="swiper-container" adjust-height="highest" autoplay>
+    <swiper-item a:for="{{ images }}" wx:key="item" class="swiper-item">
+      <image style="width: 100vw;" src="{{ item }}"></image>
+    </swiper-item>
+  </swiper>
+</view>

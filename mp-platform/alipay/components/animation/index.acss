@@ -1,11 +1,12 @@
-.svga-palette-container {
-  padding: 100rpx auto 50rpx;
+.svga-palette {
+  width: 80vw;
+  height: 80vh;
 }
 
-.svga-palette {
-  width: 100vw;
-  height: 160vw;
-  margin: 100rpx auto 50rpx;
+.svga-secondary {
+  position: fixed;
+  left: -200vw;
+  top: -200vh;
 }
 
 .svga-error-popup {

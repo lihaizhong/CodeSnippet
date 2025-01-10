@@ -9,25 +9,21 @@ export declare class Player {
      */
     currFrame: number;
     /**
-     * 动画总帧数
+     * 动画最后帧数
      */
-    totalFrames: number;
+    lastFrame: number;
     /**
      * SVGA 数据源
      * Video Entity
      */
-    ve: Video | undefined;
+    entity: Video | undefined;
     /**
      * 当前配置项
      */
     readonly config: PlayerConfig;
-    private manager;
+    private brush;
     private animator;
     private cache;
-    /**
-     * 配置是否准备完成
-     */
-    private isReady;
     /**
      * 片段绘制开始位置
      */
@@ -36,7 +32,6 @@ export declare class Player {
      * 片段绘制结束位置
      */
     private tail;
-    private isDrawnFragment;
     /**
      * 设置配置项
      * @param options 可配置项

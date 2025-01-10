@@ -1,5 +1,5 @@
-import { BitmapsCache, PlatformCanvas, Video } from "../types";
-export default class CanvasManager {
+import { Bitmap, PlatformCanvas, Video } from "../types";
+export default class Brush {
     /**
      * 主屏的 Canvas 元素
      * Main Screen
@@ -29,10 +29,10 @@ export default class CanvasManager {
         width: number;
         height: number;
     }): void;
-    getMainScreen(): PlatformCanvas;
-    clearMainScreen(): void;
-    clearSecondaryScreen(): void;
+    getM(): PlatformCanvas;
+    clearM(): void;
+    clearS(): void;
     destroy(): void;
-    draw(bitmapsCache: BitmapsCache, videoEntity: Video, currentFrame: number, start?: number, end?: number): void;
+    draw(bitmapsCache: Map<string, Bitmap>, videoEntity: Video, currentFrame: number, start: number, end: number): void;
     stick(): void;
 }

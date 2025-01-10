@@ -1,13 +1,13 @@
 import { getCanvas, getOffscreenCanvas, platform, SP } from "../polyfill";
 import {
-  BitmapsCache,
+  Bitmap,
   PlatformCanvas,
   PlatformOffscreenCanvas,
   Video,
 } from "../types";
 import render from "./render";
 
-export default class CanvasManager {
+export default class Brush {
   /**
    * 主屏的 Canvas 元素
    * Main Screen
@@ -69,18 +69,18 @@ export default class CanvasManager {
     this.ms!.height = options.height;
   }
 
-  public getMainScreen(): PlatformCanvas {
+  public getM(): PlatformCanvas {
     return this.ms!;
   }
 
-  public clearMainScreen() {
+  public clearM() {
     const { width, height } = this.ms!;
 
     this.ms!.width = width;
     this.ms!.height = height;
   }
 
-  public clearSecondaryScreen() {
+  public clearS() {
     const { width, height } = this.ms!;
 
     if (
@@ -99,8 +99,8 @@ export default class CanvasManager {
   }
 
   public destroy() {
-    this.clearMainScreen();
-    this.clearSecondaryScreen();
+    this.clearM();
+    this.clearS();
     this.ms = null;
     this.mc = null;
     this.ss = null;
@@ -109,11 +109,11 @@ export default class CanvasManager {
   }
 
   public draw(
-    bitmapsCache: BitmapsCache,
+    bitmapsCache: Map<string, Bitmap>,
     videoEntity: Video,
     currentFrame: number,
-    start?: number,
-    end?: number
+    start: number,
+    end: number
   ) {
     render(
       this.sc!,

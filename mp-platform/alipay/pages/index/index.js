@@ -1,65 +1,28 @@
 Page({
   data: {
-    focus: false,
-    inputValue: '',
+    btnList: [
+      {
+        text: '跳转SVGA动画',
+        path: '/pages/svga/index'
+      },
+      {
+        text: '跳转表单',
+        path: '/pages/webview/index'
+      },
+      {
+        text: '跳转SVGA分析',
+        path: '/pages/svga-analyze/index'
+      }
+    ]
   },
 
-  bindButtonTap() {
-    // blur 事件和这个冲突
-    setTimeout(() => {
-      this.onFocus();
-    }, 100);
-  },
-  onFocus() {
-    this.setData({
-      focus: true,
-    });
-  },
-  onBlur() {
-    this.setData({
-      focus: false,
-    });
-  },
+  handleNavigateTo(e) {
+    const { url } = e.currentTarget.dataset
 
-  bindKeyInput(e) {
-    this.setData({
-      inputValue: e.detail.value,
-    });
-  },
-
-  bindHideKeyboard(e) {
-    if (e.detail.value === '123') {
-      // 收起键盘
-      my.hideKeyboard();
+    if (url) {
+      my.navigateTo({ url })
+    } else {
+      console.error('未获取到跳转路径', e)
     }
-  },
-
-  handleSearch(e) {
-    console.log('search', e.detail.value);
-    this.setData({
-      search: e.detail.value,
-    });
-  },
-  doneSearch() {
-    console.log('doneSearch', this.data.search);
-    my.hideKeyboard();
-  },
-  clearSearch() {
-    console.log('clear search', this.data.search);
-    this.setData({
-      search: '',
-    });
-  },
-  handleNickNameFocus(e) {
-    console.log('nickname focus', e)
-  },
-  handleNickNameInput(e) {
-    console.log('nickname input', e)
-  },
-  handleNickNameBlur(e) {
-    console.log('nickname blur', e)
-  },
-  handleNickNameConfirm(e) {
-    console.log('nickname confirm', e)
   }
-});
+})

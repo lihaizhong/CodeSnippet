@@ -1,7 +1,9 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/svga/index"
+    "pages/svga/index",
+    "pages/svga-analyze/index",
+    "pages/form/index"
   ],
   "window": {
     "defaultTitle": "My App"

@@ -183,10 +183,6 @@ export interface VideoSprite {
 
 export type Bitmap = PlatformImage | PlatformOffscreenCanvas | ImageBitmap;
 
-export interface BitmapsCache {
-  [key: string]: Bitmap;
-}
-
 export type ReplaceElement =
   | PlatformImage
   | ImageBitmap
@@ -255,14 +251,6 @@ export const enum PLAYER_PLAY_MODE {
 
 export interface PlayerConfig {
   /**
-   * 播放动画的 Canvas 元素
-   */
-  // container: PlatformCanvas | null;
-  /**
-   * 播放动画的 Context 对象
-   */
-  // context: CanvasRenderingContext2D | null;
-  /**
    * 循环次数，默认值 0（无限循环）
    */
   loop: number;
@@ -293,11 +281,13 @@ export interface PlayerConfig {
   // isUseIntersectionObserver: boolean;
 }
 
-export type PlayerConfigOptions = Partial<
-  PlayerConfig & {
-    // 主屏
-    container: string;
-    // 副屏
-    secondary?: string;
-  }
->;
+export type PlayerConfigOptions = Partial<PlayerConfig> & {
+  /**
+   * 主屏，播放动画的 Canvas 元素
+   */
+  container: string;
+  /**
+   * 副屏，播放动画的 Canvas 元素
+   */
+  secondary?: string;
+};
