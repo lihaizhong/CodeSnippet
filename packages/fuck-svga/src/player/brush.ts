@@ -33,22 +33,22 @@ export default class Brush {
    * 主屏的 Canvas 元素
    * Main Screen
    */
-  private ms: PlatformCanvas | null = null;
+  private X: PlatformCanvas | null = null;
   /**
    * 主屏的 Context 对象
    * Main Context
    */
-  private mc: CanvasRenderingContext2D | null = null;
+  private XC: CanvasRenderingContext2D | null = null;
   /**
    * 副屏的 Canvas 元素
    * Secondary Screen
    */
-  private ss: PlatformCanvas | PlatformOffscreenCanvas | null = null;
+  private Y: PlatformCanvas | PlatformOffscreenCanvas | null = null;
   /**
    * 副屏的 Context 对象
    * Secondary Context
    */
-  private sc:
+  private YC:
     | CanvasRenderingContext2D
     | OffscreenCanvasRenderingContext2D
     | null = null;
@@ -123,8 +123,8 @@ export default class Brush {
     const { canvas, ctx } = await getCanvas(selector, component);
     const { width, height } = canvas;
     // 添加主屏
-    this.ms = canvas;
-    this.mc = ctx;
+    this.X = canvas;
+    this.XC = ctx;
     this.W = width;
     this.H = height;
     // #endregion set main screen implement
@@ -141,8 +141,8 @@ export default class Brush {
       ofsResult = getOffscreenCanvas({ width, height });
       this.setMode("O");
     }
-    this.ss = ofsResult.canvas;
-    this.sc = ofsResult.ctx;
+    this.Y = ofsResult.canvas;
+    this.YC = ofsResult.ctx;
     // #endregion set secondary screen implement
 
     // #region clear main screen implement
@@ -151,13 +151,13 @@ export default class Brush {
     if (this.mode.clear === "CL") {
       this.clearFront = () => {
         const { W, H } = this;
-        this.mc!.clearRect(0, 0, W, H);
+        this.XC!.clearRect(0, 0, W, H);
       };
     } else {
       this.clearFront = () => {
         const { W, H } = this;
-        this.ms!.width = W;
-        this.ms!.height = H;
+        this.X!.width = W;
+        this.X!.height = H;
       };
     }
     // #endregion clear main screen implement
@@ -171,22 +171,22 @@ export default class Brush {
         this.clearBack = () => {
           const { W, H } = this;
           const { canvas, ctx } = getOffscreenCanvas({ width: W, height: H });
-          this.ss = canvas;
-          this.sc = ctx;
+          this.Y = canvas;
+          this.YC = ctx;
         };
         break;
       case "CL":
         this.clearBack = () => {
           const { W, H } = this;
           // FIXME:【支付宝小程序】无法通过改变尺寸来清理画布，无论是Canvas还是OffscreenCanvas
-          this.sc!.clearRect(0, 0, W, H);
+          this.YC!.clearRect(0, 0, W, H);
         };
         break;
       default:
         this.clearBack = () => {
-          const { W, H, ss } = this;
-          ss!.width = W;
-          ss!.height = H;
+          const { W, H, Y } = this;
+          Y!.width = W;
+          Y!.height = H;
         };
     }
     // #endregion clear secondary screen implement
@@ -198,15 +198,15 @@ export default class Brush {
         this.stick = () => {
           // FIXME:【微信小程序】 drawImage 无法绘制 OffscreenCanvas；【抖音小程序】 drawImage 无法绘制 Canvas
           const { W, H } = this;
-          this.mc!.drawImage(this.ss as CanvasImageSource, 0, 0, W, H);
+          this.XC!.drawImage(this.Y as CanvasImageSource, 0, 0, W, H);
         };
         break;
       case "PU":
         this.stick = () => {
           const { W, H } = this;
           // FIXME:【所有小程序】 imageData 获取到的数据都是 0，可以当场使用，但不要妄图缓存它
-          const imageData = this.sc!.getImageData(0, 0, W, H);
-          this.mc!.putImageData(imageData, 0, 0, 0, 0, W, H);
+          const imageData = this.YC!.getImageData(0, 0, W, H);
+          this.XC!.putImageData(imageData, 0, 0, 0, 0, W, H);
         };
         break;
       default:
@@ -220,10 +220,10 @@ export default class Brush {
    * @param height 高度
    */
   public setRect(width: number, height: number): void {
-    const { ms, ss } = this;
+    const { X, Y } = this;
 
-    ms!.width = ss!.width = this.W = width;
-    ms!.height = ss!.height = this.H = height;
+    X!.width = Y!.width = this.W = width;
+    X!.height = Y!.height = this.H = height;
   }
 
   /**
@@ -259,7 +259,7 @@ export default class Brush {
       return new Image();
     }
 
-    return (this.ms as WechatMiniprogram.Canvas).createImage();
+    return (this.X as WechatMiniprogram.Canvas).createImage();
   }
 
   /**
@@ -267,7 +267,7 @@ export default class Brush {
    * @param cb 
    */
   public flush(cb: () => void): void {
-    (app === SP.H5 ? br : this.ms).requestAnimationFrame(cb);
+    (app === SP.H5 ? br : this.X).requestAnimationFrame(cb);
   }
 
   public clearFront: () => void = noop;
@@ -287,7 +287,7 @@ export default class Brush {
     start: number,
     end: number
   ) {
-    render(this.sc!, this.materials, videoEntity, currentFrame, start, end);
+    render(this.YC!, this.materials, videoEntity, currentFrame, start, end);
   }
 
   public stick: () => void = noop;
@@ -299,6 +299,6 @@ export default class Brush {
     this.clearFront();
     this.clearBack();
     this.materials.clear();
-    this.ms = this.mc = this.ss = this.sc = null;
+    this.X = this.XC = this.Y = this.YC = null;
   }
 }

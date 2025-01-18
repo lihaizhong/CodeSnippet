@@ -4,22 +4,22 @@ export default class Brush {
      * 主屏的 Canvas 元素
      * Main Screen
      */
-    private ms;
+    private X;
     /**
      * 主屏的 Context 对象
      * Main Context
      */
-    private mc;
+    private XC;
     /**
      * 副屏的 Canvas 元素
      * Secondary Screen
      */
-    private ss;
+    private Y;
     /**
      * 副屏的 Context 对象
      * Secondary Context
      */
-    private sc;
+    private YC;
     /**
      * canvas宽度
      */
