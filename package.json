@@ -27,6 +27,7 @@
   "author": "lihzsky",
   "license": "MIT",
   "devDependencies": {
+    "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.11",
     "@types/benchmark": "^2.1.5",
     "benchmark": "^2.1.4",
