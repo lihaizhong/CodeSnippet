@@ -2,7 +2,6 @@ import type { PlatformImage } from "../types";
 import { br } from "./bridge";
 import { genFilePath, removeTmpFile, writeTmpFile } from "./fs";
 import { app, SP } from "./app";
-import Brush from "player/brush";
 
 /**
  * 将ArrayBuffer转为base64
@@ -57,11 +56,13 @@ async function genImageSource(
     return data;
   }
 
+  // FIXME: 支付宝小程序IDE保存临时文件会失败
   if (app === SP.H5 || (app === SP.ALIPAY && br.isIDE)) {
     return toBase64(data);
   }
 
   try {
+    // FIXME: IOS设备Uint8Array转base64时间较长，使用图片缓存形式速度会更快
     return await writeTmpFile(
       createArrayBuffer(data),
       genFilePath(filename, prefix)
@@ -85,6 +86,7 @@ export function loadImage(
   prefix?: string
 ): Promise<PlatformImage | ImageBitmap> {
   if (app === SP.H5) {
+    // 由于ImageBitmap在图片渲染上有优势，故优先使用
     if (data instanceof Uint8Array && "createImageBitmap" in window) {
       return toBitmap(data);
     }

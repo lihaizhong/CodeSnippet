@@ -55,20 +55,17 @@ export function getCanvas(
   component?: WechatMiniprogram.Component.TrivialInstance | null
 ): Promise<IGetCanvasResult> {
   return new Promise((resolve, reject) => {
+    // 获取并重置Canvas
     const initCanvas = (
       canvas?: PlatformCanvas,
       width: number = 0,
       height: number = 0
     ) => {
       if (!canvas) {
-        reject("canvas not found.");
+        reject(new Error("canvas not found."));
         return;
       }
       const ctx = canvas!.getContext("2d");
-      if (!ctx) {
-        reject("canvas context not found.");
-        return;
-      }
       canvas!.width = width * dpr;
       canvas!.height = height * dpr;
       ctx.scale(dpr, dpr);
@@ -78,6 +75,7 @@ export function getCanvas(
     if (app === SP.H5) {
       const canvas = document.querySelector(selector) as HTMLCanvasElement;
       const { width, height } = canvas.style;
+
       initCanvas(canvas, parseFloat(width), parseFloat(height));
     } else {
       let query = (br as WechatMiniprogram.Wx).createSelectorQuery();
@@ -89,12 +87,9 @@ export function getCanvas(
       query
         .select(selector)
         .fields({ node: true, size: true }, (res) => {
-          if (res?.node) {
-            const { node, width, height } = res;
-            initCanvas(node, width, height);
-          } else {
-            reject(new Error("canvas not found!"));
-          }
+          const { node, width, height } = res || {};
+
+          initCanvas(node, width, height);
         })
         .exec();
     }
