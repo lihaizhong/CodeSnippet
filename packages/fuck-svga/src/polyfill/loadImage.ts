@@ -2,45 +2,7 @@ import type { PlatformImage } from "../types";
 import { br } from "./bridge";
 import { genFilePath, removeTmpFile, writeTmpFile } from "./fs";
 import { app, SP } from "./app";
-
-/**
- * 将ArrayBuffer转为base64
- * @param data 二进制数据
- * @returns
- */
-function toBase64(data: Uint8Array): string {
-  const ab = createArrayBuffer(data);
-  let b: string;
-
-  if (app === SP.H5) {
-    b = btoa(String.fromCharCode(...new Uint8Array(ab)));
-  } else {
-    b = br.arrayBufferToBase64(ab);
-  }
-
-  return `data:image/png;base64,${b}`;
-}
-
-/**
- * 将Uint8Array转ArrayBuffer
- * @param data 二进制数据
- * @returns
- */
-function toBitmap(data: Uint8Array): Promise<ImageBitmap> {
-  return createImageBitmap(new Blob([createArrayBuffer(data)]));
-}
-
-/**
- * Uint8Array转换成ArrayBuffer
- * @param data
- * @returns
- */
-function createArrayBuffer(data: Uint8Array): ArrayBuffer {
-  return data.buffer.slice(
-    data.byteOffset,
-    data.byteOffset + data.byteLength
-  ) as ArrayBuffer;
-}
+import { toBase64, toBitmap, toBuffer } from "./decode";
 
 /**
  * 创建图片src元信息
@@ -63,10 +25,7 @@ async function genImageSource(
 
   try {
     // FIXME: IOS设备Uint8Array转base64时间较长，使用图片缓存形式速度会更快
-    return await writeTmpFile(
-      createArrayBuffer(data),
-      genFilePath(filename, prefix)
-    );
+    return await writeTmpFile(toBuffer(data), genFilePath(filename, prefix));
   } catch (ex) {
     console.error(ex);
     return toBase64(data);

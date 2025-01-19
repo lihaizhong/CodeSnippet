@@ -14,3 +14,21 @@ export declare function miniBtoa(string: string): string;
  * @returns
  */
 export declare function miniAtob(base64: string): string;
+/**
+ * 将ArrayBuffer转为base64
+ * @param data 二进制数据
+ * @returns
+ */
+export declare function toBase64(data: Uint8Array): string;
+/**
+ * 将Uint8Array转ArrayBuffer
+ * @param data 二进制数据
+ * @returns
+ */
+export declare function toBitmap(data: Uint8Array): Promise<ImageBitmap>;
+/**
+ * Uint8Array转换成ArrayBuffer
+ * @param data
+ * @returns
+ */
+export declare function toBuffer(data: Uint8Array): ArrayBuffer;

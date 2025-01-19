@@ -3,42 +3,6 @@ import { br } from "./bridge";
 import { app, SP } from "./app";
 import { dpr } from "./ratio";
 
-/**
- * 创建离屏Canvas
- * @param options 离屏Canvas参数
- * @returns
- */
-function createOffscreenCanvas(
-  options: WechatMiniprogram.CreateOffscreenCanvasOption
-): PlatformOffscreenCanvas {
-  if (app === SP.H5) {
-    return new OffscreenCanvas(
-      options.width as number,
-      options.height as number
-    );
-  }
-
-  if (app === SP.ALIPAY) {
-    return my.createOffscreenCanvas({
-      width: options.width,
-      height: options.height,
-    });
-  }
-
-  if (app === SP.DOUYIN) {
-    const canvas = (tt as any).createOffscreenCanvas();
-    canvas.width = options.width;
-    canvas.height = options.height;
-
-    return canvas;
-  }
-
-  return wx.createOffscreenCanvas({
-    ...options,
-    type: "2d",
-  });
-}
-
 export interface IGetCanvasResult {
   canvas: PlatformCanvas;
   ctx: CanvasRenderingContext2D;
@@ -93,6 +57,42 @@ export function getCanvas(
         })
         .exec();
     }
+  });
+}
+
+/**
+ * 创建离屏Canvas
+ * @param options 离屏Canvas参数
+ * @returns
+ */
+function createOffscreenCanvas(
+  options: WechatMiniprogram.CreateOffscreenCanvasOption
+): PlatformOffscreenCanvas {
+  if (app === SP.H5) {
+    return new OffscreenCanvas(
+      options.width as number,
+      options.height as number
+    );
+  }
+
+  if (app === SP.ALIPAY) {
+    return my.createOffscreenCanvas({
+      width: options.width,
+      height: options.height,
+    });
+  }
+
+  if (app === SP.DOUYIN) {
+    const canvas = (tt as any).createOffscreenCanvas();
+    canvas.width = options.width;
+    canvas.height = options.height;
+
+    return canvas;
+  }
+
+  return wx.createOffscreenCanvas({
+    ...options,
+    type: "2d",
   });
 }
 

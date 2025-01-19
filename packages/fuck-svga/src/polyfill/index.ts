@@ -8,3 +8,4 @@ export * from "./noop";
 export * from "./fs";
 export * from "./system";
 export * from "./time";
+export * from "./decode";

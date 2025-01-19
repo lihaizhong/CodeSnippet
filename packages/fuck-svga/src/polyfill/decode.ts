@@ -1,3 +1,6 @@
+import { app, SP } from "./app";
+import { br } from "./bridge";
+
 // miniprogram btoa/atob polyfill
 const b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 const b64re =
@@ -77,4 +80,43 @@ export function miniAtob(base64: string): string {
   }
 
   return result;
+}
+
+/**
+ * 将ArrayBuffer转为base64
+ * @param data 二进制数据
+ * @returns
+ */
+export function toBase64(data: Uint8Array): string {
+  const ab = toBuffer(data);
+  let b: string;
+
+  if (app === SP.H5) {
+    b = btoa(String.fromCharCode(...new Uint8Array(ab)));
+  } else {
+    b = br.arrayBufferToBase64(ab);
+  }
+
+  return `data:image/png;base64,${b}`;
+}
+
+/**
+ * 将Uint8Array转ArrayBuffer
+ * @param data 二进制数据
+ * @returns
+ */
+export function toBitmap(data: Uint8Array): Promise<ImageBitmap> {
+  return createImageBitmap(new Blob([toBuffer(data)]));
+}
+
+/**
+ * Uint8Array转换成ArrayBuffer
+ * @param data
+ * @returns
+ */
+export function toBuffer(data: Uint8Array): ArrayBuffer {
+  return data.buffer.slice(
+    data.byteOffset,
+    data.byteOffset + data.byteLength
+  ) as ArrayBuffer;
 }
