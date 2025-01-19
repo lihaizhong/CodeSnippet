@@ -1,6 +1,6 @@
 import type { PlatformImage } from "../types";
 import { br } from "./bridge";
-import { genFilePath, removeTmpFile, writeTmpFile } from "./fs";
+import { genFilePath, removeTmpFile, writeTmpFile } from "./fsm";
 import { app, SP } from "./app";
 import { toBase64, toBitmap, toBuffer } from "./decode";
 

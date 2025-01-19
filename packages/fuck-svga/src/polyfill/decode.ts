@@ -7,13 +7,13 @@ const b64re =
   /^(?:[A-Za-z\d+\/]{4})*?(?:[A-Za-z\d+\/]{2}(?:==)?|[A-Za-z\d+\/]{3}=?)?$/;
 
 /**
- * btoa
+ * btoa implementation
  * 将一个二进制字符串（例如，将字符串中的每一个字节都视为一个二进制数据字节）编码为 Base64 编码的 ASCII 字符串
  * https://developer.mozilla.org/zh-CN/docs/Web/API/Window/btoa
  * @param string 二进制字符串
  * @returns
  */
-export function miniBtoa(string: string): string {
+export function mbtoa(string: string): string {
   let bitmap,
     a,
     b,
@@ -26,10 +26,11 @@ export function miniBtoa(string: string): string {
       (a = string.charCodeAt(i++)) > 255 ||
       (b = string.charCodeAt(i++)) > 255 ||
       (c = string.charCodeAt(i++)) > 255
-    )
+    ) {
       throw new TypeError(
         'Failed to execute "btoa" on "Window": The string to be encoded contains characters outside of the Latin1 range.'
       );
+    }
 
     bitmap = (a << 16) | (b << 8) | c;
     result +=
@@ -43,18 +44,19 @@ export function miniBtoa(string: string): string {
 }
 
 /**
- * atob
+ * atob implementation
  * 对经过 Base64 编码的字符串进行解码
  * https://developer.mozilla.org/zh-CN/docs/Web/API/Window/atob
  * @param base64 base64字符串
  * @returns
  */
-export function miniAtob(base64: string): string {
+export function matob(base64: string): string {
   let string = String(base64).replace(/[\t\n\f\r ]+/g, "");
-  if (!b64re.test(string))
+  if (!b64re.test(string)) {
     throw new TypeError(
       'Failed to execute "atob" on "Window": The string to be decoded is not correctly encoded.'
     );
+  }
   string += "==".slice(2 - (string.length & 3));
   let bitmap,
     result = "",
@@ -88,20 +90,22 @@ export function miniAtob(base64: string): string {
  * @returns
  */
 export function toBase64(data: Uint8Array): string {
-  const ab = toBuffer(data);
-  let b: string;
+  const buf = toBuffer(data);
+  let b64: string;
 
   if (app === SP.H5) {
-    b = btoa(String.fromCharCode(...new Uint8Array(ab)));
+    b64 = btoa(String.fromCharCode(...new Uint8Array(buf)));
   } else {
-    b = br.arrayBufferToBase64(ab);
+    // FIXME: 如果arrayBufferToBase64被废除，可以使用mbtoa代替
+    b64 = br.arrayBufferToBase64(buf);
   }
 
-  return `data:image/png;base64,${b}`;
+  return `data:image/png;base64,${b64}`;
 }
 
 /**
- * 将Uint8Array转ArrayBuffer
+ * 生成ImageBitmap数据
+ * 目前仅H5支持
  * @param data 二进制数据
  * @returns
  */

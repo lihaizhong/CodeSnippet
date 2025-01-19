@@ -1,5 +1,5 @@
 import { br } from "./bridge";
-import { readFile } from "./fs";
+import { readFile } from "./fsm";
 import { app, SP } from "./app";
 
 /**

@@ -5,7 +5,7 @@ export * from "./loadImage";
 export * from "./app";
 export * from "./ratio";
 export * from "./noop";
-export * from "./fs";
+export * from "./fsm";
 export * from "./system";
 export * from "./time";
 export * from "./decode";
