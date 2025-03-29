@@ -55,5 +55,5 @@ interface SVGAPlatform {
     options: WechatMiniprogram.CreateOffscreenCanvasOption
   ) => IGetOffscreenCanvasResult;
 
-  setEnv: (env: SupportedEnv) => void;
+  switch: (env: SupportedEnv) => void;
 }

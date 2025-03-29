@@ -156,7 +156,7 @@ export class Platform implements SVGAPlatform {
     });
   }
 
-  public setEnv(env: SupportedEnv) {
+  public switch(env: SupportedEnv) {
     this.global.env = env;
     this.init();
   }
