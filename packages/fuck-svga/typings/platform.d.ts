@@ -1,4 +1,4 @@
-enum SupportedEnv {
+enum SupportedPlatform {
   WECHAT = "weapp",
   ALIPAY = "alipay",
   DOUYIN = "tt",
@@ -6,16 +6,16 @@ enum SupportedEnv {
   UNKNOWN = "unknown",
 }
 
-interface SVGAPlatformGlobal {
-  env: SupportedEnv;
+interface PlatformGlobal {
+  env: SupportedPlatform;
   br: any;
   fsm: any;
   dpr: number;
   sys: string;
 }
 
-interface SVGAPlatform {
-  global: SVGAPlatformGlobal;
+interface IPlatform {
+  global: PlatformGlobal;
 
   noop: () => any;
 
@@ -55,5 +55,5 @@ interface SVGAPlatform {
     options: WechatMiniprogram.CreateOffscreenCanvasOption
   ) => IGetOffscreenCanvasResult;
 
-  switch: (env: SupportedEnv) => void;
+  switch: (env: SupportedPlatform) => void;
 }

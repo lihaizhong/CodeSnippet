@@ -24,10 +24,10 @@ function initCanvas(
   return { canvas, ctx };
 }
 
-export function getCanvas(this: SVGAPlatform) {
+export function getCanvas(this: IPlatform) {
   const { env, br, dpr } = this.global;
 
-  if (env === SupportedEnv.H5) {
+  if (env === SupportedPlatform.H5) {
     this.getCanvas = (selector: string, component?: WechatMiniprogram.Component.TrivialInstance | null) => {
       return new Promise((resolve) => {
         const canvas = document.querySelector(selector) as HTMLCanvasElement;

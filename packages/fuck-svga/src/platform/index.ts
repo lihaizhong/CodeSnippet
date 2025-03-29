@@ -9,11 +9,11 @@ const useNow = () => {
 
 export const noop: () => any = () => {};
 
-export class Platform implements SVGAPlatform {
+export class Platform implements IPlatform {
   private plugins: (() => void)[] = [];
 
-  public global: SVGAPlatformGlobal = {
-    env: SupportedEnv.UNKNOWN,
+  public global: PlatformGlobal = {
+    env: SupportedPlatform.UNKNOWN,
     br: null,
     fsm: null,
     dpr: 1,
@@ -24,19 +24,19 @@ export class Platform implements SVGAPlatform {
 
   public now = useNow();
 
-  public local = {} as SVGAPlatform["local"];
+  public local = {} as IPlatform["local"];
 
-  public remote = {} as SVGAPlatform["remote"];
+  public remote = {} as IPlatform["remote"];
 
-  public decode = {} as SVGAPlatform["decode"];
+  public decode = {} as IPlatform["decode"];
 
-  public image = {} as SVGAPlatform["image"];
+  public image = {} as IPlatform["image"];
 
-  public rAF = noop as SVGAPlatform["rAF"];
+  public rAF = noop as IPlatform["rAF"];
 
-  public getCanvas = noop as SVGAPlatform["getCanvas"];
+  public getCanvas = noop as IPlatform["getCanvas"];
 
-  public getOfsCanvas = noop as SVGAPlatform["getOfsCanvas"];
+  public getOfsCanvas = noop as IPlatform["getOfsCanvas"];
 
   constructor() {
     this.global.env = this.autoEnv();
@@ -54,19 +54,19 @@ export class Platform implements SVGAPlatform {
   private autoEnv() {
     // FIXME：由于抖音场景支持wx对象，所以需要放在wx对象之前检查
     if (typeof window !== "undefined") {
-      return SupportedEnv.H5;
+      return SupportedPlatform.H5;
     }
 
     if (typeof tt !== "undefined") {
-      return SupportedEnv.DOUYIN;
+      return SupportedPlatform.DOUYIN;
     }
 
     if (typeof my !== "undefined") {
-      return SupportedEnv.ALIPAY;
+      return SupportedPlatform.ALIPAY;
     }
 
     if (typeof wx !== "undefined") {
-      return SupportedEnv.WECHAT;
+      return SupportedPlatform.WECHAT;
     }
 
     throw new Error("Unsupported app");
@@ -74,13 +74,13 @@ export class Platform implements SVGAPlatform {
 
   private useBridge() {
     switch (this.global.env) {
-      case SupportedEnv.H5:
+      case SupportedPlatform.H5:
         return globalThis;
-      case SupportedEnv.ALIPAY:
+      case SupportedPlatform.ALIPAY:
         return my;
-      case SupportedEnv.DOUYIN:
+      case SupportedPlatform.DOUYIN:
         return tt;
-      case SupportedEnv.WECHAT:
+      case SupportedPlatform.WECHAT:
         return wx;
       default:
     }
@@ -91,7 +91,7 @@ export class Platform implements SVGAPlatform {
   private usePixelRatio() {
     const { env, br } = this.global;
 
-    if (env === SupportedEnv.H5) {
+    if (env === SupportedPlatform.H5) {
       return globalThis.devicePixelRatio;
     }
 
@@ -119,7 +119,7 @@ export class Platform implements SVGAPlatform {
   private useSystem() {
     const { env, br } = this.global;
 
-    if (env === SupportedEnv.H5) {
+    if (env === SupportedPlatform.H5) {
       const UA = navigator.userAgent;
 
       if (/(Android)/i.test(UA)) {
@@ -134,15 +134,15 @@ export class Platform implements SVGAPlatform {
         return "OpenHarmony";
       }
     } else {
-      if (env === SupportedEnv.ALIPAY) {
+      if (env === SupportedPlatform.ALIPAY) {
         return (br as any).getDeviceBaseInfo().platform as string;
       }
 
-      if (env === SupportedEnv.DOUYIN) {
+      if (env === SupportedPlatform.DOUYIN) {
         return (br as any).getDeviceInfoSync().platform as string;
       }
 
-      if (env === SupportedEnv.WECHAT) {
+      if (env === SupportedPlatform.WECHAT) {
         return (br as any).getDeviceInfo().platform as string;
       }
     }
@@ -156,7 +156,7 @@ export class Platform implements SVGAPlatform {
     });
   }
 
-  public switch(env: SupportedEnv) {
+  public switch(env: SupportedPlatform) {
     this.global.env = env;
     this.init();
   }
