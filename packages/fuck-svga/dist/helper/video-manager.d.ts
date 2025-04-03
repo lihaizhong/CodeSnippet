@@ -95,6 +95,11 @@ export declare class VideoManager {
      */
     go(pos: number): Promise<Bucket>;
     /**
+     * 获取当前指针位置
+     * @returns
+     */
+    getPoint(): number;
+    /**
      * 清理所有的bucket
      * @returns
      */
