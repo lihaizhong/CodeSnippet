@@ -1,5 +1,7 @@
 import pluginNow from "./plugin-now";
 
+jest.useFakeTimers();
+
 describe("pluginNow defined", () => {
   it("should be defined", () => {
     expect(pluginNow).toBeDefined();

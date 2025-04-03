@@ -74,7 +74,7 @@ export default definePlugin<"decode">({
   name: "decode",
   install() {
     const { env, br } = this.global;
-    const wrapper = (b64: string) => `data:image/png;base64,${b64}`;
+    const b64Wrap = (b64: string) => `data:image/png;base64,${b64}`;
     const decode = {
       toBuffer(data: Uint8Array): ArrayBuffer {
         const { buffer, byteOffset, byteLength } = data;
@@ -89,12 +89,12 @@ export default definePlugin<"decode">({
       decode.toBitmap = (data: Uint8Array) =>
         globalThis.createImageBitmap(new Blob([decode.toBuffer(data)]));
       decode.toDataURL = (data: Uint8Array) =>
-        wrapper(globalThis.btoa(String.fromCharCode(...data)));
+        b64Wrap(globalThis.btoa(String.fromCharCode(...data)));
       decode.utf8 = (data: Uint8Array, start: number, end: number) =>
         textDecoder.decode(data.subarray(start, end));
     } else {
       decode.toDataURL = (data: Uint8Array) =>
-        wrapper((br as any).arrayBufferToBase64(decode.toBuffer(data)));
+        b64Wrap((br as any).arrayBufferToBase64(decode.toBuffer(data)));
       decode.utf8 = utf8;
     }
 

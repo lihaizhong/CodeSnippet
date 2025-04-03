@@ -129,7 +129,10 @@ const config: Config = {
   roots: [
     "<rootDir>/src/extensions",
     "<rootDir>/src/helper",
+    "<rootDir>/src/parser",
     "<rootDir>/src/platform",
+    "<rootDir>/src/player",
+    "<rootDir>/src/parser",
   ],
 
   // Allows you to use a custom runner instead of Jest's default test runner

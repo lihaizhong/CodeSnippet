@@ -1,5 +1,7 @@
 import pluginRaf from "./plugin-raf";
 
+jest.useFakeTimers();
+
 describe("pluginRaf defined", () => {
   it("should be defined", () => {
     expect(pluginRaf).toBeDefined();
