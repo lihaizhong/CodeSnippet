@@ -302,6 +302,14 @@ export class VideoManager {
   }
 
   /**
+   * 获取当前指针位置
+   * @returns 
+   */
+  getPoint() {
+    return this.point;
+  }
+
+  /**
    * 清理所有的bucket
    * @returns
    */
