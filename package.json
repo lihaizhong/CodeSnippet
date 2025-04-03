@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "代码片段整理",
   "private": true,
-  "packageManager": "pnpm@9.8.0",
   "scripts": {
     "preinstall": "npx -y only-allow pnpm",
     "dev": "rm -rf dist .parcel-cache && parcel serve",

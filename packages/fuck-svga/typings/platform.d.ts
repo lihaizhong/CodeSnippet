@@ -17,6 +17,7 @@ declare namespace FuckSvga {
     | "local"
     | "decode"
     | "image"
+    | "intersectionObserver"
     | "rAF"
     | "getCanvas"
     | "getOfsCanvas";
