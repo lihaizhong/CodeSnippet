@@ -17,14 +17,6 @@ describe("pluginImage defined with h5", () => {
   
 });
 
-describe("pluginImage defined with alipay", () => {
-  
-});
-
-describe("pluginImage defined with tt", () => {
-  
-});
-
-describe("pluginImage defined with weapp", () => {
+describe("pluginImage defined with weapp, alipay, tt", () => {
   
 });

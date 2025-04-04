@@ -17,14 +17,6 @@ describe("pluginPath defined with h5", () => {
 
 });
 
-describe("pluginPath defined with alipay", () => {
-  
-});
-
-describe("pluginPath defined with tt", () => {
-  
-});
-
-describe("pluginPath defined with weapp", () => {
+describe("pluginPath defined with weapp, alipay, tt", () => {
   
 });

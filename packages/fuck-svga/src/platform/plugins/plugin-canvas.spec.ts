@@ -1,3 +1,4 @@
+import { initialPlatformGlobal } from "../../__test__/initial";
 import pluginCanvas from "./plugin-canvas";
 
 describe("pluginCanvas defined", () => {
@@ -14,17 +15,25 @@ describe("pluginCanvas defined", () => {
 });
 
 describe("pluginCanvas defined with h5", () => {
-  
+  let platform: Record<"global", FuckSvga.PlatformGlobal>;
+
+  beforeAll(() => {
+    platform = { global: initialPlatformGlobal.h5 };
+  });
+
+  it("plugin install", () => {
+    expect(typeof pluginCanvas.install.call(platform)).toBe("function");
+  });
 });
 
-describe("pluginCanvas defined with alipay", () => {
-  
-});
+describe("pluginCanvas defined with weapp, alipay, tt", () => {
+  let platform: Record<"global", FuckSvga.PlatformGlobal>;
 
-describe("pluginCanvas defined with tt", () => {
-  
-});
+  beforeAll(() => {
+    platform = { global: initialPlatformGlobal.weapp };
+  });
 
-describe("pluginCanvas defined with weapp", () => {
-  
+  it("plugin install", () => {
+    expect(typeof pluginCanvas.install.call(platform)).toBe("function");
+  });
 });

@@ -1,3 +1,4 @@
+// 过滤 benchmark 模块
 jest.mock('../benchmark', () => {
   const noop = () => {};
 

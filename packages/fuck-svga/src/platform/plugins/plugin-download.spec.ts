@@ -17,14 +17,6 @@ describe("pluginDownload defined with h5", () => {
   
 });
 
-describe("pluginDownload defined with alipay", () => {
-  
-});
-
-describe("pluginDownload defined with tt", () => {
-  
-});
-
-describe("pluginDownload defined with weapp", () => {
+describe("pluginDownload defined with weapp, alipay, tt", () => {
   
 });

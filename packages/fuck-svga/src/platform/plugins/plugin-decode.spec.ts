@@ -17,14 +17,6 @@ describe("pluginDecode defined with h5", () => {
   
 });
 
-describe("pluginDecode defined with alipay", () => {
-  
-});
-
-describe("pluginDecode defined with tt", () => {
-  
-});
-
-describe("pluginDecode defined with weapp", () => {
+describe("pluginDecode defined with weapp, alipay, tt", () => {
   
 });
