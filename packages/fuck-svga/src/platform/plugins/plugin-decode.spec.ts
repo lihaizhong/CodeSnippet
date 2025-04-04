@@ -13,10 +13,6 @@ describe("pluginDecode defined", () => {
   });
 });
 
-describe("pluginDecode defined with h5", () => {
-  
-});
+describe("pluginDecode defined with h5", () => {});
 
-describe("pluginDecode defined with weapp, alipay, tt", () => {
-  
-});
+describe("pluginDecode defined with weapp, alipay, tt", () => {});

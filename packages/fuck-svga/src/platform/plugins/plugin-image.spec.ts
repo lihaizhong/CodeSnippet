@@ -13,10 +13,6 @@ describe("pluginImage defined", () => {
   });
 });
 
-describe("pluginImage defined with h5", () => {
-  
-});
+describe("pluginImage defined with h5", () => {});
 
-describe("pluginImage defined with weapp, alipay, tt", () => {
-  
-});
+describe("pluginImage defined with weapp, alipay, tt", () => {});

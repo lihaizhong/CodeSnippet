@@ -26,5 +26,8 @@
     "Varint",
     "weapp",
     "wechat"
-  ]
+  ],
+  "marscode.codeCompletionPro": {
+    "enableCodeCompletionPro": true
+  }
 }

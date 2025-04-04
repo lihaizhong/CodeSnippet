@@ -15,10 +15,6 @@ describe("pluginRaf defined", () => {
   });
 });
 
-describe("pluginRaf defined with h5", () => {
+describe("pluginRaf defined with h5", () => {});
 
-});
-
-describe("pluginRaf defined with weapp, alipay, tt", () => {
-  
-});
+describe("pluginRaf defined with weapp, alipay, tt", () => {});

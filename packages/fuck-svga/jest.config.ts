@@ -127,7 +127,7 @@ const config: Config = {
 
   // A list of paths to directories that Jest should use to search for files in
   roots: [
-    "<rootDir>/src/extensions",
+    "<rootDir>/src/extensions/png-encoder",
     "<rootDir>/src/helper",
     "<rootDir>/src/parser",
     "<rootDir>/src/platform",

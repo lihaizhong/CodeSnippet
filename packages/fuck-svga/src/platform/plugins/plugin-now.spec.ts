@@ -15,14 +15,8 @@ describe("pluginNow defined", () => {
   });
 });
 
-describe("pluginNow defined with h5", () => {
-  
-});
+describe("pluginNow defined with h5", () => {});
 
-describe("pluginNow defined with weapp, alipay", () => {
-  
-});
+describe("pluginNow defined with weapp, alipay", () => {});
 
-describe("pluginNow defined with tt", () => {
-  
-});
+describe("pluginNow defined with tt", () => {});

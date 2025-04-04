@@ -13,18 +13,10 @@ describe("pluginOfsCanvas defined", () => {
   });
 });
 
-describe("pluginOfsCanvas defined with h5", () => {
-  
-});
+describe("pluginOfsCanvas defined with h5", () => {});
 
-describe("pluginOfsCanvas defined with alipay", () => {
-  
-});
+describe("pluginOfsCanvas defined with weapp", () => {});
 
-describe("pluginOfsCanvas defined with tt", () => {
-  
-});
+describe("pluginOfsCanvas defined with alipay", () => {});
 
-describe("pluginOfsCanvas defined with weapp", () => {
-  
-});
+describe("pluginOfsCanvas defined with tt", () => {});

@@ -13,10 +13,6 @@ describe("pluginDownload defined", () => {
   });
 });
 
-describe("pluginDownload defined with h5", () => {
-  
-});
+describe("pluginDownload defined with h5", () => {});
 
-describe("pluginDownload defined with weapp, alipay, tt", () => {
-  
-});
+describe("pluginDownload defined with weapp, alipay, tt", () => {});

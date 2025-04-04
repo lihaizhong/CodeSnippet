@@ -32,18 +32,10 @@ describe("platform defined", () => {
   });
 });
 
-describe("platform defined with h5", () => {
-  
-});
+describe("platform defined with weapp", () => {});
 
-describe("platform defined with alipay", () => {
-  
-});
+describe("platform defined with h5", () => {});
 
-describe("platform defined with tt", () => {
-  
-})
+describe("platform defined with alipay", () => {});
 
-describe("platform defined with weapp", () => {
-  
-})
+describe("platform defined with tt", () => {});

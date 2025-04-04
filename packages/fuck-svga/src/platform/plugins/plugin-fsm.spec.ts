@@ -13,10 +13,6 @@ describe("pluginFsm defined", () => {
   });
 });
 
-describe("pluginFsm defined with h5", () => {
-  
-});
+describe("pluginFsm defined with h5", () => {});
 
-describe("pluginFsm defined with weapp, alipay, tt", () => {
-  
-});
+describe("pluginFsm defined with weapp, alipay, tt", () => {});
