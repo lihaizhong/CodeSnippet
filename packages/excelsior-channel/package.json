@@ -26,14 +26,11 @@
     "url": "https://github.com/lihaizhong/CodeSnippets/issues"
   },
   "devDependencies": {
-    "typescript": "^5.8.2"
-  },
-  "dependencies": {
     "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.14",
     "jest": "^29.7.0",
-    "jest-puppeteer": "^11.0.0",
-    "puppeteer": "^24.5.0",
-    "ts-jest": "^29.3.1"
+    "jest-environment-jsdom": "^29.7.0",
+    "ts-jest": "^29.3.1",
+    "typescript": "^5.8.2"
   }
 }
