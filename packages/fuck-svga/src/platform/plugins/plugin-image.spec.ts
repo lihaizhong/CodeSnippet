@@ -1,3 +1,4 @@
+import { initialPlatformGlobal } from "../../__test__/initial";
 import pluginImage from "./plugin-image";
 
 describe("pluginImage defined", () => {
@@ -13,6 +14,26 @@ describe("pluginImage defined", () => {
   });
 });
 
-describe("pluginImage defined with h5", () => {});
+describe("pluginImage defined with h5", () => {
+  let platform: Record<"global", FuckSvga.PlatformGlobal>;
 
-describe("pluginImage defined with weapp, alipay, tt", () => {});
+  beforeEach(() => {
+    platform = { global: initialPlatformGlobal.h5 };
+  });
+
+  it("plugin install", () => {
+    expect(typeof pluginImage.install.call(platform)).toBe("object");
+  });
+});
+
+describe("pluginImage defined with weapp, alipay, tt", () => {
+  let platform: Record<"global", FuckSvga.PlatformGlobal>;
+
+  beforeEach(() => {
+    platform = { global: initialPlatformGlobal.weapp };
+  });
+
+  it("plugin install", () => {
+    expect(typeof pluginImage.install.call(platform)).toBe("object");
+  });
+});

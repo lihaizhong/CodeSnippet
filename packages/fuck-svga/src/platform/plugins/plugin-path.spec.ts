@@ -1,3 +1,4 @@
+import { initialPlatformGlobal } from "../../__test__/initial";
 import pluginPath from "./plugin-path";
 
 describe("pluginPath defined", () => {
@@ -13,6 +14,38 @@ describe("pluginPath defined", () => {
   });
 });
 
-describe("pluginPath defined with h5", () => {});
+describe("pluginPath defined with h5", () => {
+  let platform: Record<"global", FuckSvga.PlatformGlobal>;
 
-describe("pluginPath defined with weapp, alipay, tt", () => {});
+  beforeEach(() => {
+    platform = { global: initialPlatformGlobal.h5 };
+  })
+
+  it("plugin install", () => {
+    expect(typeof pluginPath.install.call(platform)).toBe("object");
+  })
+});
+
+describe("pluginPath defined with weapp, alipay, tt", () => {
+  let platform: Record<"global", FuckSvga.PlatformGlobal>;
+
+  beforeEach(() => {
+    platform = { global: initialPlatformGlobal.weapp };
+  });
+
+  it("plugin install", () => {
+    expect(typeof pluginPath.install.call(platform)).toBe("object");
+  });
+});
+
+describe("pluginPath defined with tt", () => {
+  let platform: Record<"global", FuckSvga.PlatformGlobal>;
+
+  beforeEach(() => {
+    platform = { global: initialPlatformGlobal.tt };
+  });
+
+  it("plugin install", () => {
+    expect(typeof pluginPath.install.call(platform)).toBe("object");
+  });
+});

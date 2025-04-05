@@ -1,3 +1,4 @@
+import { initialPlatformGlobal } from "../../__test__/initial";
 import pluginRaf from "./plugin-raf";
 
 jest.useFakeTimers();
@@ -15,6 +16,26 @@ describe("pluginRaf defined", () => {
   });
 });
 
-describe("pluginRaf defined with h5", () => {});
+describe("pluginRaf defined with h5", () => {
+  let platform: Record<"global", FuckSvga.PlatformGlobal>;
 
-describe("pluginRaf defined with weapp, alipay, tt", () => {});
+  beforeEach(() => {
+    platform = { global: initialPlatformGlobal.h5 };
+  });
+
+  it("plugin install", () => {
+    expect(typeof pluginRaf.install.call(platform)).toBe("function");
+  });
+});
+
+describe("pluginRaf defined with weapp, alipay, tt", () => {
+  let platform: Record<"global", FuckSvga.PlatformGlobal>;
+
+  beforeEach(() => {
+    platform = { global: initialPlatformGlobal.weapp };
+  });
+
+  it("plugin install", () => {
+    expect(typeof pluginRaf.install.call(platform)).toBe("function");
+  });
+});

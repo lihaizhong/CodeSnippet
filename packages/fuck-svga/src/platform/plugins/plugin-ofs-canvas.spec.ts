@@ -1,3 +1,4 @@
+import { initialPlatformGlobal } from "../../__test__/initial";
 import pluginOfsCanvas from "./plugin-ofs-canvas";
 
 describe("pluginOfsCanvas defined", () => {
@@ -13,10 +14,50 @@ describe("pluginOfsCanvas defined", () => {
   });
 });
 
-describe("pluginOfsCanvas defined with h5", () => {});
+describe("pluginOfsCanvas defined with h5", () => {
+  let platform: Record<"global", FuckSvga.PlatformGlobal>;
 
-describe("pluginOfsCanvas defined with weapp", () => {});
+  beforeEach(() => {
+    platform = { global: initialPlatformGlobal.h5 };
+  });
 
-describe("pluginOfsCanvas defined with alipay", () => {});
+  it("plugin install", () => {
+    expect(typeof pluginOfsCanvas.install.call(platform)).toBe("function");
+  });
+});
 
-describe("pluginOfsCanvas defined with tt", () => {});
+describe("pluginOfsCanvas defined with weapp", () => {
+  let platform: Record<"global", FuckSvga.PlatformGlobal>;
+
+  beforeEach(() => {
+    platform = { global: initialPlatformGlobal.weapp };
+  });
+
+  it("plugin install", () => {
+    expect(typeof pluginOfsCanvas.install.call(platform)).toBe("function");
+  });
+});
+
+describe("pluginOfsCanvas defined with alipay", () => {
+  let platform: Record<"global", FuckSvga.PlatformGlobal>;
+
+  beforeEach(() => {
+    platform = { global: initialPlatformGlobal.alipay };
+  });
+
+  it("plugin install", () => {
+    expect(typeof pluginOfsCanvas.install.call(platform)).toBe("function");
+  });
+});
+
+describe("pluginOfsCanvas defined with tt", () => {
+  let platform: Record<"global", FuckSvga.PlatformGlobal>;
+
+  beforeEach(() => {
+    platform = { global: initialPlatformGlobal.tt };
+  });
+
+  it("plugin install", () => {
+    expect(typeof pluginOfsCanvas.install.call(platform)).toBe("function");
+  });
+});

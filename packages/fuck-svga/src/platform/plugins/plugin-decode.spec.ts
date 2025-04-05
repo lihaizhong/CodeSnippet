@@ -1,3 +1,4 @@
+import { initialPlatformGlobal } from "../../__test__/initial";
 import pluginDecode from "./plugin-decode";
 
 describe("pluginDecode defined", () => {
@@ -13,6 +14,26 @@ describe("pluginDecode defined", () => {
   });
 });
 
-describe("pluginDecode defined with h5", () => {});
+describe("pluginDecode defined with h5", () => {
+  let platform: Record<"global", FuckSvga.PlatformGlobal>;
 
-describe("pluginDecode defined with weapp, alipay, tt", () => {});
+  beforeEach(() => {
+    platform = { global: initialPlatformGlobal.h5 };
+  });
+
+  it("plugin install", () => {
+    expect(typeof pluginDecode.install.call(platform)).toBe("object");
+  });
+});
+
+describe("pluginDecode defined with weapp, alipay, tt", () => {
+  let platform: Record<"global", FuckSvga.PlatformGlobal>;
+
+  beforeEach(() => {
+    platform = { global: initialPlatformGlobal.weapp };
+  });
+
+  it("plugin install", () => {
+    expect(typeof pluginDecode.install.call(platform)).toBe("object");
+  });
+});

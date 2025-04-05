@@ -1,3 +1,4 @@
+import { initialPlatformGlobal } from "../../__test__/initial";
 import pluginFsm from "./plugin-fsm";
 
 describe("pluginFsm defined", () => {
@@ -13,6 +14,26 @@ describe("pluginFsm defined", () => {
   });
 });
 
-describe("pluginFsm defined with h5", () => {});
+describe("pluginFsm defined with h5", () => {
+  let platform: Record<"global", FuckSvga.PlatformGlobal>;
 
-describe("pluginFsm defined with weapp, alipay, tt", () => {});
+  beforeEach(() => {
+    platform = { global: initialPlatformGlobal.h5 };
+  });
+
+  it("plugin install", () => {
+    expect(typeof pluginFsm.install.call(platform)).toBe("object");
+  });
+});
+
+describe("pluginFsm defined with weapp, alipay, tt", () => {
+  let platform: Record<"global", FuckSvga.PlatformGlobal>;
+
+  beforeEach(() => {
+    platform = { global: initialPlatformGlobal.weapp };
+  });
+
+  it("plugin install", () => {
+    expect(typeof pluginFsm.install.call(platform)).toBe("object");
+  });
+});

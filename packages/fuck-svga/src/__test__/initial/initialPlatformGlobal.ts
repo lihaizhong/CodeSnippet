@@ -30,6 +30,9 @@ export const initialPlatformGlobal: Record<
     env: "weapp",
     br: {
       ...bridge,
+      env: {
+        USER_DATA_PATH: "/data/user/0",
+      },
       getWindowInfo,
       getDeviceInfo,
     },
@@ -43,6 +46,9 @@ export const initialPlatformGlobal: Record<
     br: {
       ...bridge,
       isIDE: false,
+      env: {
+        USER_DATA_PATH: "/data/user/0",
+      },
       getWindowInfo,
       getDeviceBaseInfo: getDeviceInfo,
     },
@@ -57,6 +63,11 @@ export const initialPlatformGlobal: Record<
       ...bridge,
       getSystemInfoSync: getWindowInfo,
       getDeviceInfoSync: getDeviceInfo,
+      getEnvInfoSync: () => ({
+        common: {
+          USER_DATA_PATH: "/data/user/0",
+        },
+      }),
       getPerformance: () =>
         new Proxy(performance, {
           get(target, prop, receiver) {

@@ -23,6 +23,9 @@ describe("pluginCanvas defined with h5", () => {
 
   it("plugin install", () => {
     expect(typeof pluginCanvas.install.call(platform)).toBe("function");
+    expect(pluginCanvas.install.call(platform).toString()).not.toEqual(
+      pluginCanvas.install.call({ global: initialPlatformGlobal.weapp }).toString()
+    );
   });
 });
 
@@ -35,5 +38,11 @@ describe("pluginCanvas defined with weapp, alipay, tt", () => {
 
   it("plugin install", () => {
     expect(typeof pluginCanvas.install.call(platform)).toBe("function");
+    expect(pluginCanvas.install.call(platform).toString()).toEqual(
+      pluginCanvas.install.call({ global: initialPlatformGlobal.alipay }).toString()
+    );
+    expect(pluginCanvas.install.call(platform).toString()).toEqual(
+      pluginCanvas.install.call({ global: initialPlatformGlobal.tt }).toString()
+    );
   });
 });
